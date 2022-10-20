@@ -2,14 +2,14 @@
   <div id="app">
     <router-view />
     <!-- <router-link to="/">Home</router-link> -->
-    <Footer />
+
   </div>
 </template>
 
 <script>
-import Footer from "./views/Footer.vue";
+
 export default {
-  components: { Footer },
+
 };
 </script>
 
@@ -24,6 +24,7 @@ body,
 #app {
   width: 100%;
   height: 100%;
+  overflow-x: hidden;
 }
 
 ul {

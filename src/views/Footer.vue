@@ -63,10 +63,34 @@ export default {};
   .footer-main-content {
     display: flex;
     justify-content: space-evenly;
+    margin-bottom: 20px;
+
+    div:not(:first-child) {
+      margin-top: 40px;
+      p {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      ul>li {
+        line-height: 20px;
+        height: 20px;
+        font-size: 10px;
+        transform: scale(0.8);
+      }
+    }
 
     div:first-child {
-
+      margin-top: 50px;
+      p {
+        font-size: 10px;
+      }
+      p:first-child {
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
       .qrCodeImage {
+        margin-top: 10px;
         width: 50px;
         height: 50px;
       }

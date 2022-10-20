@@ -14,7 +14,7 @@
     <div class="bannerCenter">
       <div class="block">
         <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
-        <el-carousel height="300px">
+        <el-carousel height="200px">
           <el-carousel-item v-for="item in 4" :key="item">
             <h3 class="small">{{ item }}</h3>
           </el-carousel-item>
@@ -24,8 +24,8 @@
     <div class="bannerRight">
       <div class="welcomeBox">您好!欢迎来到贝壳精选!</div>
       <div class="buttonBox">
-        <button>登录</button>
-        <button>注册</button>
+        <button @click="goLoin()">登录</button>
+        <button @click="goRegister()">注册</button>
       </div>
       <div class="announcementBox">
         <p>平台公告</p>
@@ -46,18 +46,17 @@ export default {};
 <style lang="less" scoped>
 .serviceBannerBox {
   width: 90vw;
-  height: 300px;
+  height: 200px;
   border: 1px solid #000;
   margin-bottom: 20px;
   display: flex;
 
   .bannerLeft {
     width: 25%;
-    // background-color: red;
-    padding: 20px;
+    padding: 10px;
 
     li {
-      line-height: 35px;
+      line-height: 25px;
     }
 
     li:hover {
@@ -80,7 +79,6 @@ export default {};
       color: #475669;
       font-size: 14px;
       opacity: 0.75;
-      line-height: 150px;
       margin: 0;
     }
 
@@ -100,15 +98,24 @@ export default {};
     align-items: center;
 
     .welcomeBox {
-      font-size: 12px;
-      padding: 20px;
+      font-size: 16px;
+      padding: 12px;
     }
 
     .buttonBox {
-      button {
-        width: 50px;
+      button:first-child {
+        width: 100px;
+        margin: 10px;
+        color: #fff;
+        background-color: #0e6ebe;
+        border:1px solid black;
+      }
+        button:last-child {
+        width: 100px;
         margin: 10px;
         color: #000;
+        background-color: #fff;
+        border:1px solid black;
       }
     }
 
@@ -116,8 +123,8 @@ export default {};
       text-align: center;
       width: 100%;
       border-top: 1px solid #000;
-      margin-top: 50px;
-      padding-top: 20px;
+      margin-top: 10px;
+      padding-top: 10px;
       font-size: 14px;
 
       p {
