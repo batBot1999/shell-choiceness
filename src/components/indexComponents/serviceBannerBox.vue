@@ -24,7 +24,7 @@
     <div class="bannerRight">
       <div class="welcomeBox">您好!欢迎来到贝壳精选!</div>
       <div class="buttonBox">
-        <button @click="goLoin()">登录</button>
+        <button @click="goLogin()">登录</button>
         <button @click="goRegister()">注册</button>
       </div>
       <div class="announcementBox">

@@ -4,7 +4,7 @@
       <h1>Hi!</h1>
       <h1>欢迎加入贝壳精选</h1>
       <h1>如果您已有账号</h1>
-      <button @click="goLoin()">立即登陆</button>
+      <button @click="goLogin()">立即登陆</button>
     </div>
     <div class="register-right-box">
       <loginForm />
@@ -20,7 +20,7 @@ export default {
   },
 
   methods: {
-    goLoin() {
+    goLogin() {
       this.$router.push({ name: "login" });
     },
   },

@@ -5,6 +5,8 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import Footer from '../views/Footer.vue'
+import ShopCar from '../views/ShopCar.vue'
+import SearchPage from '../views/SearchPage.vue'
 
 
 
@@ -23,9 +25,14 @@ const routes = [
 
   },
   {
-    path: '/about',
-    name: 'about',
-    component: () => import( /* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/shop-car',
+    name: 'shop-car',
+    component: ShopCar
+  },
+  {
+    path: '/search-page',
+    name: 'search-page',
+    component: SearchPage
   },
   {
     path: '/login',

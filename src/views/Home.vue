@@ -5,7 +5,7 @@
       <el-header>
         <el-row :gutter="28">
           <el-col :span="3"
-            ><div class="grid-content shell-shoiceness">贝壳精选</div></el-col
+            ><div class="grid-content shell-choiceness">贝壳精选</div></el-col
           >
           <el-col :span="1"><div class="grid-content"></div></el-col>
           <el-col :span="2"><div class="grid-content"></div></el-col>
@@ -38,24 +38,28 @@
         </el-row>
       </el-header>
 
-      <!-- 主题内容 -->
       <el-main>
         <div v-if="num == 1" class="el-main-son">
-          <!-- 商品搜索box 开始 -->
+          <!-- 商品搜索box -->
           <GoodsSearchBox />
-          <!-- 商品搜索box 结束 -->
+          <!-- 商品搜索box -->
 
-          <!-- 商品轮播图box 开始 -->
+          <!-- 商品轮播图box -->
           <GoodsBannerBox />
-          <!-- 商品轮播图box 结束 -->
+          <!-- 商品轮播图box -->
 
-          <!-- 商品推荐 开始 -->
+          <!-- 商品推荐 -->
           <GoodsRecommand />
-          <!-- 商品推荐 结束 -->
+          <!-- 商品推荐 -->
         </div>
         <div v-if="num == 2" class="el-main-son">
+          <!-- 服务搜索box  -->
           <ServiceSearchBox />
+          <!-- 服务轮播图box -->
           <ServiceBannerBox />
+          <!-- 精选服务 -->
+          <SelectedService />
+          <PartnerBox />
         </div>
 
         <!-- <router-link to="/about">About</router-link>
@@ -74,6 +78,9 @@ import ServiceSearchBox from "../components/ServiceSearchBox.vue";
 import GoodsBannerBox from "../components/indexComponents/GoodsBannerBox.vue";
 import ServiceBannerBox from "../components/indexComponents/ServiceBannerBox.vue";
 import GoodsRecommand from "../components/GoodsRecommand.vue";
+import SelectedService from "../components/SelectedService.vue";
+import PartnerBox from "../components/PartnerBox.vue";
+
 export default {
   // name: 'Home',
   data() {
@@ -89,6 +96,8 @@ export default {
     GoodsBannerBox,
     ServiceBannerBox,
     GoodsRecommand,
+    SelectedService,
+    PartnerBox,
   },
 };
 </script>
@@ -101,7 +110,7 @@ export default {
       text-align: center;
       line-height: 36px;
     }
-    .shell-shoiceness {
+    .shell-choiceness {
       background: #0e6ebe;
       color: #fff;
       height: 60px;
