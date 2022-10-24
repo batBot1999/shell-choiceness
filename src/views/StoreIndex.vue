@@ -1,10 +1,17 @@
 <template>
   <div>
-    <HeaderNav/>
+    <HeaderNav />
     <div class="header-search-box">
       <div class="shell-choiceness">贝壳精选</div>
-      <GoodsSearchBox />
+      <img src="../assets/img/shell-icon.png" alt="" />
+      <div>
+        <p>贝壳社</p>
+        <p>服务电话: 0581-86658021</p>
+      </div>
+      <GoodsSearchBox class="goods-search-box" />
+      <button class="search-button">搜全站</button>
     </div>
+
     <div class="header-tab-box">
       <div
         style=""
@@ -13,7 +20,7 @@
         :class="num == 1 ? 'active' : ''"
         @click="num = 1"
       >
-        全部商品
+        企业全部商品
       </div>
       <div
         style=""
@@ -22,7 +29,7 @@
         :class="num == 2 ? 'active' : ''"
         @click="num = 2"
       >
-        首页
+        联系方式
       </div>
     </div>
     <el-main>
@@ -41,33 +48,14 @@
             <el-radio-button label="辅料"></el-radio-button>
           </el-radio-group>
         </div>
-        <div class="brand-box">
-          <span>品牌</span>
-          <button label="">全部</button>
-          <tr class="brand-checkbox">
-            <td v-for="(item, index) in brands" :key="index">
-              <input type="checkbox" />{{ item }}
-            </td>
-          </tr>
+
+        <div class="keyword-search-box">
+          <span>关键字</span>
+          <input type="text" />
+          <button>搜索</button>
         </div>
 
-        <div class="standard-box">
-          <span>规格</span>
-          <button label="">全部</button>
-          <tr class="standard-checkbox">
-            <td v-for="(item, index) in standards" :key="index">
-              <input type="checkbox" />{{ item }}
-            </td>
-          </tr>
-        </div>
-
-        <div class="search-pagination-box">
-          <el-radio-group v-model="radio2">
-            <el-radio-button label="默认排序"></el-radio-button>
-            <el-radio-button label="价格"></el-radio-button>
-            <el-radio-button label="上架时间"></el-radio-button>
-            <el-radio-button label="销量"></el-radio-button>
-          </el-radio-group>
+        <div class="store-pagination-box">
           <el-table :data="tableData" style="width: 100%">
             <el-table-column prop="goods" label="商品名称"> </el-table-column>
             <el-table-column prop="number" label="货号"> </el-table-column>
@@ -76,9 +64,6 @@
             <el-table-column prop="package" label="销售包装"> </el-table-column>
             <el-table-column prop="price" label="价格"> </el-table-column>
             <el-table-column prop="date" label="发货时间"> </el-table-column>
-            <el-table-column prop="provider" label="供应商">
-                <el-button type="text" size="small">科加奥</el-button>
-            </el-table-column>
             <el-table-column prop="operarion" label="操作">
               <template slot-scope="scope">
                 <el-button
@@ -108,46 +93,20 @@
         <p>2</p>
       </div>
     </el-main>
-    <Footer/>
+
+    <Footer />
   </div>
 </template>
 
 <script>
-import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import HeaderNav from "../components/HeaderNav.vue";
+import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import Footer from "../components/Footer.vue";
 export default {
   data() {
     return {
       num: 1,
       radio1: "全部",
-      brands: [
-        "品牌1",
-        "品牌2",
-        "品牌3",
-        "品牌4",
-        "品牌5",
-        "品牌6",
-        "品牌7",
-        "品牌8",
-        "品牌9",
-        "品牌10",
-        "品牌11",
-        "品牌12",
-        "品牌13",
-      ],
-      standards: [
-        "规格1",
-        "规格2",
-        "规格3",
-        "规格4",
-        "规格5",
-        "规格6",
-        "规格7",
-        "规格8",
-        "规格9",
-        "规格10",
-      ],
       currentPage4: 4,
       tableData: [
         {
@@ -158,19 +117,17 @@ export default {
           package: "6支/盒",
           price: "￥999.00",
           date: "5-7天",
-          provider: "科加奥",
         },
       ],
-      radio2: "默认排序",
     };
   },
   components: {
+    HeaderNav,
     GoodsSearchBox,
     Footer,
-    HeaderNav,
   },
-  methods: {
 
+  methods: {
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
@@ -182,16 +139,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
 .header-search-box {
-  width: 100vw;
+  width: 90vw;
+  margin-left: 5vw;
   display: flex;
   justify-content: center;
 
   .shell-choiceness {
     width: 150px;
     height: 36px;
-    text-align: center;
     line-height: 36px;
     background: #0e6ebe;
     color: #fff;
@@ -200,7 +156,60 @@ export default {
     line-height: 60px;
     font-size: 20px;
   }
+
+  img {
+    margin-left: 30px;
+    margin-right: 10px;
+    height: 60px;
+  }
+
+  div {
+    height: 60px;
+    line-height: 30px;
+
+    p {
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    p:first-child {
+      font-weight: bold;
+    }
+  }
+
+  /deep/.search-box {
+    width: 50vw;
+    margin-left: 50px;
+    .el-select > .el-input {
+      .el-input__inner {
+        width: 110px;
+      }
+    }
+
+    .el-input {
+      width: 300px;
+      .el-input__inner {
+        width: 300px;
+      }
+    }
+
+    .search-button:active {
+      color: #4b8bc0;
+    }
+  }
+  .search-button {
+    width: 200px;
+    height: 60px;
+    color: #fff;
+    font-size: 25px;
+    background-color: grey;
+    border: none;
+  }
+  .search-button:active {
+    color: #0e6ebe;
+  }
 }
+
 .header-tab-box {
   margin-top: 20px;
   width: 100vw;
@@ -217,6 +226,7 @@ export default {
     color: #fff;
   }
 }
+
 .el-main {
   overflow-x: hidden;
   padding: 0;
@@ -266,80 +276,50 @@ export default {
       }
     }
 
-    .brand-box {
-      margin: 10px 0;
+    .keyword-search-box {
       display: flex;
-      text-align: center;
-
+      line-height: 50px;
+      gap: 10px;
+      margin-left: 50px;
+      margin-top: 50px;
       span {
-        height: 50px;
-        line-height: 50px;
-        width: 10%;
+        font-size: 20px;
         font-weight: bold;
-        font-size: 25px;
       }
 
-      .brand-checkbox {
-        width: 90%;
-        display: flex;
-        flex-wrap: wrap;
+      input {
+        height: 46px;
+        width: 400px;
+      }
 
-        td {
-          width: 12.5%;
-        }
+      button {
+        color: #fff;
+        background: #0e6ebe;
+        text-align: center;
+        font-size: 20px;
+        width: 100px;
+        height: 50px;
+        border: none;
       }
     }
 
-    .standard-box {
-      margin: 10px 0;
-      display: flex;
-      text-align: center;
-
-      span {
-        height: 50px;
-        line-height: 50px;
-        width: 10%;
-        font-weight: bold;
-        font-size: 25px;
+    .store-pagination-box {
+      /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+        background: #0e6ebe;
+        color: #fff;
       }
 
-      .standard-checkbox {
-        width: 90%;
-        display: flex;
-        flex-wrap: wrap;
-
-        td {
-          width: calc(100% / 7);
-        }
+      /deep/.el-radio-button__inner {
+        padding: 0 0;
+        width: 100%;
+        border: none;
+        height: 30px;
+        line-height: 30px;
+        transition: none;
       }
-    }
 
-    .search-pagination-box {
-      .el-radio-group {
-        margin: 30px 0;
-        display: flex;
-        justify-content: center;
-        .el-radio-button {
-          width: 20vw;
-        }
-
-        /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
-          background: #0e6ebe;
-          color: #fff;
-        }
-
-        /deep/.el-radio-button__inner {
-          padding: 0 0;
-          width: 100%;
-          border: none;
-          height: 30px;
-          line-height: 30px;
-          transition: none;
-        }
-
-        /deep/.el-radio-button__inner:hover {
-          color: #0e6ebe;
-        }
+      /deep/.el-radio-button__inner:hover {
+        color: #0e6ebe;
       }
     }
   }

@@ -4,9 +4,13 @@ import Home from '../views/Home.vue'
 // const Home=()=>import('../views/Home.vue');
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import Footer from '../views/Footer.vue'
 import ShopCar from '../views/ShopCar.vue'
 import SearchPage from '../views/SearchPage.vue'
+import GoodsDetail from '../views/GoodsDetail.vue'
+import StoreIndex from '../views/StoreIndex.vue'
+import ServiceDetail from '../views/ServiceDetail.vue'
+import SettlementPage from '../views/SettlementPage.vue'
+
 
 
 
@@ -44,10 +48,26 @@ const routes = [
     component: Register
   },
   {
-    path: '/footer',
-    name: 'footer',
-    component: Footer
+    path: '/goods-detail',
+    name: 'goods-detail',
+    component: GoodsDetail
   },
+  {
+    path: '/store-index',
+    name: 'store-index',
+    component: StoreIndex
+  },
+  {
+    path: '/service-detail',
+    name: 'service-detail',
+    component: ServiceDetail
+  },
+  {
+    path: '/settlement-page',
+    name: 'settlement-page',
+    component: SettlementPage
+  },
+
 ]
 
 const router = new VueRouter({

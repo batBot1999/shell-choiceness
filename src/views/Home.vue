@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import Footer from "./Footer.vue";
+import Footer from "../components/Footer.vue";
 import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
 import GoodsBannerBox from "../components/indexComponents/GoodsBannerBox.vue";

@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="search-box">
       <img src="../assets/img/searchIcon.png" class="search-img" alt="" />
       <el-select v-model="value" placeholder="商品名称">
@@ -17,7 +16,6 @@
       ></el-input>
       <button class="search-button">搜索</button>
     </div>
-  </div>
 </template>
 
 <script>
@@ -53,13 +51,13 @@ export default {
   // overflow: hidden;
 
   .search-img {
-    width: 50px;
+    width: 40px;
     height: 40px;
     margin: 0 15px;
   }
 
   .el-select {
-    width: 150px;
+    width: 160px;
    /deep/.el-input__inner {
       height: 40px;
       background-color: #FFF;
