@@ -9,8 +9,8 @@
       class="demo-ruleForm"
     >
       <h2>欢迎您使用贝壳精选</h2>
-      <el-form-item label="账号:" prop="username">
-        <el-input v-model="ruleForm.username" autocomplete="off"></el-input>
+      <el-form-item label="账号:" prop="email">
+        <el-input v-model="ruleForm.email" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="密码:" prop="password">
         <el-input v-model="ruleForm.password" autocomplete="off"></el-input>
@@ -36,11 +36,11 @@ export default {
   data() {
     return {
       ruleForm: {
-        username: "",
+        email: "",
         password: "",
       },
       rules: {
-        username: [
+        email: [
           {
             required: true,
             message: "请输入账号",
@@ -48,7 +48,7 @@ export default {
           },
           {
             min: 3,
-            max: 10,
+            max: 20,
             message: "账号长度在3到10之间",
             trigger: "blur",
           },
@@ -61,7 +61,7 @@ export default {
           },
           {
             min: 3,
-            max: 10,
+            max: 20,
             message: "密码长度在3到10之间",
             trigger: "blur",
           },
@@ -77,22 +77,31 @@ export default {
         // valid布尔类型,为true表示验证成功,false验证错误
         if (valid) {
           login({
-            username: this.ruleForm.username,
+            email: this.ruleForm.email,
             password: this.ruleForm.password,
           }).then((res) => {
-            console.log(res);
-            if (res.data.code == 0) {
-              this.$router.push({ name: "home"});
-              window.localStorage.setItem(
-                "username",
-                this.ruleForm.userName
-              );
-              window.localStorage.setItem(
-                "password",
-                this.ruleForm.password
-              );
-            // 如果账号密码正确,要把token保存起来
-            window.localStorage.setItem("token", res.data.token);
+            // console.log("res---",res);
+            if (res.code == 200) {
+              // 如果账号密码正确,要把token保存起来
+              // console.log("res.result.userInfo---", res.result.userInfo);
+              window.localStorage.setItem("realname", res.result.userInfo.realname);
+              window.localStorage.setItem("companyName", res.result.userInfo.companyName);
+              // console.log("localStorage.realname---", localStorage.realname);
+              // window.localStorage.setItem("companyName", res.result.userInfo.realname);
+              window.localStorage.setItem("token", res.result.token);
+              // console.log("res---", res);
+              // console.log("localStorage---", localStorage);
+              this.$router.push({ name: "home" });
+            }
+          }).catch((e) => {
+            // 如果账号不存在
+            console.log("e---", e);
+            if (e.code === 500) {
+              this.$message({
+                showClose: true,
+                message: e.message,
+                type: "error",
+              });
             }
           });
         } else {

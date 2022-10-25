@@ -21,11 +21,18 @@
         </el-carousel>
       </div>
     </div>
-    <div class="bannerRight">
-      <div class="welcomeBox">您好!欢迎来到贝壳精选!</div>
-      <div class="buttonBox">
-        <button @click="goLogin()">登录</button>
-        <button @click="goRegister()">注册</button>
+    <div class="bannerRight" >
+      <div class="is-login-box" v-show="!notLogin">
+        <div class="welcomeBox">您好!欢迎来到贝壳精选!</div>
+        <div class="buttonBox">
+          <button @click="goLogin()">登录</button>
+          <button @click="goRegister()">注册</button>
+        </div>
+      </div>
+      <div class="is-login-box" v-show="notLogin">
+       <p>{{ realname }},您已登录</p>
+       <br>
+       <p>所在公司:{{ companyName }}</p>
       </div>
       <div class="announcementBox">
         <p>平台公告</p>
@@ -42,9 +49,16 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      notLogin: false,
+      realname: localStorage.realname,
+      companyName: localStorage.companyName,
+    };
   },
-
+  mounted(){
+    // console.log(localStorage.getItem('token'));
+    this.notLogin= localStorage.getItem('token')?true:false;
+  },
   methods: {
     goLogin() {
       this.$router.push({ name: "login" });
@@ -52,6 +66,12 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
+  },
+  watch:{
+    notLogin(newvalue,oldvalue){
+      console.log(localStorage.getItem('token'));
+      console.log(newvalue,oldvalue);
+    }
   },
 };
 </script>
@@ -110,25 +130,28 @@ export default {
     flex-direction: column;
     align-items: center;
 
-    .welcomeBox {
-      font-size: 16px;
-      padding: 12px;
-    }
-
-    .buttonBox {
-      button:first-child {
-        width: 100px;
-        margin: 10px;
-        color: #fff;
-        background-color: #0e6ebe;
-        border: 1px solid black;
+    .is-login-box {
+      text-align: center;
+      .welcomeBox {
+        font-size: 16px;
+        padding: 12px;
       }
-      button:last-child {
-        width: 100px;
-        margin: 10px;
-        color: #000;
-        background-color: #fff;
-        border: 1px solid black;
+
+      .buttonBox {
+        button:first-child {
+          width: 100px;
+          margin: 10px;
+          color: #fff;
+          background-color: #0e6ebe;
+          border: 1px solid black;
+        }
+        button:last-child {
+          width: 100px;
+          margin: 10px;
+          color: #000;
+          background-color: #fff;
+          border: 1px solid black;
+        }
       }
     }
 

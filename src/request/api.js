@@ -3,16 +3,14 @@ import {post} from "./index";
 
 // 登录
 export function login(data) {
-    return service({
-        url: "/login",
-        method: "POST",
+    return post({
+        url: "/bio/user/login",
         data
     })
 }
 
 // 注册
 export function register(data) {
-    // console.log(service);
     return post({
         url: "/bio/user/register",
         data
