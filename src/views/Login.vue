@@ -16,17 +16,22 @@
         <el-input v-model="ruleForm.password" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" class="loginButton" @click="submitForm('ruleForm')"
+        <el-button
+          type="primary"
+          class="loginButton"
+          @click="submitForm('ruleForm')"
           >登录</el-button
         >
-        <el-button class="loginButton" @click="resetForm('ruleForm')">重置</el-button>
+        <el-button class="loginButton" @click="resetForm('ruleForm')"
+          >重置</el-button
+        >
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
-import {login} from "../request/api.js"
+import { login } from "../request/api.js";
 export default {
   data() {
     return {
@@ -66,29 +71,40 @@ export default {
   },
 
   methods: {
-      submitForm(formName) {
-        // 对表单内容进行验证
-        this.$refs[formName].validate((valid) => {
-          // valid布尔类型,为true表示验证成功,false验证错误
-          if (valid) {
-            alert('submit!');
-            login(this.ruleForm).then((res) => {
-              // console.log(res);
-              // 如果账号密码正确,要把token保存起来
-              localStorage.setItem("token", res.data.token);
-              // 而且还要跳转页面
-              this.$router.push({name: "home"})
-            })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
-    }
+    submitForm(formName) {
+      // 对表单内容进行验证
+      this.$refs[formName].validate((valid) => {
+        // valid布尔类型,为true表示验证成功,false验证错误
+        if (valid) {
+          login({
+            username: this.ruleForm.username,
+            password: this.ruleForm.password,
+          }).then((res) => {
+            console.log(res);
+            if (res.data.code == 0) {
+              this.$router.push({ name: "home"});
+              window.localStorage.setItem(
+                "username",
+                this.ruleForm.userName
+              );
+              window.localStorage.setItem(
+                "password",
+                this.ruleForm.password
+              );
+            // 如果账号密码正确,要把token保存起来
+            window.localStorage.setItem("token", res.data.token);
+            }
+          });
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
+  },
 };
 </script>
 
@@ -108,7 +124,7 @@ export default {
     margin: 200px auto;
     background-color: #fff;
     padding: 40px;
-    border: 20px solid #409EFF;
+    border: 20px solid #409eff;
     border-radius: 20px;
 
     h2 {
@@ -119,6 +135,5 @@ export default {
       width: 40%;
     }
   }
-
 }
 </style>
