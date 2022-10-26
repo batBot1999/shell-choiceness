@@ -69,8 +69,8 @@ export default {
   },
   watch:{
     notLogin(newvalue,oldvalue){
-      console.log(localStorage.getItem('token'));
-      console.log(newvalue,oldvalue);
+      // console.log(localStorage.getItem('token'));
+      // console.log(newvalue,oldvalue);
     }
   },
 };

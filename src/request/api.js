@@ -1,5 +1,5 @@
 // import service from "./index";
-import {post} from "./index";
+import {post,get} from "./index";
 
 // 登录
 export function login(data) {
@@ -18,10 +18,19 @@ export function register(data) {
 }
 
 // 商品推荐列表
-export function goodsRecommendList () {
-    return service({
-        url: "goodsRecommendList",
-        method: "GET"
+// export function goodsRecommendList (data) {
+//     return service({
+//         url: "/bio/app/bioItem/recommended/list",
+//         method: "get",
+//         data
+//     })
+// }
+
+// 商品推荐列表
+export function goodsRecommendList (data) {
+    return get({
+        url: "/bio/app/bioItem/recommended/list",
+        data
     })
 }
 

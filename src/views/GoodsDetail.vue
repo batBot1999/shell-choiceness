@@ -124,6 +124,11 @@ export default {
     GoodsSearchBox,
     Footer,
   },
+
+  mounted() {
+    this.id = this.$route.query.id;
+    console.log(id);
+  }
 };
 </script>
 

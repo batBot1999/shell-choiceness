@@ -1,4 +1,5 @@
 import axios from "axios"
+import qs from "qs"
 
 // 创建axios实例
 const service = axios.create({
@@ -33,13 +34,14 @@ service.interceptors.response.use((res) => {
   console.log(err);
 })
 
+// get
+export function get({url, params}) {
+  let str = params ? `?${qs.stringify(params)}` : '';
+  return service.get(`${url}${str}`);
+}
 
-// export function get(url, params) {
-//   let str = params ? `?${qs.stringify(params)}` : '';
-//   return reqInstance.get(`${url}${str}`);
-// }
 
-// post 默认 application/json 类型
+// post
 export function post({url,data}) {
   // console.log(url, data);
   let headers = {

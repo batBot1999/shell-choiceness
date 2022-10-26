@@ -56,6 +56,7 @@
         </div>
 
         <div class="store-pagination-box">
+          <!-- table -->
           <el-table :data="tableData" style="width: 100%">
             <el-table-column prop="goods" label="商品名称"> </el-table-column>
             <el-table-column prop="number" label="货号"> </el-table-column>
@@ -76,7 +77,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <!-- <span class="demonstration">完整功能</span> -->
+          <!-- 分页 -->
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"

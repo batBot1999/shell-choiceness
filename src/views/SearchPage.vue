@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HeaderNav/>
+    <HeaderNav />
     <div class="header-search-box">
       <div class="shell-choiceness">贝壳精选</div>
       <GoodsSearchBox />
@@ -68,16 +68,15 @@
             <el-radio-button label="上架时间"></el-radio-button>
             <el-radio-button label="销量"></el-radio-button>
           </el-radio-group>
+          <!-- table -->
           <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="goods" label="商品名称"> </el-table-column>
-            <el-table-column prop="number" label="货号"> </el-table-column>
-            <el-table-column prop="brand" label="品牌"> </el-table-column>
-            <el-table-column prop="standard" label="规格"> </el-table-column>
-            <el-table-column prop="package" label="销售包装"> </el-table-column>
+            <el-table-column prop="name" label="商品名称"> </el-table-column>
+            <el-table-column prop="itemNo" label="货号"> </el-table-column>
+            <el-table-column prop="specificationDesc" label="规格"> </el-table-column>
             <el-table-column prop="price" label="价格"> </el-table-column>
             <el-table-column prop="date" label="发货时间"> </el-table-column>
-            <el-table-column prop="provider" label="供应商">
-                <el-button type="text" size="small">科加奥</el-button>
+            <el-table-column prop=" enterpriseName" label="供应商">
+              <el-button type="text" size="small">科加奥</el-button>
             </el-table-column>
             <el-table-column prop="operarion" label="操作">
               <template slot-scope="scope">
@@ -91,7 +90,7 @@
               </template>
             </el-table-column>
           </el-table>
-          <!-- <span class="demonstration">完整功能</span> -->
+          <!-- 分页 -->
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -108,11 +107,12 @@
         <p>2</p>
       </div>
     </el-main>
-    <Footer/>
+    <Footer />
   </div>
 </template>
 
 <script>
+import { goodsRecommendList } from "../request/api.js";
 import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
@@ -161,6 +161,7 @@ export default {
           provider: "科加奥",
         },
       ],
+      // goodsList: [],
       radio2: "默认排序",
     };
   },
@@ -170,19 +171,31 @@ export default {
     HeaderNav,
   },
   methods: {
-
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
+
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
+
+    // getgoodsList() {
+    //   goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
+    //     (res) => {
+    //       this.goodsList = res.result.records;
+    //       console.log("this.goodsList---", this.goodsList);
+    //     }
+    //   );
+    // },
+  },
+
+  mounted() {
+    // this.getgoodsList();
   },
 };
 </script>
 
 <style lang="less" scoped>
-
 .header-search-box {
   width: 100vw;
   display: flex;

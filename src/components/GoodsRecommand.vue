@@ -2,18 +2,21 @@
   <div class="goodsRecommandBox">
     <span>商品推荐</span>&nbsp&nbsp&nbsp&nbsp<span>爆款商品推荐</span>
     <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="热门推荐" name="hotRecommand">
-        <div class="tab-item-container">
-          <div class="tab-item">
-            <img src="../assets/img/goodsImage.png" alt="">
-            <div class="tab-item-text">
-              <p>艾本德单道移液器</p>
-              <p>品牌：Eppendorf/艾本德</p>
-              <p>货号：20210330</p>
-              <p>规格：套装</p>
-              <p>￥999</p>
-              <p>杭州科加奥网络科技有限公司</p>
-            </div>
+      <el-tab-pane label="热门推荐" name="hotRecommand" class="hot-recommand">
+        <div
+          class="tab-item"
+          @click="goGoodsDetail(item.id)"
+          v-for="item in goodsList"
+          :key="item.id"
+        >
+          <!-- <div class="tab-item" @click="goGoodsDetail"> -->
+          <img src="../assets/img/goodsImage.png" alt="" />
+          <div class="tab-item-text">
+            <p>{{ item.name }}</p>
+            <p>货号:{{ item.itemNo }}</p>
+            <p>规格:{{ item.specificationDesc }}</p>
+            <p>{{ item.price }}</p>
+            <p>{{ item.enterpriseName }}</p>
           </div>
         </div>
       </el-tab-pane>
@@ -31,22 +34,47 @@
 </template>
 
 <script>
+import { goodsRecommendList } from "../request/api.js";
 export default {
   data() {
     return {
       activeName: "hotRecommand",
+      pageNo: 1,
+      pageSize: 1000,
+      goodsList: [],
     };
   },
   methods: {
     handleClick(tab, event) {
       // console.log(tab, event);
     },
+
+    goGoodsDetail() {
+      this.$router.push({
+        name: "",
+      });
+    },
+
+    getgoodsList() {
+      goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
+        (res) => {
+          // console.log("res.result.records---", res.result.records);
+          this.goodsList = res.result.records;
+        }
+      );
+    },
+  },
+
+  mounted() {
+    this.getgoodsList();
   },
 };
 </script>
 
 <style lang="less" scoped>
 .goodsRecommandBox {
+  // display: flex;
+  // background: red;
   width: 90vw;
   span:first-child {
     font-weight: bold;
@@ -62,17 +90,23 @@ export default {
     color: #fff;
     background: #0e6ebe;
   }
-  .tab-item-container {
+
+  .hot-recommand {
+    display: flex;
     .tab-item {
+      box-sizing: border-box;
       background: #0e6ebe;
-      width: 210px;
+      width: 18%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 1%;
       img {
-        width: 210px;
+        width: 100%;
       }
 
       .tab-item-text {
-        // text-align: center;
-        padding-left: 10px;
+        text-align: center;
         font-size: 14px;
         color: #fff;
         padding-bottom: 10px;
@@ -86,11 +120,10 @@ export default {
         p:nth-child(5) {
           color: red;
           margin-left: 20px;
-          font-size:30px;
+          font-size: 30px;
         }
       }
     }
-
   }
 }
 </style>
