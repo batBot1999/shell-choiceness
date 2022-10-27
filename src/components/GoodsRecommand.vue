@@ -74,7 +74,7 @@ export default {
     getgoodsList() {
       goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
         (res) => {
-          console.log("res.result---", res.result);
+          // console.log("res.result---", res.result);
           this.goodsList = res.result.records;
           // console.log("goodsList---", this.goodsList);
         }

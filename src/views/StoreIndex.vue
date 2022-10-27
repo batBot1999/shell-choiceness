@@ -58,10 +58,10 @@
         <div class="store-pagination-box">
           <!-- table -->
           <el-table :data="tableData" style="width: 100%">
-            <el-table-column prop="goods" label="商品名称"> </el-table-column>
-            <el-table-column prop="number" label="货号"> </el-table-column>
-            <el-table-column prop="brand" label="品牌"> </el-table-column>
-            <el-table-column prop="standard" label="规格"> </el-table-column>
+            <el-table-column prop="id" label="商品名称"> </el-table-column>
+            <el-table-column prop="title" label="货号"> </el-table-column>
+            <el-table-column prop="type" label="品牌"> </el-table-column>
+            <el-table-column prop="url" label="规格"> </el-table-column>
             <el-table-column prop="package" label="销售包装"> </el-table-column>
             <el-table-column prop="price" label="价格"> </el-table-column>
             <el-table-column prop="date" label="发货时间"> </el-table-column>
@@ -81,11 +81,11 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage4"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
+            :current-page="currentPage"
+            :page-sizes="[5, 10, 15, 20]"
+            :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+            :total="total"
           >
           </el-pagination>
         </div>
@@ -103,23 +103,19 @@
 import HeaderNav from "../components/HeaderNav.vue";
 import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import Footer from "../components/Footer.vue";
+import axios from "axios";
+// import getPoem from "../request/api.js";
+
 export default {
   data() {
     return {
       num: 1,
       radio1: "全部",
-      currentPage4: 4,
-      tableData: [
-        {
-          goods: "艾本德单道移液器",
-          number: "20210330",
-          brand: "Eppendorf/艾本德",
-          standard: "100-1000ul",
-          package: "6支/盒",
-          price: "￥999.00",
-          date: "5-7天",
-        },
-      ],
+      currentPage: 1,
+      pageSize: 5,
+      // total: res.data.result.total,
+      tableData: [],
+      total: 0,
     };
   },
   components: {
@@ -129,12 +125,34 @@ export default {
   },
 
   methods: {
+    // 选择一页显示多少条数据
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
+      this.pageSize = val;
+      this.getPoemList();
     },
+    // 选择当前是第几页
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getPoemList();
     },
+    getPoemList() {
+      axios.get("https://api.apiopen.top/api/getImages", {
+        header: { "Content-Type": "application/json" },
+        params: { page: this.currentPage, size: this.pageSize },
+      }).then((res) => {
+        console.log("res---", res);
+        if (res.data.code === 200) {
+          this.tableData = res.data.result.list;
+          this.total = res.data.result.total;
+        }
+      })
+    },
+  },
+
+  mounted() {
+    this.getPoemList();
   },
 };
 </script>

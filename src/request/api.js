@@ -50,7 +50,7 @@ export function getGoodsDetail(data) {
 export function getGoodsDetailSku(data) {
     // console.log("api---", data);
     return get({
-        url: "/bio/app/bioSku/queryItemId?itemId=" + data,
+        url: "/bio/app/bioSku/queryItemId?itemId=" +data,
     })
 }
 
@@ -58,6 +58,13 @@ export function getGoodsDetailSku(data) {
 export function getGoodsRecommendBanner(data) {
     return get({
         url: "/bio/app/bioBanner/app/list?bannerType="+data
+    })
+}
+
+// 获取古诗分页
+export function getPoem() {
+    return get({
+        url: "https://api.apiopen.top/api/getImages?page=0&size=10"
     })
 }
 
