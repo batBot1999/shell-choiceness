@@ -62,36 +62,36 @@
             </el-carousel>
           </div>
           <div class="goods-right-box">
-            <p>艾本德单道移液器</p>
-            <p>¥999.00</p>
+            <p>{{ this.goodsItem.name }}</p>
             <div class="text-box">
-              <div>
-                <span>货号：20210330</span>
-                <span>计量单位：支</span>
-                <span>规格：100- 1000ul</span>
-                <span>运杂费：¥99.00</span>
-              </div>
-              <div>
-                <span>品牌：Eppendorf/艾本德</span>
-                <span>交货周期：付款成功后7天内安排发货</span>
-                <span>销售包装：6支/盒</span>
-              </div>
-              <div>
-                <span>发货地：上海</span>
+              <div class="detail-box">
+                <span>货号：{{ this.goodsItem.itemNo }}</span>
+                <span>规格：{{ this.goodsItem.specificationDesc }}</span>
+                <!-- <span>价格: {{ this.goodsItem.price }} </span> -->
+                <span>{{ this.goodsItem.enterpriseName }}</span>
+                <span>购买数量：</span>
+                <div
+                  class="sku-item"
+                  v-for="item in goodsItemSku"
+                  :key="item.id"
+                >
+                  <div class="sku-text">
+                    {{ item.unitName }}({{ item.convertMultiple
+                    }}{{ item.stockUnitName }}/{{ item.unitName }})
+                  </div>
+                  <span>价格:{{ item.price }}</span>
+                  <el-input-number
+                    v-model="item.counter"
+                    @change="handleChange"
+                    :min="0"
+                    :max="10"
+                    label="描述文字"
+                  ></el-input-number>
+                </div>
+                <div>总价:{{ totalPrice }}</div>
               </div>
             </div>
-            <span>购买数量：</span>
-            <el-input-number
-              v-model="counter"
-              @change="handleChange"
-              :min="1"
-              :max="10"
-              label="描述文字"
-            ></el-input-number>
-            <div class="button-box">
-              <button>加入购物车</button>
-              <button>立即购买</button>
-            </div>
+            <button>提交订单</button>
           </div>
         </div>
       </div>
@@ -101,34 +101,83 @@
     <Footer />
   </div>
 </template>
-
 <script>
 import HeaderNav from "../components/HeaderNav.vue";
 import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import Footer from "../components/Footer.vue";
+import { getGoodsDetail } from "../request/api.js";
+import { getGoodsDetailSku } from "../request/api.js";
+
 export default {
+  components: {
+    HeaderNav,
+    GoodsSearchBox,
+    Footer,
+  },
   data() {
     return {
       num: 2,
       levels: ["实验常规仪器", "移液器", "单道移液器"],
       counter: 0,
+      goodsItem: {},
+      goodsItemSku: [],
+      id: null,
     };
   },
   methods: {
     handleChange(value) {
       console.log(value);
     },
+
+    getGoodsDetailItem() {
+      // console.log("id---",this.id);
+      getGoodsDetail(this.id)
+        .then((res) => {
+          // console.log("res---", res);
+          this.goodsItem = res.result;
+          // console.log("goodsItem---", this.goodsItem);
+        })
+        .catch((e) => {
+          // console.log("e---", e);
+        });
+    },
+
+    getGoodsDetailItemSku() {
+      // console.log("id---",this.id);
+      getGoodsDetailSku(this.id)
+        .then((res) => {
+          // console.log("res---", res);
+          this.goodsItemSku = res.result;
+          console.log("goodsItemSku---", this.goodsItemSku);
+          // 遍历每一个sku然后给他加一个计数器,一开始直接加进去没有响应式地更新视图,去网上查发现可以用这个this.$set(obj, key, value)给对象加键值对
+          this.goodsItemSku.map((item) => {
+            this.$set(item, "counter", 0);
+          });
+        })
+        .catch((e) => {
+          // console.log("e---", e);
+        });
+    },
+
+    submitOrder() {},
   },
-  components: {
-    HeaderNav,
-    GoodsSearchBox,
-    Footer,
+
+  computed: {
+    totalPrice() {
+      // console.log("this.counter",this.counter);
+      let a = 0;
+      this.goodsItemSku.map((item) => {
+        a += item.price * item.counter;
+      });
+      return a;
+    },
   },
 
   mounted() {
     this.id = this.$route.query.id;
-    console.log(id);
-  }
+    this.getGoodsDetailItem();
+    this.getGoodsDetailItemSku();
+  },
 };
 </script>
 
@@ -274,38 +323,41 @@ export default {
 
       .text-box {
         margin-bottom: 15px;
-        display: flex;
+        // display: flex;
         gap: 100px;
-        div {
+        .detail-box {
           display: flex;
           flex-direction: column;
           span {
-            margin-top: 15px;
+          }
+          .sku-item {
+            display: flex;
+            // flex-direction: column;
+            font-size: 40px;
+            line-height: 40px;
+
+            .sku-text {
+              border: 1px solid #000;
+            }
+            .active {
+              border: blue;
+            }
           }
         }
       }
 
-      .button-box {
-        width: 500px;
-        height: 100px;
-        // background: red;
-        display: flex;
-        justify-content: space-evenly;
-        align-items: center;
+      button {
         margin-top: 30px;
+        width: 150px;
+        height: 80px;
+        font-size: 20px;
+        border: none;
+        border-radius: 5px;
+      }
 
-        button {
-          width: 150px;
-          height: 80px;
-          font-size: 20px;
-          border: none;
-          border-radius: 5px;
-        }
-
-        button:first-child {
-          background: #0e6ebe;
-          color: #fff;
-        }
+      button:first-child {
+        background: #0e6ebe;
+        color: #fff;
       }
     }
   }
