@@ -175,6 +175,7 @@ export default {
 
   mounted() {
     this.id = this.$route.query.id;
+    console.log(this.id);
     this.getGoodsDetailItem();
     this.getGoodsDetailItemSku();
   },

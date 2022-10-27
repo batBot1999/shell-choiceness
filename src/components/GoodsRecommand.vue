@@ -56,6 +56,7 @@ export default {
       pageSize: 1000,
       goodsList: [],
       currentPage4: 4,
+      id: null,
     };
   },
   methods: {
@@ -66,14 +67,14 @@ export default {
     goGoodsDetail(id) {
       this.$router.push({
         name: "goods-detail",
-        query: { id: item.id },
+        query: { id: id },
       });
     },
 
     getgoodsList() {
       goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
         (res) => {
-          // console.log("res.result.records---", res.result.records);
+          console.log("res.result---", res.result);
           this.goodsList = res.result.records;
           // console.log("goodsList---", this.goodsList);
         }

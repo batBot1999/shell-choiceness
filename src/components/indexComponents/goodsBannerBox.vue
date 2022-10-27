@@ -21,7 +21,7 @@
         </el-carousel>
       </div>
     </div>
-    <div class="bannerRight" >
+    <div class="bannerRight">
       <div class="is-login-box" v-show="!notLogin">
         <div class="welcomeBox">您好!欢迎来到贝壳精选!</div>
         <div class="buttonBox">
@@ -30,9 +30,9 @@
         </div>
       </div>
       <div class="is-login-box" v-show="notLogin">
-       <p>{{ realname }},您已登录</p>
-       <br>
-       <p>所在公司:{{ companyName }}</p>
+        <p>{{ realname }},您已登录</p>
+        <br />
+        <p>所在公司:{{ companyName }}</p>
       </div>
       <div class="announcementBox">
         <p>平台公告</p>
@@ -47,17 +47,15 @@
 </template>
 
 <script>
+import { getGoodsRecommendBanner } from "../../request/api.js";
 export default {
   data() {
     return {
       notLogin: false,
       realname: localStorage.realname,
       companyName: localStorage.companyName,
+      bannerType: 1,
     };
-  },
-  mounted(){
-    // console.log(localStorage.getItem('token'));
-    this.notLogin= localStorage.getItem('token')?true:false;
   },
   methods: {
     goLogin() {
@@ -66,12 +64,23 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
+    getGoodsBanner() {
+      getGoodsRecommendBanner(this.bannerType).then((res) => {
+        console.log("res---", res);
+      });
+    },
   },
-  watch:{
-    notLogin(newvalue,oldvalue){
+  mounted() {
+    // console.log(localStorage.getItem('token'));
+    this.notLogin = localStorage.getItem("token") ? true : false;
+
+    this.getGoodsBanner();
+  },
+  watch: {
+    notLogin(newvalue, oldvalue) {
       // console.log(localStorage.getItem('token'));
       // console.log(newvalue,oldvalue);
-    }
+    },
   },
 };
 </script>

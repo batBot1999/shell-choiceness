@@ -41,7 +41,7 @@ export function goodsRecommendList(data) {
 export function getGoodsDetail(data) {
     // console.log("api---", data);
     return get({
-        url: "/bio/app/bioItem/queryById?id="+data,
+        url: "/bio/app/bioItem/queryById?id=" + data,
 
     })
 }
@@ -50,7 +50,14 @@ export function getGoodsDetail(data) {
 export function getGoodsDetailSku(data) {
     // console.log("api---", data);
     return get({
-        url: "/bio/app/bioSku/queryItemId?itemId="+data,
+        url: "/bio/app/bioSku/queryItemId?itemId=" + data,
+    })
+}
+
+// 商品推荐轮播图
+export function getGoodsRecommendBanner(data) {
+    return get({
+        url: "/bio/app/bioBanner/app/list?bannerType="+data
     })
 }
 
