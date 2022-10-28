@@ -16,7 +16,7 @@
         <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
         <el-carousel height="200px">
           <el-carousel-item v-for="item in bannerList" :key="item.id">
-            <img :src="item.pic" class="small">{{ item }}</img>
+            <img :src="item.pic" class="small" @click="goBannerDetail(item.id, item.skipType, item.skipUrl)">{{ item }}</img>
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -93,16 +93,23 @@ export default {
     },
     getGoodsBanner() {
       getGoodsRecommendBanner(this.bannerType).then((res) => {
-        console.log(res);
+        console.log("bannerRes---", res);
         this.bannerList = res.result;
-        // console.log("bannerList---", bannerList);
+        console.log("bannerList---", this.bannerList);
       });
     },
-    goAnnouncementDetail(id) {
-      this.$router.push({
-        name: "announcement-detail",
-        query: { id: id },
-      })
+    goBannerDetail(id, skipType, skipUrl) {
+      // 如果skipId为1,点击跳转到商品详情页面
+      if (skipType == 1) {
+        this.$router.push({
+          name: "goods-detail",
+          query: { id: id },
+        })
+      }
+      else if (skipType == 3) {
+        // window.open("https://"+skipUrl); 如果后端没加https,只是一个www.baidu.com,要自己手动拼，否则就会跳转到localhost8080:www.baidu.com
+        window.open(skipUrl);
+      }
     },
 
     // getAnnouncement() {
@@ -146,6 +153,7 @@ export default {
           }
         });
     },
+
   },
   mounted() {
     // console.log(localStorage.getItem('token'));
