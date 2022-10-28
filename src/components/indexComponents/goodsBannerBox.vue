@@ -15,8 +15,8 @@
       <div class="block">
         <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
         <el-carousel height="200px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <img :src="item.pic" class="small">{{ item }}</img>
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -36,11 +36,24 @@
       </div>
       <div class="announcementBox">
         <p>平台公告</p>
-        <ul>
-          <li>【通告】&供应商管理措施</li>
-          <li>【通告】&采购商管理措施</li>
-          <li>【推荐】&nbsp实验耗材精选</li>
+        <!-- paginationContent -->
+        <ul v-for="(item, index) in announcementList" :key="index">
+          <div class="flex-box" @click="goAnnouncementDetail(item.id)">
+            <span>{{ item.title }}</span>
+            <span>{{ item.createTime }}</span>
+          </div>
         </ul>
+
+        <!-- 分页 -->
+        <el-pagination
+          small
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          :current-page="anouncementCurrentPage"
+          :page-size="anouncementPageSize"
+          :total="anouncementTotal"
+        >
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -48,6 +61,9 @@
 
 <script>
 import { getGoodsRecommendBanner } from "../../request/api.js";
+import { getAnnouncementPagination } from "../../request/api.js";
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -55,6 +71,17 @@ export default {
       realname: localStorage.realname,
       companyName: localStorage.companyName,
       bannerType: 1,
+      announcementList: [],
+
+      currentPage: 1,
+      pageSize: 5,
+      total: 0,
+      // 公告分页参数
+      anouncementCurrentPage: 1,
+      anouncementPageSize: 3,
+      anouncementTotal: 0,
+      // 轮播图容器
+      bannerList:[],
     };
   },
   methods: {
@@ -66,8 +93,58 @@ export default {
     },
     getGoodsBanner() {
       getGoodsRecommendBanner(this.bannerType).then((res) => {
-        console.log("res---", res);
+        console.log(res);
+        this.bannerList = res.result;
+        // console.log("bannerList---", bannerList);
       });
+    },
+    goAnnouncementDetail(id) {
+      this.$router.push({
+        name: "announcement-detail",
+        query: { id: id },
+      })
+    },
+
+    // getAnnouncement() {
+    //   getAnnouncementPagination({
+    //     pageNo: this.anouncementCurrentPage,
+    //     pageSize: this.anouncementPageSize,
+    //   }).then((res) => {
+    //     console.log(res);
+    //     if (res.code === 200) {
+    //       this.announcementList = res.result.records;
+    //       // console.log("announcementList---", this.announcementList);
+    //       this.anouncementTotal = res.result.total;
+    //       // console.log("this.total---", this.total);
+    //     }
+    //   });
+    // },
+
+    // 选择当前是第几页
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.anouncementCurrentPage = val;
+      this.getAnnouncement();
+    },
+    getAnnouncement() {
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
+          {
+            header: { "Content-Type": "application/json" },
+            params: {
+              pageNo: this.anouncementCurrentPage,
+              pageSize: this.anouncementPageSize,
+            },
+          }
+        )
+        .then((res) => {
+          // console.log("res---", res);
+          if (res.data.code === 200) {
+            this.announcementList = res.data.result.records;
+            this.anouncementTotal = res.data.result.total;
+          }
+        });
     },
   },
   mounted() {
@@ -75,6 +152,8 @@ export default {
     this.notLogin = localStorage.getItem("token") ? true : false;
 
     this.getGoodsBanner();
+
+    this.getAnnouncement();
   },
   watch: {
     notLogin(newvalue, oldvalue) {
@@ -117,11 +196,12 @@ export default {
 
   .bannerCenter {
     width: 50%;
-    .el-carousel__item h3 {
+    .el-carousel__item img {
       color: #475669;
       font-size: 14px;
       opacity: 0.75;
       margin: 0;
+      width: 100%;
     }
 
     .el-carousel__item:nth-child(2n) {
@@ -165,7 +245,7 @@ export default {
     }
 
     .announcementBox {
-      text-align: center;
+      // text-align: center;
       width: 100%;
       border-top: 1px solid #000;
       margin-top: 10px;
@@ -173,15 +253,31 @@ export default {
       font-size: 14px;
 
       p {
-        font-size: 15px;
+        font-size: 12px;
         font-weight: bolder;
-        margin-bottom: 10px;
+        margin-left: 40%;
       }
 
-      ul > li {
+      span {
         font-size: 12px;
-        height: 20px;
-        line-height: 20px;
+        height: 12px;
+        line-height: 12px;
+      }
+
+      ul > .flex-box {
+        display: flex;
+        justify-content: space-between;
+        span:first-child {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        span:last-child {
+          color: red;
+          transform: scale(0.8);
+          white-space: nowrap;
+        }
       }
     }
   }

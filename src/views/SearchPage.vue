@@ -80,12 +80,12 @@
             </el-table-column>
             <el-table-column prop="operarion" label="操作">
               <template slot-scope="scope">
-                <el-button
+                <!-- <el-button
                   @click="handleClick(scope.row)"
                   type="text"
                   size="small"
                   >加入购物车</el-button
-                >
+                > -->
                 <el-button type="text" size="small">立即下单</el-button>
               </template>
             </el-table-column>

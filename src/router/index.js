@@ -10,6 +10,7 @@ import GoodsDetail from '../views/GoodsDetail.vue'
 import StoreIndex from '../views/StoreIndex.vue'
 import ServiceDetail from '../views/ServiceDetail.vue'
 import SettlementPage from '../views/SettlementPage.vue'
+import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 
 
 
@@ -67,6 +68,11 @@ const routes = [
     name: 'settlement-page',
     component: SettlementPage
   },
+  {
+    path: '/announcement-detail',
+    name: 'announcement-detail',
+    component: AnnouncementDetail
+  }
 
 ]
 

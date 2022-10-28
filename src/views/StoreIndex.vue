@@ -67,12 +67,12 @@
             <el-table-column prop="date" label="发货时间"> </el-table-column>
             <el-table-column prop="operarion" label="操作">
               <template slot-scope="scope">
-                <el-button
+                <!-- <el-button
                   @click="handleClick(scope.row)"
                   type="text"
                   size="small"
                   >加入购物车</el-button
-                >
+                > -->
                 <el-button type="text" size="small">立即下单</el-button>
               </template>
             </el-table-column>
@@ -113,7 +113,6 @@ export default {
       radio1: "全部",
       currentPage: 1,
       pageSize: 5,
-      // total: res.data.result.total,
       tableData: [],
       total: 0,
     };
