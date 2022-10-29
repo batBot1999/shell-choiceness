@@ -48,6 +48,7 @@
 
 <script>
 import { goodsRecommendList } from "../request/api.js";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -57,6 +58,8 @@ export default {
       goodsList: [],
       currentPage4: 4,
       id: null,
+      level: 1,
+      type: 1,
     };
   },
   methods: {
@@ -74,7 +77,7 @@ export default {
     getgoodsList() {
       goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
         (res) => {
-          // console.log("res.result---", res.result);
+          console.log("res---", res);
           this.goodsList = res.result.records;
           // console.log("goodsList---", this.goodsList);
         }
@@ -87,10 +90,33 @@ export default {
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
     },
+
+    getGoodsRecommendNav() {
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
+          {
+            params: {
+              level: this.level,
+              type: this.type,
+            },
+          }
+        )
+        .then((res) => {
+          console.log("resNav-----", res);
+          if (res.data.code === 200) {
+            // this.totalGoodsSortFirst = res.data.result;
+            // console.log(this.totalGoodsSortFirst);
+          }
+        })
+        .catch((e) => {});
+    },
   },
 
   mounted() {
     this.getgoodsList();
+
+    this.getGoodsRecommendNav();
   },
 };
 </script>

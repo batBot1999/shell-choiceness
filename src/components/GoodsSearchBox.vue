@@ -1,42 +1,56 @@
 <template>
-    <div class="search-box">
-      <img src="../assets/img/searchIcon.png" class="search-img" alt="" />
-      <el-select v-model="value" placeholder="商品名称">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-      <el-input
-        v-model="input"
-        placeholder="请输入关键词"
-      ></el-input>
-      <button class="search-button">搜索</button>
-    </div>
+  <div class="search-box">
+    <img src="../assets/img/searchIcon.png" class="search-img" alt="" />
+    <el-select v-model="value" placeholder="商品名称">
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+      </el-option>
+    </el-select>
+    <el-input v-model="input" placeholder="请输入关键词"></el-input>
+    <button class="search-button" @click="goGoodsSearch()">
+      搜索
+    </button>
+  </div>
 </template>
 
 <script>
+// import { getIndexGoodsSort } from "../request/api.js";
 export default {
   data() {
     return {
       input: "",
-              options: [{
-          value: '选项1',
-          label: '商品名称'
-        }, {
-          value: '选项2',
-          label: '商品货号'
-        }, {
-          value: '选项3',
-          label: '商品品牌'
-        }],
-        value: ''
+      options: [
+        {
+          value: "选项1",
+          label: "商品名称",
+        },
+        {
+          value: "选项2",
+          label: "商品货号",
+        },
+        {
+          value: "选项3",
+          label: "商品品牌",
+        },
+      ],
+      value: "",
     };
   },
   components: {},
+
+  methods: {
+    goGoodsSearch() {
+      this.$router.push({
+        name: "search-page",
+        query: {name: this.input}
+      })
+
+    },
+  },
 };
 </script>
 
@@ -58,14 +72,13 @@ export default {
 
   .el-select {
     width: 160px;
-   /deep/.el-input__inner {
+    /deep/.el-input__inner {
       height: 40px;
-      background-color: #FFF;
+      background-color: #fff;
       border: 1px solid #000;
       border-radius: 0;
     }
   }
-
 
   /deep/.el-input__inner {
     background-color: #eff1f2;

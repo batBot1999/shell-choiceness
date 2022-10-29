@@ -49,14 +49,14 @@ export default {
       getAnouncementDetail(this.id).then((res) => {
         // console.log("res--", res);
         this.anouncementDetailContent = res.result;
-        console.log(
-          "this.anouncementDetailContent---",
-          this.anouncementDetailContent
-        );
-        console.log(
-          "this.anouncementDetailContent.createTime---",
-          this.anouncementDetailContent.createTime
-        );
+        // console.log(
+        //   "this.anouncementDetailContent---",
+        //   this.anouncementDetailContent
+        // );
+        // console.log(
+        //   "this.anouncementDetailContent.createTime---",
+        //   this.anouncementDetailContent.createTime
+        // );
       });
     },
   },

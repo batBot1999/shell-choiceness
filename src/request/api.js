@@ -71,8 +71,8 @@ export function getGoodsRecommendBanner(data) {
 // 平台公告分页
 export function getAnnouncementPagination(data) {
     return get({
-        url: "/bio/app/bioAnnouncement/app/list",
-        data
+        url: "/bio/app/bioAnnouncement/app/list?",
+        data,
     })
 }
 
@@ -83,6 +83,16 @@ export function getAnouncementDetail(data) {
 
     })
 }
+
+// 首页商品分类
+export function getIndexGoodsSort(data) {
+    return get({
+        url: "/bio/app/bioClassification/app/parent?",
+        data,
+    })
+}
+
+
 
 
 

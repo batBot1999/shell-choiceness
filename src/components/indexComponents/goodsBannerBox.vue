@@ -1,22 +1,38 @@
 <template>
   <div class="goodsBannerBox">
     <div class="bannerLeft">
-      <ul>
-        <li>全部商品分类</li>
-        <li>工具酶、抗体等上游生物试剂</li>
-        <li>实验室常用仪器、耗材</li>
-        <li>医疗器械、设备</li>
-        <li>特色原料药、中间体、辅料、包材</li>
-        <li>医疗服务</li>
-        <li>专业软件</li>
-      </ul>
+        <!-- @mouseover.native="getIndexGoodsSortHover(item1.id)" -->
+      <el-popover
+        width="200"
+        trigger="hover"
+        placement="right-start"
+        visible-arrow="false"
+        v-for="(item1, index) in this.totalGoodsSortFirst"
+        :key="index"
+        @show="hoverShow(item1.id)"
+      >
+        <div v-if="slotIsShow">
+          <!-- slot插入开始 -->
+
+          <div v-for="(item2, index) in this.totalGoodsSortSecond" :key="index">
+          2323
+          </div>
+          <!-- <div>2112</div> -->
+        </div>
+        <!-- slot插入结束 -->
+        <el-button slot="reference">{{ item1.name }}</el-button>
+      </el-popover>
     </div>
     <div class="bannerCenter">
       <div class="block">
         <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
         <el-carousel height="200px">
           <el-carousel-item v-for="item in bannerList" :key="item.id">
-            <img :src="item.pic" class="small" @click="goBannerDetail(item.id, item.skipType, item.skipUrl)">{{ item }}</img>
+            <img
+              :src="item.pic"
+              class="small"
+              @click="goBannerDetail(item.id, item.skipType, item.skipUrl)"
+            />{{ item }}
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -62,6 +78,7 @@
 <script>
 import { getGoodsRecommendBanner } from "../../request/api.js";
 import { getAnnouncementPagination } from "../../request/api.js";
+import { getIndexGoodsSort } from "../../request/api.js";
 import axios from "axios";
 
 export default {
@@ -81,7 +98,19 @@ export default {
       anouncementPageSize: 3,
       anouncementTotal: 0,
       // 轮播图容器
-      bannerList:[],
+      bannerList: [],
+      // 商品分类参数一级
+      parentId: 0,
+      level: 1,
+      type: 1,
+      // 一级商品分类容器
+      totalGoodsSortFirst: [],
+      // 二级商品分类容器
+      totalGoodsSortSecond: [],
+      // 全部商品分类控制显示隐藏
+      // visible: false,
+      slotIsShow: false,
+      id: null,
     };
   },
   methods: {
@@ -93,9 +122,9 @@ export default {
     },
     getGoodsBanner() {
       getGoodsRecommendBanner(this.bannerType).then((res) => {
-        console.log("bannerRes---", res);
+        // console.log("bannerRes---", res);
         this.bannerList = res.result;
-        console.log("bannerList---", this.bannerList);
+        // console.log("bannerList---", this.bannerList);
       });
     },
     goBannerDetail(id, skipType, skipUrl) {
@@ -104,27 +133,47 @@ export default {
         this.$router.push({
           name: "goods-detail",
           query: { id: id },
-        })
-      }
-      else if (skipType == 3) {
+        });
+      } else if (skipType == 3) {
         // window.open("https://"+skipUrl); 如果后端没加https,只是一个www.baidu.com,要自己手动拼，否则就会跳转到localhost8080:www.baidu.com
         window.open(skipUrl);
       }
     },
 
+    getAnnouncement() {
+      getAnnouncementPagination({
+        pageNo: this.anouncementCurrentPage,
+        pageSize: this.anouncementPageSize,
+      }).then((res) => {
+        // console.log(res);
+        if (res.code === 200) {
+          this.announcementList = res.result.records;
+          // console.log("announcementList---", this.announcementList);
+          this.anouncementTotal = res.result.total;
+          // console.log("this.total---", this.total);
+        }
+      });
+    },
+
     // getAnnouncement() {
-    //   getAnnouncementPagination({
-    //     pageNo: this.anouncementCurrentPage,
-    //     pageSize: this.anouncementPageSize,
-    //   }).then((res) => {
-    //     console.log(res);
-    //     if (res.code === 200) {
-    //       this.announcementList = res.result.records;
-    //       // console.log("announcementList---", this.announcementList);
-    //       this.anouncementTotal = res.result.total;
-    //       // console.log("this.total---", this.total);
-    //     }
-    //   });
+    //   axios
+    //     .get(
+    //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
+    //       {
+    //         header: { "Content-Type": "application/json" },
+    //         params: {
+    //           pageNo: this.anouncementCurrentPage,
+    //           pageSize: this.anouncementPageSize,
+    //         },
+    //       }
+    //     )
+    //     .then((res) => {
+    //       // console.log("res---", res);
+    //       if (res.data.code === 200) {
+    //         this.announcementList = res.data.result.records;
+    //         this.anouncementTotal = res.data.result.total;
+    //       }
+    //     });
     // },
 
     // 选择当前是第几页
@@ -133,27 +182,73 @@ export default {
       this.anouncementCurrentPage = val;
       this.getAnnouncement();
     },
-    getAnnouncement() {
+
+    getIndexGoodsSortMounted() {
       axios
         .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
           {
-            header: { "Content-Type": "application/json" },
             params: {
-              pageNo: this.anouncementCurrentPage,
-              pageSize: this.anouncementPageSize,
+              parentId: this.parentId,
+              level: this.level,
+              type: this.type,
             },
           }
         )
         .then((res) => {
-          // console.log("res---", res);
+          // console.log("res-----", res);
           if (res.data.code === 200) {
-            this.announcementList = res.data.result.records;
-            this.anouncementTotal = res.data.result.total;
+            this.totalGoodsSortFirst = res.data.result;
+            // console.log(this.totalGoodsSortFirst);
           }
-        });
+        })
+        .catch((e) => {});
     },
 
+    // getIndexGoodsSortMounted() {
+    //   getIndexGoodsSort({
+    //     parentId: this.parentId,
+    //     level: this.level,
+    //     type: this.type,
+    //   }).then((res) => {
+    //     console.log("三个参数:", this.parentId,this.level,this.type);
+    //     console.log("getIndexGoodsSortRes---", res);
+    //   });
+    // },
+
+    // getIndexGoodsSortHover(id) {
+    hoverShow(id) {
+      // console.log("id---", id);
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
+          {
+            params: {
+              id: id,
+              level: this.level,
+              type: this.type,
+            },
+          }
+        )
+        .then((res) => {
+          // console.log("res-----", res);
+          if (res.data.code === 200) {
+            this.totalGoodsSortSecond = res.data.result;
+            // slotIsShow = true;
+            console.log("totalGoodsSortSecond---", this.totalGoodsSortSecond);
+          }
+        })
+        .catch((e) => {});
+
+      // getIndexGoodsSort({
+      //   parentId: id,
+      //   level: this.level,
+      //   type: this.type,
+      // }).then((res) => {
+      //   console.log(id);
+      //   console.log('二级标题res---',res);
+      // })
+    },
   },
   mounted() {
     // console.log(localStorage.getItem('token'));
@@ -162,6 +257,8 @@ export default {
     this.getGoodsBanner();
 
     this.getAnnouncement();
+
+    this.getIndexGoodsSortMounted();
   },
   watch: {
     notLogin(newvalue, oldvalue) {
@@ -181,24 +278,14 @@ export default {
   display: flex;
 
   .bannerLeft {
-    width: 25%;
-    padding: 10px;
+    width: 25vw;
+    background: green;
 
-    li {
-      line-height: 25px;
-    }
-
-    li:hover {
-      color: #475669;
-    }
-
-    li:last-child::after {
-      content: ">";
-      float: right;
-    }
-
-    li:first-child::after {
-      content: "";
+    .el-popover {
+      // height: 100px;
+      // line-height: 50px;
+      .el-button {
+      }
     }
   }
 

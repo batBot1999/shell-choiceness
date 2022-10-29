@@ -62,19 +62,21 @@
         </div>
 
         <div class="search-pagination-box">
-          <el-radio-group v-model="radio2">
+          <!-- <el-radio-group v-model="radio2">
             <el-radio-button label="默认排序"></el-radio-button>
             <el-radio-button label="价格"></el-radio-button>
             <el-radio-button label="上架时间"></el-radio-button>
             <el-radio-button label="销量"></el-radio-button>
-          </el-radio-group>
+          </el-radio-group> -->
           <!-- table -->
           <el-table :data="tableData" style="width: 100%">
             <el-table-column prop="name" label="商品名称"> </el-table-column>
             <el-table-column prop="itemNo" label="货号"> </el-table-column>
-            <el-table-column prop="specificationDesc" label="规格"> </el-table-column>
+            <el-table-column prop="specificationDesc" label="规格">
+            </el-table-column>
             <el-table-column prop="price" label="价格"> </el-table-column>
-            <el-table-column prop="date" label="发货时间"> </el-table-column>
+            <el-table-column prop="createTime" label="发货时间">
+            </el-table-column>
             <el-table-column prop=" enterpriseName" label="供应商">
               <el-button type="text" size="small">科加奥</el-button>
             </el-table-column>
@@ -92,13 +94,11 @@
           </el-table>
           <!-- 分页 -->
           <el-pagination
-            @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage4"
-            :page-sizes="[100, 200, 300, 400]"
-            :page-size="100"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400"
+            :current-page="currentPage"
+            :page-size="pageSize"
+            layout="total,  prev, pager, next, jumper"
+            :total="total"
           >
           </el-pagination>
         </div>
@@ -116,6 +116,7 @@ import { goodsRecommendList } from "../request/api.js";
 import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
+import axios from "axios";
 export default {
   data() {
     return {
@@ -148,21 +149,15 @@ export default {
         "规格9",
         "规格10",
       ],
-      currentPage4: 4,
-      tableData: [
-        {
-          goods: "艾本德单道移液器",
-          number: "20210330",
-          brand: "Eppendorf/艾本德",
-          standard: "100-1000ul",
-          package: "6支/盒",
-          price: "￥999.00",
-          date: "5-7天",
-          provider: "科加奥",
-        },
-      ],
+      currentPage: 1,
+      pageSize: 5,
+      tableData: [],
+      total: 0,
       // goodsList: [],
       radio2: "默认排序",
+      name: "",
+      level: 1,
+      type: 1,
     };
   },
   components: {
@@ -171,12 +166,10 @@ export default {
     HeaderNav,
   },
   methods: {
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
-
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getRearchPageGoodsList();
     },
 
     // getgoodsList() {
@@ -187,10 +180,40 @@ export default {
     //     }
     //   );
     // },
+
+    getRearchPageGoodsList() {
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list",
+          {
+            params: {
+              name: this.name,
+              pageNo: this.currentPage,
+              pageSize: this.pageSize,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.code === 200) {
+            console.log("res-----", res.data.result.records);
+            this.tableData = res.data.result.records;
+            console.log(this.tableData);
+            this.total = res.data.result.total;
+          }
+        })
+        .catch((e) => {});
+    },
   },
 
   mounted() {
     // this.getgoodsList();
+
+    // 拿到在首页搜索时候传递的搜索参数
+    this.name = this.$route.query.name;
+    console.log(this.name);
+
+    // 在这个页面请求和渲染
+    this.getRearchPageGoodsList();
   },
 };
 </script>

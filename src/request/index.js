@@ -36,7 +36,8 @@ service.interceptors.response.use((res) => {
 
 // get
 export function get({url, params}) {
-  let str = params ? `?${qs.stringify(params)}` : '';
+  let str = params ? `${qs.stringify(params)}` : '';
+  // console.log(str);
   return service.get(`${url}${str}`);
 }
 
@@ -48,10 +49,6 @@ export function post({url,data}) {
     'Content-Type': "application/json",
     // ...header
   };
-  // if (isJson === false) {
-  //   params = qs.stringify(params);
-  //   headers['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
-  // }
   return service.post(url, data, {
     headers
   });
