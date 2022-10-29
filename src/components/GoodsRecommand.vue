@@ -1,48 +1,43 @@
 <template>
   <div class="goodsRecommandBox">
     <span>商品推荐</span>&nbsp&nbsp&nbsp&nbsp<span>爆款商品推荐</span>
-    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-      <el-tab-pane label="热门推荐" name="hotRecommand" class="hot-recommand">
-        <div class="hot-recommand-box">
-          <div
-            class="tab-item"
-            @click="goGoodsDetail(item.id)"
-            v-for="item in goodsList"
-            :key="item.id"
-          >
-            <!-- <div class="tab-item" @click="goGoodsDetail"> -->
-            <img src="../assets/img/goodsImage.png" alt="" />
-            <div class="tab-item-text">
-              <p>{{ item.name }}</p>
-              <p>货号:{{ item.itemNo }}</p>
-              <p>规格:{{ item.specificationDesc }}</p>
-              <p>{{ item.price }}</p>
-              <p>{{ item.enterpriseName }}</p>
-            </div>
-          </div>
-        </div>
-        <!-- 分页 -->
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage4"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400"
-        >
-        </el-pagination>
+    <el-tabs v-model="activeName" type="card" @tab-click="tabSearchButton()">
+      <!-- <el-tab-pane label="热门推荐" name="hot-recommend"> </el-tab-pane> -->
+      <el-tab-pane
+        v-for="(item, index) in goodsRecommendNav"
+        :key="index"
+        :label="item.name"
+        :name="item.name"
+      >
       </el-tab-pane>
-      <el-tab-pane class="tab-pane" label="工具酶" name="">工具酶</el-tab-pane>
-      <el-tab-pane class="tab-pane" label="抗体" name="">抗体</el-tab-pane>
-      <el-tab-pane label="仪器" name="">仪器</el-tab-pane>
-      <el-tab-pane label="耗材" name="">耗材</el-tab-pane>
-      <el-tab-pane label="器械" name="">器械</el-tab-pane>
-      <el-tab-pane label="设备" name="">设备</el-tab-pane>
-      <el-tab-pane label="原料药" name="">原料药</el-tab-pane>
-      <el-tab-pane label="辅料" name="">辅料</el-tab-pane>
-      <el-tab-pane label="更多" name="">更多</el-tab-pane>
     </el-tabs>
+    <div class="hot-recommand-box">
+      <div
+        class="tab-item"
+        @click="goGoodsDetail(item.id)"
+        v-for="(item, index) in goodsList"
+        :key="index"
+      >
+        <!-- <div class="tab-item" @click="goGoodsDetail"> -->
+        <img src="../assets/img/goodsImage.png" alt="" />
+        <div class="tab-item-text">
+          <p>{{ item.name }}</p>
+          <p>货号:{{ item.itemNo }}</p>
+          <p>规格:{{ item.specificationDesc }}</p>
+          <p>{{ item.price }}</p>
+          <p>{{ item.enterpriseName }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- 分页 -->
+    <el-pagination
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-size="pageSize"
+      layout="total, prev, pager, next, jumper"
+      :total="total"
+    >
+    </el-pagination>
   </div>
 </template>
 
@@ -53,13 +48,15 @@ export default {
   data() {
     return {
       activeName: "hotRecommand",
-      pageNo: 1,
-      pageSize: 1000,
+      pageSize: 20,
       goodsList: [],
-      currentPage4: 4,
+      currentPage: 1,
       id: null,
-      level: 1,
+      level: 2,
       type: 1,
+      goodsRecommendNav: [],
+      activeName: "hot-recommend",
+      total: 0,
     };
   },
   methods: {
@@ -74,24 +71,47 @@ export default {
       });
     },
 
+    // getgoodsList() {
+    //   goodsRecommendList({ pageNo: this.currentPage, pageSize: this.pageSize }).then(
+    //     (res) => {
+    //       // console.log("res---", res);
+    //       this.goodsList = res.result.records;
+    //       console.log("goodsList---", this.goodsList);
+    //     }
+    //   );
+    // },
+
     getgoodsList() {
-      goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
-        (res) => {
-          console.log("res---", res);
-          this.goodsList = res.result.records;
-          // console.log("goodsList---", this.goodsList);
-        }
-      );
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/recommended/list",
+          {
+            params: {
+              pageNo: this.currentPage,
+              pageSize: this.pageSize,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.code === 200) {
+            // console.log("res-----", res.data.result.records);
+            this.goodsList = res.data.result.records;
+            // console.log("this.goodsList----", this.goodsList);
+            this.total = res.data.result.total;
+          }
+        })
+        .catch((e) => {});
     },
 
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    },
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.handleCurrentChange();
     },
 
+    // 获取商品推荐tab列表
     getGoodsRecommendNav() {
+      console.log("aaa");
       axios
         .get(
           "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
@@ -103,14 +123,43 @@ export default {
           }
         )
         .then((res) => {
-          console.log("resNav-----", res);
+          // console.log("resNav-----", res);
           if (res.data.code === 200) {
-            // this.totalGoodsSortFirst = res.data.result;
-            // console.log(this.totalGoodsSortFirst);
+            this.goodsRecommendNav = res.data.result;
+            this.$set(this.goodsRecommendNav, "name", "热门推荐");
+            console.log("this.goodsRecommendNav---", this.goodsRecommendNav);
           }
         })
         .catch((e) => {});
     },
+
+    // 点击tab时重新进行查询
+    tabSearchButton(tabId) {
+      // console.log(tabId);
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/recommended/list",
+          {
+            params: {
+              categoryId: tabId,
+              pageNo: this.currentPage,
+              pageSize: this.pageSize,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.code === 200) {
+            console.log("tabSearch-----", res);
+            // this.goodsRecommendNav = res.data.result;
+            // console.log("this.goodsRecommendNav---", this.goodsRecommendNav);
+          }
+        })
+        .catch((e) => {});
+    },
+
+      // tabSearchButton () {
+      //   console.log("dfsdf");
+      // }
   },
 
   mounted() {
@@ -141,41 +190,39 @@ export default {
     background: #0e6ebe;
   }
   .hot-recommand {
-    .hot-recommand-box {
+  }
+  .hot-recommand-box {
+    display: flex;
+    .tab-item {
+      box-sizing: border-box;
+      background: #0e6ebe;
+      width: 18%;
       display: flex;
-      .tab-item {
-        box-sizing: border-box;
-        background: #0e6ebe;
-        width: 18%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 0 1%;
-        img {
-          width: 100%;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 1%;
+      img {
+        width: 100%;
+      }
+
+      .tab-item-text {
+        text-align: center;
+        font-size: 14px;
+        color: #fff;
+        padding-bottom: 10px;
+
+        p:first-child {
+          margin: 10px;
+          font-weight: bold;
+          font-size: 20px;
         }
 
-        .tab-item-text {
-          text-align: center;
-          font-size: 14px;
-          color: #fff;
-          padding-bottom: 10px;
-
-          p:first-child {
-            margin: 10px;
-            font-weight: bold;
-            font-size: 20px;
-          }
-
-          p:nth-child(5) {
-            color: red;
-            margin-left: 20px;
-            font-size: 30px;
-          }
+        p:nth-child(5) {
+          color: red;
+          margin-left: 20px;
+          font-size: 30px;
         }
       }
-    }
-    .el-pagination {
     }
   }
 }

@@ -140,41 +140,41 @@ export default {
       }
     },
 
-    getAnnouncement() {
-      getAnnouncementPagination({
-        pageNo: this.anouncementCurrentPage,
-        pageSize: this.anouncementPageSize,
-      }).then((res) => {
-        // console.log(res);
-        if (res.code === 200) {
-          this.announcementList = res.result.records;
-          // console.log("announcementList---", this.announcementList);
-          this.anouncementTotal = res.result.total;
-          // console.log("this.total---", this.total);
-        }
-      });
-    },
-
     // getAnnouncement() {
-    //   axios
-    //     .get(
-    //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
-    //       {
-    //         header: { "Content-Type": "application/json" },
-    //         params: {
-    //           pageNo: this.anouncementCurrentPage,
-    //           pageSize: this.anouncementPageSize,
-    //         },
-    //       }
-    //     )
-    //     .then((res) => {
-    //       // console.log("res---", res);
-    //       if (res.data.code === 200) {
-    //         this.announcementList = res.data.result.records;
-    //         this.anouncementTotal = res.data.result.total;
-    //       }
-    //     });
+    //   getAnnouncementPagination({
+    //     pageNo: this.anouncementCurrentPage,
+    //     pageSize: this.anouncementPageSize,
+    //   }).then((res) => {
+    //     // console.log(res);
+    //     if (res.code === 200) {
+    //       this.announcementList = res.result.records;
+    //       // console.log("announcementList---", this.announcementList);
+    //       this.anouncementTotal = res.result.total;
+    //       // console.log("this.total---", this.total);
+    //     }
+    //   });
     // },
+
+    getAnnouncement() {
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
+          {
+            header: { "Content-Type": "application/json" },
+            params: {
+              pageNo: this.anouncementCurrentPage,
+              pageSize: this.anouncementPageSize,
+            },
+          }
+        )
+        .then((res) => {
+          // console.log("res---", res);
+          if (res.data.code === 200) {
+            this.announcementList = res.data.result.records;
+            this.anouncementTotal = res.data.result.total;
+          }
+        });
+    },
 
     // 选择当前是第几页
     handleCurrentChange(val) {
@@ -249,6 +249,14 @@ export default {
       //   console.log('二级标题res---',res);
       // })
     },
+
+    // 跳转到公告详情
+    goAnnouncementDetail(id) {
+            this.$router.push({
+        name: "announcement-detail",
+        query: { id: id },
+      });
+    }
   },
   mounted() {
     // console.log(localStorage.getItem('token'));
