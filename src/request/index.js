@@ -35,8 +35,10 @@ service.interceptors.response.use((res) => {
 })
 
 // get
-export function get({url, params}) {
-  let str = params ? `${qs.stringify(params)}` : '';
+export function get({url, data}) {
+  // console.log(data);
+  // console.log(qs.stringify(data));
+  let str = data ? `${qs.stringify(data)}` : '';
   // console.log(str);
   return service.get(`${url}${str}`);
 }

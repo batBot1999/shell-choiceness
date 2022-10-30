@@ -1,12 +1,12 @@
 <template>
   <div class="goodsBannerBox">
     <div class="bannerLeft">
-        <!-- @mouseover.native="getIndexGoodsSortHover(item1.id)" -->
+      <!-- @mouseover.native="getIndexGoodsSortHover(item1.id)" -->
       <el-popover
         width="200"
         trigger="hover"
         placement="right-start"
-        visible-arrow="false"
+        :visible-arrow="false"
         v-for="(item1, index) in this.totalGoodsSortFirst"
         :key="index"
         @show="hoverShow(item1.id)"
@@ -14,9 +14,9 @@
         <div v-if="slotIsShow">
           <!-- slot插入开始 -->
 
-          <div v-for="(item2, index) in this.totalGoodsSortSecond" :key="index">
-          2323
-          </div>
+          <!-- <div v-for="(item2, index) in this.totalGoodsSortSecond" :key="index">
+            2323
+          </div> -->
           <!-- <div>2112</div> -->
         </div>
         <!-- slot插入结束 -->
@@ -140,41 +140,42 @@ export default {
       }
     },
 
-    // getAnnouncement() {
-    //   getAnnouncementPagination({
-    //     pageNo: this.anouncementCurrentPage,
-    //     pageSize: this.anouncementPageSize,
-    //   }).then((res) => {
-    //     // console.log(res);
-    //     if (res.code === 200) {
-    //       this.announcementList = res.result.records;
-    //       // console.log("announcementList---", this.announcementList);
-    //       this.anouncementTotal = res.result.total;
-    //       // console.log("this.total---", this.total);
-    //     }
-    //   });
-    // },
-
     getAnnouncement() {
-      axios
-        .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
-          {
-            header: { "Content-Type": "application/json" },
-            params: {
-              pageNo: this.anouncementCurrentPage,
-              pageSize: this.anouncementPageSize,
-            },
-          }
-        )
-        .then((res) => {
-          // console.log("res---", res);
-          if (res.data.code === 200) {
-            this.announcementList = res.data.result.records;
-            this.anouncementTotal = res.data.result.total;
-          }
-        });
+      let params = {
+        pageNo: this.anouncementCurrentPage,
+        pageSize: this.anouncementPageSize,
+      };
+      getAnnouncementPagination(params).then((res) => {
+        // console.log(res);
+        if (res.code === 200) {
+          this.announcementList = res.result.records;
+          // console.log("announcementList---", this.announcementList);
+          this.anouncementTotal = res.result.total;
+          // console.log("this.total---", this.total);
+        }
+      });
     },
+
+    // getAnnouncement() {
+    //   axios
+    //     .get(
+    //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioAnnouncement/app/list",
+    //       {
+    //         header: { "Content-Type": "application/json" },
+    //         params: {
+    //           pageNo: this.anouncementCurrentPage,
+    //           pageSize: this.anouncementPageSize,
+    //         },
+    //       }
+    //     )
+    //     .then((res) => {
+    //       // console.log("res---", res);
+    //       if (res.data.code === 200) {
+    //         this.announcementList = res.data.result.records;
+    //         this.anouncementTotal = res.data.result.total;
+    //       }
+    //     });
+    // },
 
     // 选择当前是第几页
     handleCurrentChange(val) {
@@ -234,8 +235,8 @@ export default {
           // console.log("res-----", res);
           if (res.data.code === 200) {
             this.totalGoodsSortSecond = res.data.result;
-            // slotIsShow = true;
-            console.log("totalGoodsSortSecond---", this.totalGoodsSortSecond);
+            // this.slotIsShow = true;
+            // console.log("totalGoodsSortSecond---", this.totalGoodsSortSecond);
           }
         })
         .catch((e) => {});
@@ -250,13 +251,23 @@ export default {
       // })
     },
 
+    // 在mounted时就获取到首页商品分类二级标题
+    // getIndexGoodsSortSecond() {
+    //   let params = {
+    //     id: id,
+    //     level: this.level,
+    //     type: this.type,
+    //   };
+    //   getIndexGoodsSort({});
+    // },
+
     // 跳转到公告详情
     goAnnouncementDetail(id) {
-            this.$router.push({
+      this.$router.push({
         name: "announcement-detail",
         query: { id: id },
       });
-    }
+    },
   },
   mounted() {
     // console.log(localStorage.getItem('token'));
@@ -267,6 +278,8 @@ export default {
     this.getAnnouncement();
 
     this.getIndexGoodsSortMounted();
+
+    // this.getIndexGoodsSortSecond();
   },
   watch: {
     notLogin(newvalue, oldvalue) {

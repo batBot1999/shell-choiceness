@@ -1,13 +1,13 @@
 <template>
   <div class="goodsRecommandBox">
     <span>商品推荐</span>&nbsp&nbsp&nbsp&nbsp<span>爆款商品推荐</span>
-    <el-tabs v-model="activeName" type="card" @tab-click="tabSearchButton()">
+    <el-tabs v-model="activeName" type="card" @tab-click="tabSearchButton">
       <!-- <el-tab-pane label="热门推荐" name="hot-recommend"> </el-tab-pane> -->
       <el-tab-pane
         v-for="(item, index) in goodsRecommendNav"
         :key="index"
         :label="item.name"
-        :name="item.name"
+        :name="item.id.toString()"
       >
       </el-tab-pane>
     </el-tabs>
@@ -47,7 +47,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      activeName: "hotRecommand",
+      activeName: "22",
       pageSize: 20,
       goodsList: [],
       currentPage: 1,
@@ -55,10 +55,21 @@ export default {
       level: 2,
       type: 1,
       goodsRecommendNav: [],
-      activeName: "hot-recommend",
+      // activeName: "hot-recommend",
       total: 0,
+      recommendTabItem: {
+        name: "热门推荐",
+        parentId: 22,
+        level: 2,
+        createBy: "admin",
+        id: 22,
+        tabId: null,
+      },
     };
   },
+
+  computed: {},
+
   methods: {
     handleClick(tab, event) {
       // console.log(tab, event);
@@ -71,37 +82,40 @@ export default {
       });
     },
 
-    // getgoodsList() {
-    //   goodsRecommendList({ pageNo: this.currentPage, pageSize: this.pageSize }).then(
-    //     (res) => {
-    //       // console.log("res---", res);
-    //       this.goodsList = res.result.records;
-    //       console.log("goodsList---", this.goodsList);
-    //     }
-    //   );
-    // },
-
     getgoodsList() {
-      axios
-        .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/recommended/list",
-          {
-            params: {
-              pageNo: this.currentPage,
-              pageSize: this.pageSize,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.code === 200) {
-            // console.log("res-----", res.data.result.records);
-            this.goodsList = res.data.result.records;
-            // console.log("this.goodsList----", this.goodsList);
-            this.total = res.data.result.total;
-          }
-        })
-        .catch((e) => {});
+      let params = {
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      };
+      // console.log(123213);
+      goodsRecommendList(params).then((res) => {
+        // console.log("res---", res);
+        this.goodsList = res.result.records;
+        // console.log("goodsList---", this.goodsList);
+      });
     },
+
+    // getgoodsList() {
+    //   axios
+    //     .get(
+    //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/recommended/list",
+    //       {
+    //         params: {
+    //           pageNo: this.currentPage,
+    //           pageSize: this.pageSize,
+    //         },
+    //       }
+    //     )
+    //     .then((res) => {
+    //       if (res.data.code === 200) {
+    //         // console.log("res-----", res.data.result.records);
+    //         this.goodsList = res.data.result.records;
+    //         // console.log("this.goodsList----", this.goodsList);
+    //         this.total = res.data.result.total;
+    //       }
+    //     })
+    //     .catch((e) => {});
+    // },
 
     handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
@@ -111,7 +125,6 @@ export default {
 
     // 获取商品推荐tab列表
     getGoodsRecommendNav() {
-      console.log("aaa");
       axios
         .get(
           "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
@@ -123,10 +136,11 @@ export default {
           }
         )
         .then((res) => {
-          // console.log("resNav-----", res);
+          console.log("resNav-----", res);
           if (res.data.code === 200) {
             this.goodsRecommendNav = res.data.result;
-            this.$set(this.goodsRecommendNav, "name", "热门推荐");
+            // this.$push(this.goodsRecommendNav, "2", this.recommendTabItem);
+            this.goodsRecommendNav.unshift(this.recommendTabItem);
             console.log("this.goodsRecommendNav---", this.goodsRecommendNav);
           }
         })
@@ -134,32 +148,49 @@ export default {
     },
 
     // 点击tab时重新进行查询
-    tabSearchButton(tabId) {
-      // console.log(tabId);
-      axios
-        .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/recommended/list",
-          {
-            params: {
-              categoryId: tabId,
-              pageNo: this.currentPage,
-              pageSize: this.pageSize,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.code === 200) {
-            console.log("tabSearch-----", res);
-            // this.goodsRecommendNav = res.data.result;
-            // console.log("this.goodsRecommendNav---", this.goodsRecommendNav);
-          }
-        })
-        .catch((e) => {});
-    },
+    // tabSearchButton(tab, event) {
+    //   console.log(tab, event);
+    //   // 通过elementui文档拿到这个tabId,真的难拿,不看文档绕了好大一圈都拿不到
+    //   this.tabId = tab.name;
+    //   // console.log(this.tabId);
+    //   // console.log(this.activeName);
+    //   // axios
+    //   //   .get(
+    //   //     "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/recommended/list",
+    //   //     {
+    //   //       params: {
+    //   //         // categoryId:sskdjlsparamsdsfkdjal,dnsi
+    //   //         pageNo: this.currentPage,
+    //   //         pageSize: this.pageSize,
+    //   //       },
+    //   //     }
+    //   //   )
+    //   //   .then((res) => {
+    //   //     if (res.data.code === 200) {
+    //   //       console.log("tabSearch-----", res);
+    //   //       // this.goodsRecommendNav = res.data.result;
+    //   //       // console.log("this.goodsRecommendNav---", this.goodsRecommendNav);
+    //   //     }
+    //   //   })
+    //   //   .catch((e) => {});
+    // },
 
-      // tabSearchButton () {
-      //   console.log("dfsdf");
-      // }
+    tabSearchButton(tab, event) {
+      // console.log(tab, event);
+      // 通过elementui文档拿到这个tabId,真的难拿,不看文档绕了好大一圈都拿不到
+      this.tabId = tab.name;
+        // console.log(this.tabId);
+      let params = {
+        id: this.tabId,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      };
+      goodsRecommendList(params).then((res) => {
+        console.log("tabSearchButton---",res);
+        this.goodsList = res.result.records;
+        this.currentPage = 1;
+      })
+    },
   },
 
   mounted() {
@@ -183,7 +214,6 @@ export default {
     font-size: 12px;
   }
   /deep/.el-tabs__item {
-    width: 8.96vw;
   }
   /deep/.el-tabs__item.is-active {
     color: #fff;

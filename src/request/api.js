@@ -32,7 +32,7 @@ export function register(data) {
 // 商品推荐列表
 export function goodsRecommendList(data) {
     return get({
-        url: "/bio/app/bioItem/recommended/list",
+        url: "/bio/app/bioItem/recommended/list?",
         data
     })
 }
