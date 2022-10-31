@@ -157,8 +157,8 @@ export default {
             position: this.ruleForm.position,
             type: 0,
           }).then((res) => {
-            console.log("res---", res);
-            console.log("res.code---", res.code);
+            // console.log("res---", res);
+            // console.log("res.code---", res.code);
             // 如果成功的话
             if (res.code === 200) {
               this.$message({

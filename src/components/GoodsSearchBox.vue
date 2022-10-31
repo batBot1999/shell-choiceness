@@ -54,6 +54,7 @@ export default {
     //     query: {name: this.input}
     //   }),
     // },
+
       // 1.把input内容传给父组件 子组件中通过$emit触发事件
       sendParent() {
         // 自定义事件 $emit("事件名称", "发送事件参数")

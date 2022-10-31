@@ -7,17 +7,20 @@
         trigger="hover"
         placement="right-start"
         :visible-arrow="false"
-        v-for="(item1, index) in this.totalServiceSortFirst"
+        v-for="(item1, index) in totalServiceSortFirst"
         :key="index"
         @show="hoverShow(item1.id)"
       >
         <div v-if="slotIsShow">
           <!-- slot插入开始 -->
-
-          <!-- <div v-for="(item2, index) in this.totalServiceSortSecond" :key="index">
-            2323
-          </div> -->
-          <!-- <div>2112</div> -->
+          <div
+            class="servicesort-second-item"
+            v-for="(item2, index) in totalServiceSortSecond"
+            :key="index"
+            @click="goSearchPage(item2.name)"
+          >
+          {{item2.name}}
+          </div>
         </div>
         <!-- slot插入结束 -->
         <el-button slot="reference">{{ item1.name }}</el-button>
@@ -27,8 +30,12 @@
       <div class="block">
         <!-- <span class="demonstration">默认 Hover 指示器触发</span> -->
         <el-carousel height="200px">
-          <el-carousel-item v-for="item in 4" :key="item">
-            <h3 class="small">{{ item }}</h3>
+          <el-carousel-item v-for="item in bannerList" :key="item.id">
+            <img
+              :src="item.pic"
+              class="small"
+              @click="goBannerDetail(item.id, item.skipType, item.skipUrl)"
+            />{{ item }}
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -48,11 +55,24 @@
       </div>
       <div class="announcementBox">
         <p>平台公告</p>
-        <ul>
-          <li>【通告】&供应商管理措施</li>
-          <li>【通告】&采购商管理措施</li>
-          <li>【推荐】&nbsp实验耗材精选</li>
+        <!-- paginationContent -->
+        <ul v-for="(item, index) in announcementList" :key="index">
+          <div class="flex-box" @click="goAnnouncementDetail(item.id)">
+            <span>{{ item.title }}</span>
+            <span>{{ item.createTime }}</span>
+          </div>
         </ul>
+
+        <!-- 分页 -->
+        <el-pagination
+          small
+          layout="prev, pager, next"
+          @current-change="handleCurrentChange"
+          :current-page="anouncementCurrentPage"
+          :page-size="anouncementPageSize"
+          :total="anouncementTotal"
+        >
+        </el-pagination>
       </div>
     </div>
   </div>
@@ -60,6 +80,9 @@
 
 <script>
 import { getIndexSort } from "../../request/api.js";
+import { getBanner } from "../../request/api.js";
+import { getAnnouncementPagination } from "../../request/api.js";
+
 export default {
   data() {
     return {
@@ -77,15 +100,15 @@ export default {
       anouncementTotal: 0,
       // 轮播图容器
       bannerList: [],
-      // 商品分类参数一级
+      // 服务分类参数一级
       parentId: 0,
       level: 1,
       type: 1,
-      // 一级商品分类容器
+      // 一级服务分类容器
       totalServiceSortFirst: [],
-      // 二级商品分类容器
+      // 二级服务分类容器
       totalServiceSortSecond: [],
-      // 全部商品分类控制显示隐藏
+      // 全部服务分类控制显示隐藏
       // visible: false,
       slotIsShow: false,
       id: null,
@@ -95,10 +118,27 @@ export default {
     goLogin() {
       this.$router.push({ name: "login" });
     },
+
     goRegister() {
       this.$router.push({ name: "register" });
     },
+    getBanner() {
+      getBanner(this.bannerType).then((res) => {
+        // console.log("bannerRes---", res);
+        this.bannerList = res.result;
+        // console.log("bannerList---", this.bannerList);
+      });
+    },
 
+    // 携带二级分类前往搜索页面
+    goSearchPage(secondSortName) {
+      this.$router.push({
+        name: "service-search-page",
+        query: { secondSortName: secondSortName },
+      });
+    },
+
+    // 获取服务一级分类标题
     getIndexServiceSortFirst() {
       let params = {
         parentId: this.parentId,
@@ -118,29 +158,65 @@ export default {
     hoverShow(id) {
       // console.log("id---", id);
       let params = {
-        id: id,
-        level: this.level,
-        type: this.type,
+        parentId: id,
+        level: 2,
+        type: 2,
       };
       getIndexSort(params)
         .then((res) => {
           if (res.code === 200) {
             // console.log("res---", res);
             this.totalServiceSortSecond = res.result;
+            this.slotIsShow = true;
+            // console.log("totalServiceSortSecond---", this.totalServiceSortSecond);
           }
         })
         .catch((e) => {});
     },
-  },
-  watch: {
-    notLogin(newvalue, oldvalue) {
-      console.log(localStorage.getItem("token"));
-      // console.log(newvalue, oldvalue);
+
+    // 选择当前是第几页
+    handleCurrentChange(val) {
+      this.anouncementCurrentPage = val;
+      this.getAnnouncement();
+    },
+
+    // 获取公告
+    getAnnouncement() {
+      let params = {
+        pageNo: this.anouncementCurrentPage,
+        pageSize: this.anouncementPageSize,
+      };
+      getAnnouncementPagination(params).then((res) => {
+        // console.log(res);
+        if (res.code === 200) {
+          this.announcementList = res.result.records;
+          // console.log("announcementList---", this.announcementList);
+          this.anouncementTotal = res.result.total;
+          // console.log("this.total---", this.total);
+        }
+      });
+    },
+
+    // 跳转到公告详情
+    goAnnouncementDetail(id) {
+      this.$router.push({
+        name: "announcement-detail",
+        query: { id: id },
+      });
     },
   },
+  // watch: {
+  //   notLogin(newvalue, oldvalue) {
+  //     console.log(localStorage.getItem("token"));
+  //     // console.log(newvalue, oldvalue);
+  //   },
+  // },
   mounted() {
     // console.log(localStorage.getItem("token"));
     this.notLogin = localStorage.getItem("token") ? true : false;
+
+    this.getBanner();
+    this.getAnnouncement();
 
     this.getIndexServiceSortFirst();
   },
@@ -169,11 +245,12 @@ export default {
 
   .bannerCenter {
     width: 50%;
-    .el-carousel__item h3 {
+    .el-carousel__item img {
       color: #475669;
       font-size: 14px;
       opacity: 0.75;
       margin: 0;
+      width: 100%;
     }
 
     .el-carousel__item:nth-child(2n) {
@@ -216,7 +293,7 @@ export default {
     }
 
     .announcementBox {
-      text-align: center;
+      // text-align: center;
       width: 100%;
       border-top: 1px solid #000;
       margin-top: 10px;
@@ -229,12 +306,32 @@ export default {
         margin-bottom: 10px;
       }
 
-      ul > li {
+      span {
         font-size: 12px;
-        height: 20px;
-        line-height: 20px;
+        height: 12px;
+        line-height: 12px;
+      }
+
+      ul > .flex-box {
+        display: flex;
+        justify-content: space-between;
+        span:first-child {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+
+        span:last-child {
+          color: red;
+          transform: scale(0.8);
+          white-space: nowrap;
+        }
       }
     }
   }
+}
+/deep/.servicesort-second-item:hover {
+  color: #0e6ebe;
+  background-color: #75a6cd;
 }
 </style>

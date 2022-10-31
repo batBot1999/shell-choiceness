@@ -55,7 +55,7 @@ export function getGoodsDetailSku(data) {
 }
 
 // 商品推荐轮播图
-export function getGoodsRecommendBanner(data) {
+export function getBanner(data) {
     return get({
         url: "/bio/app/bioBanner/app/list?bannerType=" + data
     })

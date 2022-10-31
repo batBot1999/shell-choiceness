@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 // const Home=()=>import('../views/Home.vue');
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
-import ShopCar from '../views/ShopCar.vue'
+// import ShopCar from '../views/ShopCar.vue'
 import GoodsSearchPage from '../views/GoodsSearchPage.vue'
 import ServiceSearchPage from '../views/ServiceSearchPage.vue'
 import GoodsDetail from '../views/GoodsDetail.vue'
@@ -34,11 +34,11 @@ const routes = [
     component: Home
 
   },
-  {
-    path: '/shop-car',
-    name: 'shop-car',
-    component: ShopCar
-  },
+  // {
+  //   path: '/shop-car',
+  //   name: 'shop-car',
+  //   component: ShopCar
+  // },
   {
     path: '/service-search-page',
     name: 'service-search-page',

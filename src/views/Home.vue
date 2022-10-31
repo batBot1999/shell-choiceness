@@ -42,7 +42,7 @@
         <div v-if="num == 1" class="el-main-son">
           <!-- 2.在父组件中通过v-on监听子组件中自定义的事件 -->
           <!-- 商品搜索box -->
-          <GoodsSearchBox @searchInput="getSearchInput" />
+          <GoodsSearchBox @searchInput="getGoodsSearchInput" />
           <!-- 商品搜索box -->
 
           <!-- 商品轮播图box -->
@@ -55,7 +55,7 @@
         </div>
         <div v-if="num == 2" class="el-main-son">
           <!-- 服务搜索box  -->
-          <ServiceSearchBox />
+          <ServiceSearchBox  @searchInput="getServiceSearchInput"  />
           <!-- 服务轮播图box -->
           <ServiceBannerBox />
           <!-- 精选服务 -->
@@ -103,10 +103,18 @@ export default {
   },
 
   methods: {
-    getSearchInput(value) {
+    getGoodsSearchInput(value) {
       // console.log(value);
       this.$router.push({
         name: "goods-search-page",
+        query: { name: value },
+      });
+    },
+
+        getServiceSearchInput(value) {
+      // console.log(value);
+      this.$router.push({
+        name: "service-search-page",
         query: { name: value },
       });
     },

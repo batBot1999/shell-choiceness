@@ -13,7 +13,6 @@
       >
         <div v-if="slotIsShow">
           <!-- slot插入开始 -->
-          <!-- {{ totalGoodsSortSecond }} -->
           <div
             class="goodssort-second-item"
             v-for="(item2, _index) in totalGoodsSortSecond"
@@ -80,7 +79,7 @@
 </template>
 
 <script>
-import { getGoodsRecommendBanner } from "../../request/api.js";
+import { getBanner } from "../../request/api.js";
 import { getAnnouncementPagination } from "../../request/api.js";
 import { getIndexSort } from "../../request/api.js";
 
@@ -123,8 +122,8 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
-    getGoodsBanner() {
-      getGoodsRecommendBanner(this.bannerType).then((res) => {
+    getBanner() {
+      getBanner(this.bannerType).then((res) => {
         // console.log("bannerRes---", res);
         this.bannerList = res.result;
         // console.log("bannerList---", this.bannerList);
@@ -153,6 +152,7 @@ export default {
       }
     },
 
+    // 获取公告
     getAnnouncement() {
       let params = {
         pageNo: this.anouncementCurrentPage,
@@ -192,13 +192,12 @@ export default {
 
     // 选择当前是第几页
     handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
       this.anouncementCurrentPage = val;
       this.getAnnouncement();
     },
 
     // 在网页显示前就把首页商品分类一级标题加载完
-    // getIndexSortFirst() {
+    // getIndexGoodsSortFirst() {
     //   axios
     //     .get(
     //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
@@ -220,7 +219,8 @@ export default {
     //     .catch((e) => {});
     // },
 
-    getIndexSortFirst() {
+    // 获取商品一级分类标题
+    getIndexGoodsSortFirst() {
       let params = {
         parentId: this.parentId,
         level: this.level,
@@ -267,12 +267,12 @@ export default {
       let params = {
         parentId: id,
         level: 2,
-        type: this.type,
+        type: 1,
       };
       getIndexSort(params)
         .then((res) => {
           if (res.code === 200) {
-            console.log("res---", res);
+            // console.log("res---", res);
             this.totalGoodsSortSecond = res.result;
             this.slotIsShow = true;
           }
@@ -302,11 +302,11 @@ export default {
     // console.log(localStorage.getItem('token'));
     this.notLogin = localStorage.getItem("token") ? true : false;
 
-    this.getGoodsBanner();
+    this.getBanner();
 
     this.getAnnouncement();
 
-    this.getIndexSortFirst();
+    this.getIndexGoodsSortFirst();
 
     // this.getIndexSortSecond();
   },

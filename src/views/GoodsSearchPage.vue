@@ -3,7 +3,7 @@
     <HeaderNav />
     <div class="header-search-box">
       <div class="shell-choiceness">贝壳精选</div>
-      <GoodsSearchBox @searchInput="getSearchInput" />
+      <GoodsSearchBox @searchInput="getGoodsSearchInput" />
     </div>
     <div class="header-tab-box">
       <div
@@ -28,19 +28,6 @@
     <el-main>
       <div v-if="num == 1" class="el-main-son1">
         <div class="sort-radio-box">
-          <!-- <span>分类</span>
-          <el-radio-group v-model="radio1">
-            <el-radio-button label="全部"></el-radio-button>
-            <el-radio-button label="化学试剂"></el-radio-button>
-            <el-radio-button label="生化试剂"></el-radio-button>
-            <el-radio-button label="实验仪器"></el-radio-button>
-            <el-radio-button label="实验耗材"></el-radio-button>
-            <el-radio-button label="医疗器械"></el-radio-button>
-            <el-radio-button label="科研设备"></el-radio-button>
-            <el-radio-button label="原料药"></el-radio-button>
-            <el-radio-button label="辅料"></el-radio-button>
-          </el-radio-group> -->
-
           <!-- tab -->
           <el-tabs
             v-model="activeName"
@@ -118,13 +105,11 @@ export default {
       activeName: "22",
       goodsRecommendNav: [],
       num: 1,
-      // radio1: "全部",
       currentPage: 1,
       pageSize: 5,
       tableData: [],
       total: 0,
       // goodsList: [],
-      radio2: "默认排序",
       name: "",
       level: 2,
       type: 1,
@@ -147,12 +132,21 @@ export default {
     // 标记1
     goGoodsDetail(row) {
       // console.log("row---", row.id);
-            this.$router.push({
+      this.$router.push({
         name: "goods-detail",
         query: { id: row.id },
       });
     },
-    getSearchInput(value) {
+
+    // 分页点击其他页
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getSearchPageGoodsList();
+    },
+
+    // 点击搜索按钮
+    getGoodsSearchInput(value) {
       // console.log(value);
       axios
         .get(
@@ -167,19 +161,13 @@ export default {
         )
         .then((res) => {
           if (res.data.code === 200) {
-            console.log("res-----", res.data.result.records);
+            // console.log("res-----", res.data.result.records);
             this.tableData = res.data.result.records;
-            console.log(this.tableData);
+            // console.log(this.tableData);
             this.total = res.data.result.total;
           }
         })
         .catch((e) => {});
-    },
-
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.currentPage = val;
-      this.getSearchPageGoodsList();
     },
 
     // getgoodsList() {
@@ -191,6 +179,7 @@ export default {
     //   );
     // },
 
+    // 获取商品列表
     getSearchPageGoodsList() {
       axios
         .get(

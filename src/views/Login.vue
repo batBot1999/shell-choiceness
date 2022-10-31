@@ -95,7 +95,7 @@ export default {
             }
           }).catch((e) => {
             // 如果账号不存在
-            console.log("e---", e);
+            // console.log("e---", e);
             if (e.code === 500) {
               this.$message({
                 showClose: true,

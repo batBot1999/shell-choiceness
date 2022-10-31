@@ -12,7 +12,7 @@
         </el-option>
       </el-select>
       <el-input v-model="input" placeholder="请输入关键词"></el-input>
-      <button class="search-button" @click="goServiceSearch()">搜索</button>
+      <button class="search-button" @click="sendParent()">搜索</button>
     </div>
   </div>
 </template>
@@ -41,12 +41,19 @@ export default {
   },
 
   methods: {
-    goServiceSearch() {
-      this.$router.push({
-        name: "service-search-page",
-        query: { name: this.input },
-      });
-    },
+    // goServiceSearch() {
+    //   this.$router.push({
+    //     name: "service-search-page",
+    //     query: { name: this.input },
+    //   });
+    // },
+
+          // 1.把input内容传给父组件 子组件中通过$emit触发事件
+      sendParent() {
+        // console.log("this.input---", this.input);
+        // 自定义事件 $emit("事件名称", "发送事件参数")
+        this.$emit("searchInput", this.input);
+      }
   },
 
   components: {},

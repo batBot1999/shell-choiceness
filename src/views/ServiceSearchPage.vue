@@ -3,7 +3,7 @@
     <HeaderNav />
     <div class="header-search-box">
       <div class="shell-choiceness">贝壳精选</div>
-      <ServiceSearchBox />
+      <ServiceSearchBox @searchInput="getServiceSearchInput" />
     </div>
     <div class="header-tab-box">
       <div
@@ -28,37 +28,20 @@
     <el-main>
       <div v-if="num == 1" class="el-main-son1">
         <div class="sort-radio-box">
-          <span>分类</span>
-          <el-radio-group v-model="radio1">
-            <el-radio-button label="全部"></el-radio-button>
-            <el-radio-button label="化学试剂"></el-radio-button>
-            <el-radio-button label="生化试剂"></el-radio-button>
-            <el-radio-button label="实验仪器"></el-radio-button>
-            <el-radio-button label="实验耗材"></el-radio-button>
-            <el-radio-button label="医疗器械"></el-radio-button>
-            <el-radio-button label="科研设备"></el-radio-button>
-            <el-radio-button label="原料药"></el-radio-button>
-            <el-radio-button label="辅料"></el-radio-button>
-          </el-radio-group>
-        </div>
-        <div class="brand-box">
-          <span>品牌</span>
-          <button label="">全部</button>
-          <tr class="brand-checkbox">
-            <td v-for="(item, index) in brands" :key="index">
-              <input type="checkbox" />{{ item }}
-            </td>
-          </tr>
-        </div>
-
-        <div class="standard-box">
-          <span>规格</span>
-          <button label="">全部</button>
-          <tr class="standard-checkbox">
-            <td v-for="(item, index) in standards" :key="index">
-              <input type="checkbox" />{{ item }}
-            </td>
-          </tr>
+          <!-- tab -->
+          <el-tabs
+            v-model="activeName"
+            type="card"
+            @tab-click="tabSearchButton"
+          >
+            <el-tab-pane
+              v-for="(item, index) in serviceRecommendNav"
+              :key="index"
+              :label="item.name"
+              :name="item.id.toString()"
+            >
+            </el-tab-pane>
+          </el-tabs>
         </div>
 
         <div class="search-pagination-box">
@@ -69,7 +52,11 @@
             <el-radio-button label="销量"></el-radio-button>
           </el-radio-group> -->
           <!-- table -->
-          <el-table :data="tableData" style="width: 100%">
+          <el-table
+            :data="tableData"
+            style="width: 100%"
+            @row-click="goServiceDetail"
+          >
             <el-table-column prop="name" label="商品名称"> </el-table-column>
             <el-table-column prop="itemNo" label="货号"> </el-table-column>
             <el-table-column prop="specificationDesc" label="规格">
@@ -112,53 +99,37 @@
 </template>
 
 <script>
-import { goodsRecommendList } from "../request/api.js";
+// import { serviceRecommendList } from "../request/api.js";
+import { serviceRecommendList } from "../request/api.js";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
+import { getIndexSort } from "../request/api.js";
 import axios from "axios";
 export default {
   data() {
     return {
+      activeName: "22",
       num: 1,
-      radio1: "全部",
-      brands: [
-        "品牌1",
-        "品牌2",
-        "品牌3",
-        "品牌4",
-        "品牌5",
-        "品牌6",
-        "品牌7",
-        "品牌8",
-        "品牌9",
-        "品牌10",
-        "品牌11",
-        "品牌12",
-        "品牌13",
-      ],
-      standards: [
-        "规格1",
-        "规格2",
-        "规格3",
-        "规格4",
-        "规格5",
-        "规格6",
-        "规格7",
-        "规格8",
-        "规格9",
-        "规格10",
-      ],
       currentPage: 1,
       pageSize: 5,
       tableData: [],
       total: 0,
-      // goodsList: [],
+      // serviceList: [],
       radio2: "默认排序",
       name: "",
       level: 1,
       type: 1,
       secondSortName: "",
+      serviceRecommendNav: [],
+      recommendTabItem: {
+        name: "热门推荐",
+        parentId: 22,
+        level: 2,
+        createBy: "admin",
+        id: 22,
+        tabId: null,
+      },
     };
   },
   components: {
@@ -167,24 +138,60 @@ export default {
     HeaderNav,
   },
   methods: {
-    handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      this.currentPage = val;
-      // this.getRearchPageGoodsList();
+    // 标记2
+    goServiceDetail(row) {
+      // console.log("row---", row.id);
+      this.$router.push({
+        name: "service-detail",
+        query: { id: row.id },
+      });
     },
 
-    // getgoodsList() {
-    //   goodsRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
+    // 分页点击其他页
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getSearchPageServiceList();
+    },
+
+    // getserviceList() {
+    //   serviceRecommendList({ pageNo: this.pageNo, pageSize: this.pageSize }).then(
     //     (res) => {
-    //       this.goodsList = res.result.records;
-    //       console.log("this.goodsList---", this.goodsList);
+    //       this.serviceList = res.result.records;
+    //       console.log("this.serviceList---", this.serviceList);
     //     }
     //   );
     // },
 
+    // 点击搜索按钮
+    getServiceSearchInput(value) {
+      // console.log(value);
+      axios
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioService/app/list",
+          {
+            params: {
+              name: value,
+              pageNo: this.currentPage,
+              pageSize: this.pageSize,
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.code === 200) {
+            // console.log("res-----", res.data.result.records);
+            this.tableData = res.data.result.records;
+            // console.log(this.tableData);
+            this.total = res.data.result.total;
+          }
+        })
+        .catch((e) => {});
+    },
+
+    // 获取服务列表
     getSearchPageServiceList() {
-      console.log("this.name---", this.name);
-      console.log("this.secondSortName---", this.secondSortName);
+      // console.log("this.name---", this.name);
+      // console.log("this.secondSortName---", this.secondSortName);
       axios
         .get(
           "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioService/app/list",
@@ -198,34 +205,84 @@ export default {
         )
         .then((res) => {
           if (res.data.code === 200) {
-            console.log("res-----", res.data.result.records);
+            // console.log("res-----", res.data.result.records);
             this.tableData = res.data.result.records;
-            console.log(this.tableData);
+            // console.log(this.tableData);
             this.total = res.data.result.total;
           }
         })
         .catch((e) => {});
     },
+
+    // 获取服务推荐tab列表
+    getServiceRecommendNav() {
+      let params = {
+        level: 2,
+        type: 2,
+      };
+      getIndexSort(params)
+        .then((res) => {
+          // console.log("resNav-----", res);
+          if (res.code === 200) {
+            this.serviceRecommendNav = res.result;
+            this.serviceRecommendNav.unshift(this.recommendTabItem);
+            console.log("serviceRecommendNav", this.serviceRecommendNav);
+          }
+        })
+        .catch((e) => {});
+    },
+
+    // 切换tab重新分页
+    tabSearchButton(tab, event) {
+      this.tabId = tab.name;
+
+      // 如果点击了热门推荐，就不传参数直接请求，如果点击其他的tab就传对应参数
+      if (this.tabId == 22) {
+        // console.log("this.tabId---", this.tabId);
+        let params = {
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+        };
+        serviceRecommendList(params).then((res) => {
+          // console.log("params---", params);
+          // console.log("tabSearchButton---", res);
+          this.tableData = res.result.records;
+          this.currentPage = 1;
+          this.total = res.result.total;
+        });
+      } else {
+        // console.log("this.tabId---", this.tabId);
+        let params = {
+          categoryId: this.tabId,
+          pageNo: this.currentPage,
+          pageSize: this.pageSize,
+        };
+        serviceRecommendList(params).then((res) => {
+          // console.log("params---", params);
+          // console.log("tabSearchButton---", res);
+          this.tableData = res.result.records;
+          this.currentPage = 1;
+          this.total = res.result.total;
+        });
+      }
+    },
   },
 
   mounted() {
-    // this.getgoodsList();
+    // this.getserviceList();
 
     // 拿到在首页搜索时候传递的搜索参数
     this.name = this.$route.query.name;
-    console.log(this.name);
+    console.log("this.name---", this.name);
 
-        // 拿到在首页点击二级分类时候传递的搜索参数
-    this.secondSortName = this.$route.query.secondSortName;
-    console.log(this.secondSortName);
+    // 拿到在首页点击二级分类时候传递的搜索参数
+    // this.secondSortName = this.$route.query.secondSortName;
+    // console.log(this.secondSortName);
 
     // 在这个页面请求和渲染 如果传的是name就带着名字搜索，如果传的是secondSortName就带着二级分类名字
-    if (this.name) {
-      this.getSearchPageServiceList(this.name);
-    }
-    if (this.secondSortName) {
-      this.getSearchPageServiceList(this.secondSortName);
-    }
+    this.getSearchPageServiceList();
+
+    this.getServiceRecommendNav();
   },
 };
 </script>
@@ -275,92 +332,73 @@ export default {
     flex-direction: column;
 
     .sort-radio-box {
-      display: flex;
-      text-align: center;
+      // display: flex;
+      // text-align: center;
 
-      span {
-        height: 50px;
-        line-height: 50px;
-        width: 10%;
-        font-weight: bold;
-        font-size: 25px;
-      }
+      // span {
+      //   height: 50px;
+      //   line-height: 50px;
+      //   width: 10%;
+      //   font-weight: bold;
+      //   font-size: 25px;
+      // }
 
-      .el-radio-group {
-        width: 90%;
-      }
+      // .el-radio-group {
+      //   width: 90%;
+      // }
 
       // 这一端css是在elementui的radio基础上改的,要理清hover active checked之间的关系
-      .el-radio-group > .el-radio-button {
-        width: 11%;
+      // .el-radio-group > .el-radio-button {
+      //   width: 11%;
 
-        /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
-          background: #0e6ebe;
-          color: #fff;
-        }
+      //   /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+      //     background: #0e6ebe;
+      //     color: #fff;
+      //   }
 
-        /deep/.el-radio-button__inner {
-          padding: 0 0;
-          width: 100%;
-          border: none;
-          height: 50px;
-          line-height: 50px;
-          transition: none;
-        }
+      //   /deep/.el-radio-button__inner {
+      //     padding: 0 0;
+      //     width: 100%;
+      //     border: none;
+      //     height: 50px;
+      //     line-height: 50px;
+      //     transition: none;
+      //   }
 
-        /deep/.el-radio-button__inner:hover {
-          color: #0e6ebe;
-        }
-      }
+      //   /deep/.el-radio-button__inner:hover {
+      //     color: #0e6ebe;
+      //   }
+      // }
     }
 
-    .brand-box {
-      margin: 10px 0;
-      display: flex;
-      text-align: center;
+    // .search-pagination-box {
+    // .el-radio-group {
+    //   margin: 30px 0;
+    //   display: flex;
+    //   justify-content: center;
+    //   .el-radio-button {
+    //     width: 20vw;
+    //   }
 
-      span {
-        height: 50px;
-        line-height: 50px;
-        width: 10%;
-        font-weight: bold;
-        font-size: 25px;
-      }
+    //   /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    //     background: #0e6ebe;
+    //     color: #fff;
+    //   }
 
-      .brand-checkbox {
-        width: 90%;
-        display: flex;
-        flex-wrap: wrap;
+    //   /deep/.el-radio-button__inner {
+    //     padding: 0 0;
+    //     width: 100%;
+    //     border: none;
+    //     height: 30px;
+    //     line-height: 30px;
+    //     transition: none;
+    //   }
 
-        td {
-          width: 12.5%;
-        }
-      }
-    }
-
-    .standard-box {
-      margin: 10px 0;
-      display: flex;
-      text-align: center;
-
-      span {
-        height: 50px;
-        line-height: 50px;
-        width: 10%;
-        font-weight: bold;
-        font-size: 25px;
-      }
-
-      .standard-checkbox {
-        width: 90%;
-        display: flex;
-        flex-wrap: wrap;
-
-        td {
-          width: calc(100% / 7);
-        }
-      }
-    }
+    //   /deep/.el-radio-button__inner:hover {
+    //     color: #0e6ebe;
+    //   }
+    // }
+    // }
 
     .search-pagination-box {
       .el-radio-group {

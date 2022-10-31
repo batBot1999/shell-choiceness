@@ -87,7 +87,7 @@ export default {
       serviceRecommendList(params).then((res) => {
         // console.log("res---", res);
         this.serviceList = res.result.records;
-        console.log("this.serviceList", this.serviceList);
+        // console.log("this.serviceList", this.serviceList);
         this.total = res.result.total;
       });
     },
@@ -101,10 +101,10 @@ export default {
       getIndexSort(params)
         .then((res) => {
           if (res.code === 200) {
-            console.log("resNav---", res);
+            // console.log("resNav---", res);
             this.serviceRecommendNav = res.result;
             this.serviceRecommendNav.unshift(this.recommendTabItem);
-            console.log("this.serviceRecommendNav",this.serviceRecommendNav);
+            // console.log("this.serviceRecommendNav",this.serviceRecommendNav);
           }
         })
         .catch((e) => {});
@@ -112,7 +112,7 @@ export default {
 
     // 分页点击其他页
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.currentPage = val;
       this.getServiceList();
     },

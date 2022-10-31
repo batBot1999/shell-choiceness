@@ -31,7 +31,7 @@ service.interceptors.response.use((res) => {
   // 成功的返回
   return res.data
 }, (err) => {
-  console.log(err);
+  // console.log(err);
 })
 
 // get
