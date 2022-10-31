@@ -5,14 +5,19 @@ import Home from '../views/Home.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ShopCar from '../views/ShopCar.vue'
-import SearchPage from '../views/SearchPage.vue'
+import GoodsSearchPage from '../views/GoodsSearchPage.vue'
+import ServiceSearchPage from '../views/ServiceSearchPage.vue'
 import GoodsDetail from '../views/GoodsDetail.vue'
 import StoreIndex from '../views/StoreIndex.vue'
 import ServiceDetail from '../views/ServiceDetail.vue'
 import SettlementPage from '../views/SettlementPage.vue'
 import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 
-
+// 解决vue-router在3.0版本以上重复点报错问题
+const originalPush = VueRouter.prototype.push
+VueRouter.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch(err => err)
+}
 
 
 Vue.use(VueRouter)
@@ -35,9 +40,14 @@ const routes = [
     component: ShopCar
   },
   {
-    path: '/search-page',
-    name: 'search-page',
-    component: SearchPage
+    path: '/service-search-page',
+    name: 'service-search-page',
+    component: ServiceSearchPage
+  },
+  {
+    path: '/goods-search-page',
+    name: 'goods-search-page',
+    component: GoodsSearchPage
   },
   {
     path: '/login',

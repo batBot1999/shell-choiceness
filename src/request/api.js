@@ -29,7 +29,7 @@ export function register(data) {
 //     })
 // }
 
-// 商品推荐列表
+// 商品推荐列表分页
 export function goodsRecommendList(data) {
     return get({
         url: "/bio/app/bioItem/recommended/list?",
@@ -84,46 +84,35 @@ export function getAnouncementDetail(data) {
     })
 }
 
-// 首页商品分类
-export function getIndexGoodsSort(data) {
+// 首页商品和服务分类
+    // 获取商品和服务推荐tab列表 只传level=2 type=1
+export function getIndexSort(data) {
     return get({
         url: "/bio/app/bioClassification/app/parent?",
         data,
     })
 }
 
-
-
-
-
-// 精选服务列表
-export function choicenessServiceList() {
-    return service({
-        url: "choicenessServiceList",
-        method: "GET"
+// 推荐服务分页
+export function serviceRecommendList(data) {
+    return get({
+        url: "/bio/app/bioService/app/recommended/list?",
+        data
     })
 }
 
-// 搜索商品
-export function searchGoods() {
-    return service({
-        url: "searchGoods",
-        method: "GET"
+// 补充服务分页
+export function serviceRecommendListSupplement(data) {
+    return get({
+        url: "/bio/app/bioService//app/list?",
+        data
     })
 }
 
-// 搜索商品
-export function searchServices() {
-    return service({
-        url: "searchServices",
-        method: "GET"
-    })
-}
+// 服务详情返回id
+export function getServiceDetail(data) {
+    return get({
+        url: "bio/app/bioService/queryById?id=" + data,
 
-// 商品列表
-export function getGoodsList() {
-    return service({
-        url: "/getGoodsList",
-        method: "GET"
     })
 }

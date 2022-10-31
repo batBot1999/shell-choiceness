@@ -1,10 +1,10 @@
 <template>
   <div class="service-detail-main">
     <HeaderNav />
-    <div class="header-icon">投融资服务</div>
+    <div class="header-icon">{{this.serviceItem.name}}</div>
 
     <div class="shell-introduce">
-      <img src="../assets/img/bioClub.png" alt="" />
+      <img src="../assets/img/bioClub.png" alt="serviceItem.name" />
       <div>
         <p>贝壳社</p>
         <p>
@@ -26,6 +26,8 @@
     </div>
 
     <div class="service-type">服务类型</div>
+        <div v-html="this.serviceItem.itemDesc"></div>
+
     <Footer />
   </div>
 </template>
@@ -33,14 +35,41 @@
 <script>
 import Footer from "../components/Footer.vue";
 import HeaderNav from "../components/HeaderNav.vue";
+import { getServiceDetail } from "../request/api.js";
 export default {
   data() {
-    return {};
+    return {
+      id: null,
+      serviceItem: {},
+
+    };
   },
 
   components: {
     HeaderNav,
     Footer,
+  },
+
+  methods: {
+    getServiceDetailItem() {
+      getServiceDetail(this.id)
+        .then((res) => {
+          // console.log("res---", res);
+          this.serviceItem = res.result;
+          // console.log("serviceItem---", this.serviceItem);
+        })
+        .catch((e) => {
+          console.log("e---", e);
+        });
+    },
+  },
+
+  computed: {},
+
+  mounted() {
+    this.id = this.$route.query.id;
+    // console.log(this.id);
+    this.getServiceDetailItem();
   },
 };
 </script>

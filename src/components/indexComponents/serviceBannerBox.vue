@@ -1,15 +1,27 @@
 <template>
   <div class="serviceBannerBox">
     <div class="bannerLeft">
-      <ul>
-        <li>服务分类</li>
-        <li>动物实验服务</li>
-        <li>药学评价服务</li>
-        <li>CDMO服务</li>
-        <li>临床前CRO服务</li>
-        <li>临床CRO服务</li>
-        <li>更多服务</li>
-      </ul>
+      <!-- @mouseover.native="getIndexServiceSortHover(item1.id)" -->
+      <el-popover
+        width="200"
+        trigger="hover"
+        placement="right-start"
+        :visible-arrow="false"
+        v-for="(item1, index) in this.totalServiceSortFirst"
+        :key="index"
+        @show="hoverShow(item1.id)"
+      >
+        <div v-if="slotIsShow">
+          <!-- slot插入开始 -->
+
+          <!-- <div v-for="(item2, index) in this.totalServiceSortSecond" :key="index">
+            2323
+          </div> -->
+          <!-- <div>2112</div> -->
+        </div>
+        <!-- slot插入结束 -->
+        <el-button slot="reference">{{ item1.name }}</el-button>
+      </el-popover>
     </div>
     <div class="bannerCenter">
       <div class="block">
@@ -47,17 +59,37 @@
 </template>
 
 <script>
+import { getIndexSort } from "../../request/api.js";
 export default {
   data() {
     return {
       notLogin: false,
       realname: localStorage.realname,
       companyName: localStorage.companyName,
+      bannerType: 1,
+      announcementList: [],
+      currentPage: 1,
+      pageSize: 5,
+      total: 0,
+      // 公告分页参数
+      anouncementCurrentPage: 1,
+      anouncementPageSize: 3,
+      anouncementTotal: 0,
+      // 轮播图容器
+      bannerList: [],
+      // 商品分类参数一级
+      parentId: 0,
+      level: 1,
+      type: 1,
+      // 一级商品分类容器
+      totalServiceSortFirst: [],
+      // 二级商品分类容器
+      totalServiceSortSecond: [],
+      // 全部商品分类控制显示隐藏
+      // visible: false,
+      slotIsShow: false,
+      id: null,
     };
-  },
-  mounted() {
-    console.log(localStorage.getItem("token"));
-    this.notLogin = localStorage.getItem("token") ? true : false;
   },
   methods: {
     goLogin() {
@@ -66,12 +98,51 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
+
+    getIndexServiceSortFirst() {
+      let params = {
+        parentId: this.parentId,
+        level: this.level,
+        type: 2,
+      };
+      getIndexSort(params).then((res) => {
+        // console.log("三个参数:", this.parentId,this.level,this.type);
+        // console.log("getIndexSortRes---", res);
+        if (res.code === 200) {
+          this.totalServiceSortFirst = res.result;
+          // console.log(this.totalSortFirst);
+        }
+      });
+    },
+
+    hoverShow(id) {
+      // console.log("id---", id);
+      let params = {
+        id: id,
+        level: this.level,
+        type: this.type,
+      };
+      getIndexSort(params)
+        .then((res) => {
+          if (res.code === 200) {
+            // console.log("res---", res);
+            this.totalServiceSortSecond = res.result;
+          }
+        })
+        .catch((e) => {});
+    },
   },
   watch: {
     notLogin(newvalue, oldvalue) {
       console.log(localStorage.getItem("token"));
-      console.log(newvalue, oldvalue);
+      // console.log(newvalue, oldvalue);
     },
+  },
+  mounted() {
+    // console.log(localStorage.getItem("token"));
+    this.notLogin = localStorage.getItem("token") ? true : false;
+
+    this.getIndexServiceSortFirst();
   },
 };
 </script>
@@ -85,24 +156,14 @@ export default {
   display: flex;
 
   .bannerLeft {
-    width: 25%;
-    padding: 10px;
+    width: 25vw;
+    background: green;
 
-    li {
-      line-height: 25px;
-    }
-
-    li:hover {
-      color: #475669;
-    }
-
-    li::after {
-      content: ">";
-      float: right;
-    }
-
-    li:first-child::after {
-      content: "";
+    .el-popover {
+      // height: 100px;
+      // line-height: 50px;
+      .el-button {
+      }
     }
   }
 

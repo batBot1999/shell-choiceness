@@ -11,14 +11,17 @@
       </el-option>
     </el-select>
     <el-input v-model="input" placeholder="请输入关键词"></el-input>
-    <button class="search-button" @click="goGoodsSearch()">
+    <!-- <button class="search-button" @click="goGoodsSearch()">
+      搜索
+    </button> -->
+        <button class="search-button" @click="sendParent()">
       搜索
     </button>
   </div>
 </template>
 
 <script>
-// import { getIndexGoodsSort } from "../request/api.js";
+// import { getIndexSort } from "../request/api.js";
 export default {
   data() {
     return {
@@ -40,16 +43,22 @@ export default {
       value: "",
     };
   },
+
   components: {},
 
   methods: {
-    goGoodsSearch() {
-      this.$router.push({
-        name: "search-page",
-        query: {name: this.input}
-      })
-
-    },
+    // goGoodsSearch() {
+    //   // THIS.$EMIT('',)
+    //   this.$router.push({
+    //     name: "goods-search-page",
+    //     query: {name: this.input}
+    //   }),
+    // },
+      // 1.把input内容传给父组件 子组件中通过$emit触发事件
+      sendParent() {
+        // 自定义事件 $emit("事件名称", "发送事件参数")
+        this.$emit("searchInput", this.input);
+      }
   },
 };
 </script>

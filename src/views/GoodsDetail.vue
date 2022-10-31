@@ -61,6 +61,7 @@
               </el-carousel-item>
             </el-carousel>
           </div>
+
           <div class="goods-right-box">
             <p>{{ this.goodsItem.name }}</p>
             <div class="text-box">
@@ -94,7 +95,9 @@
             <button>提交订单</button>
           </div>
         </div>
+        <div v-html="this.goodsItem.itemDesc"></div>
       </div>
+
       <div v-if="num == 3" class="el-main-page3">3</div>
     </el-main>
 
@@ -119,7 +122,7 @@ export default {
       num: 2,
       levels: ["实验常规仪器", "移液器", "单道移液器"],
       counter: 0,
-      goodsItem: {},
+      goodsItem: [],
       goodsItemSku: [],
       id: null,
     };
@@ -133,12 +136,12 @@ export default {
       // console.log("id---",this.id);
       getGoodsDetail(this.id)
         .then((res) => {
-          // console.log("res---", res);
+          console.log("res---", res);
           this.goodsItem = res.result;
-          // console.log("goodsItem---", this.goodsItem);
+          console.log("goodsItem---", this.goodsItem);
         })
         .catch((e) => {
-          // console.log("e---", e);
+          console.log("e---", e);
         });
     },
 
@@ -148,7 +151,7 @@ export default {
         .then((res) => {
           // console.log("res---", res);
           this.goodsItemSku = res.result;
-          console.log("goodsItemSku---", this.goodsItemSku);
+          // console.log("goodsItemSku---", this.goodsItemSku);
           // 遍历每一个sku然后给他加一个计数器,一开始直接加进去没有响应式地更新视图,去网上查发现可以用这个this.$set(obj, key, value)给对象加键值对
           this.goodsItemSku.map((item) => {
             this.$set(item, "counter", 0);

@@ -1,23 +1,27 @@
 <template>
   <div class="goodsBannerBox">
     <div class="bannerLeft">
-      <!-- @mouseover.native="getIndexGoodsSortHover(item1.id)" -->
+      <!-- @mouseover.native="getIndexSortHover(item1.id)" -->
       <el-popover
         width="200"
         trigger="hover"
         placement="right-start"
         :visible-arrow="false"
-        v-for="(item1, index) in this.totalGoodsSortFirst"
+        v-for="(item1, index) in totalGoodsSortFirst"
         :key="index"
         @show="hoverShow(item1.id)"
       >
         <div v-if="slotIsShow">
           <!-- slot插入开始 -->
-
-          <!-- <div v-for="(item2, index) in this.totalGoodsSortSecond" :key="index">
-            2323
-          </div> -->
-          <!-- <div>2112</div> -->
+          <!-- {{ totalGoodsSortSecond }} -->
+          <div
+            class="goodssort-second-item"
+            v-for="(item2, _index) in totalGoodsSortSecond"
+            :key="_index"
+            @click="goSearchPage(item2.name)"
+          >
+            {{ item2.name }}
+          </div>
         </div>
         <!-- slot插入结束 -->
         <el-button slot="reference">{{ item1.name }}</el-button>
@@ -78,8 +82,7 @@
 <script>
 import { getGoodsRecommendBanner } from "../../request/api.js";
 import { getAnnouncementPagination } from "../../request/api.js";
-import { getIndexGoodsSort } from "../../request/api.js";
-import axios from "axios";
+import { getIndexSort } from "../../request/api.js";
 
 export default {
   data() {
@@ -127,6 +130,16 @@ export default {
         // console.log("bannerList---", this.bannerList);
       });
     },
+
+    // 携带二级分类前往搜索页面
+    goSearchPage(secondSortName) {
+      this.$router.push({
+        name: "goods-search-page",
+        query: { secondSortName: secondSortName },
+      });
+    },
+
+    // 前往轮播图详情
     goBannerDetail(id, skipType, skipUrl) {
       // 如果skipId为1,点击跳转到商品详情页面
       if (skipType == 1) {
@@ -184,81 +197,97 @@ export default {
       this.getAnnouncement();
     },
 
-    getIndexGoodsSortMounted() {
-      axios
-        .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
-          {
-            params: {
-              parentId: this.parentId,
-              level: this.level,
-              type: this.type,
-            },
-          }
-        )
-        .then((res) => {
-          // console.log("res-----", res);
-          if (res.data.code === 200) {
-            this.totalGoodsSortFirst = res.data.result;
-            // console.log(this.totalGoodsSortFirst);
-          }
-        })
-        .catch((e) => {});
-    },
-
-    // getIndexGoodsSortMounted() {
-    //   getIndexGoodsSort({
-    //     parentId: this.parentId,
-    //     level: this.level,
-    //     type: this.type,
-    //   }).then((res) => {
-    //     console.log("三个参数:", this.parentId,this.level,this.type);
-    //     console.log("getIndexGoodsSortRes---", res);
-    //   });
+    // 在网页显示前就把首页商品分类一级标题加载完
+    // getIndexSortFirst() {
+    //   axios
+    //     .get(
+    //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
+    //       {
+    //         params: {
+    //           parentId: this.parentId,
+    //           level: this.level,
+    //           type: this.type,
+    //         },
+    //       }
+    //     )
+    //     .then((res) => {
+    //       // console.log("res-----", res);
+    //       if (res.data.code === 200) {
+    //         this.totalGoodsSortFirst = res.data.result;
+    //         // console.log(this.totalGoodsSortFirst);
+    //       }
+    //     })
+    //     .catch((e) => {});
     // },
 
-    // getIndexGoodsSortHover(id) {
+    getIndexSortFirst() {
+      let params = {
+        parentId: this.parentId,
+        level: this.level,
+        type: this.type,
+      };
+      getIndexSort(params).then((res) => {
+        // console.log("三个参数:", this.parentId,this.level,this.type);
+        // console.log("getIndexSortRes---", res);
+        if (res.code === 200) {
+          this.totalGoodsSortFirst = res.result;
+          // console.log(this.totalGoodsSortFirst);
+        }
+      });
+    },
+
+    // 首页商品分类hover时显示二级标题
+    // getIndexSortHover(id) {
+    // hoverShow(id) {
+    //   // console.log("id---", id);
+    //   axios
+    //     .get(
+    //       "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
+    //       {
+    //         params: {
+    //           id: id,
+    //           level: this.level,
+    //           type: this.type,
+    //         },
+    //       }
+    //     )
+    //     .then((res) => {
+    //       // console.log("res-----", res);
+    //       if (res.data.code === 200) {
+    //         this.totalGoodsSortSecond = res.data.result;
+    //         // this.slotIsShow = true;
+    //         // console.log("totalGoodsSortSecond---", this.totalGoodsSortSecond);
+    //       }
+    //     })
+    //     .catch((e) => {});
+    // },
+
     hoverShow(id) {
       // console.log("id---", id);
-      axios
-        .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioClassification/app/parent",
-          {
-            params: {
-              id: id,
-              level: this.level,
-              type: this.type,
-            },
-          }
-        )
+      let params = {
+        parentId: id,
+        level: 2,
+        type: this.type,
+      };
+      getIndexSort(params)
         .then((res) => {
-          // console.log("res-----", res);
-          if (res.data.code === 200) {
-            this.totalGoodsSortSecond = res.data.result;
-            // this.slotIsShow = true;
-            // console.log("totalGoodsSortSecond---", this.totalGoodsSortSecond);
+          if (res.code === 200) {
+            console.log("res---", res);
+            this.totalGoodsSortSecond = res.result;
+            this.slotIsShow = true;
           }
         })
         .catch((e) => {});
-
-      // getIndexGoodsSort({
-      //   parentId: id,
-      //   level: this.level,
-      //   type: this.type,
-      // }).then((res) => {
-      //   console.log(id);
-      //   console.log('二级标题res---',res);
-      // })
     },
 
     // 在mounted时就获取到首页商品分类二级标题
-    // getIndexGoodsSortSecond() {
+    // getIndexSortSecond() {
     //   let params = {
     //     id: id,
     //     level: this.level,
     //     type: this.type,
     //   };
-    //   getIndexGoodsSort({});
+    //   getIndexSort({});
     // },
 
     // 跳转到公告详情
@@ -277,9 +306,9 @@ export default {
 
     this.getAnnouncement();
 
-    this.getIndexGoodsSortMounted();
+    this.getIndexSortFirst();
 
-    // this.getIndexGoodsSortSecond();
+    // this.getIndexSortSecond();
   },
   watch: {
     notLogin(newvalue, oldvalue) {
@@ -305,8 +334,6 @@ export default {
     .el-popover {
       // height: 100px;
       // line-height: 50px;
-      .el-button {
-      }
     }
   }
 
@@ -397,5 +424,10 @@ export default {
       }
     }
   }
+}
+
+/deep/.goodssort-second-item:hover {
+  color: #0e6ebe;
+  background-color: #75a6cd;
 }
 </style>

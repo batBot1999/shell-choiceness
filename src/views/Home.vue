@@ -40,8 +40,9 @@
 
       <el-main>
         <div v-if="num == 1" class="el-main-son">
+          <!-- 2.在父组件中通过v-on监听子组件中自定义的事件 -->
           <!-- 商品搜索box -->
-          <GoodsSearchBox />
+          <GoodsSearchBox @searchInput="getSearchInput" />
           <!-- 商品搜索box -->
 
           <!-- 商品轮播图box -->
@@ -85,10 +86,11 @@ export default {
   // name: 'Home',
   data() {
     return {
-      input: "",
+      searchInput: "",
       num: 1,
     };
   },
+
   components: {
     Footer,
     GoodsSearchBox,
@@ -98,6 +100,16 @@ export default {
     GoodsRecommand,
     SelectedService,
     PartnerBox,
+  },
+
+  methods: {
+    getSearchInput(value) {
+      // console.log(value);
+      this.$router.push({
+        name: "goods-search-page",
+        query: { name: value },
+      });
+    },
   },
 };
 </script>
