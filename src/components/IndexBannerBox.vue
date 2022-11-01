@@ -123,7 +123,7 @@ export default {
     getBanner() {
       getBanner(this.bannerType)
         .then((res) => {
-          console.log("bannerRes---", res);
+          // console.log("bannerRes---", res);
           this.bannerList = res.result;
           // console.log("bannerList---", this.bannerList);
         })
