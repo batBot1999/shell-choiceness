@@ -40,14 +40,35 @@
       </div>
       <div class="banner-right-box">
         <div class="banner-login-box">
-          <div class="banner-avatar-box">3</div>
-          <div class="banner-welcome-text">4</div>
+          <div class="banner-avatar-box"></div>
+          <div class="banner-welcome-text">您好，欢迎来到贝壳精选！</div>
           <div class="banner-button-box">
-            <button>5</button>
-            <button>6</button>
+            <button>登录</button>
+            <button>注册</button>
           </div>
         </div>
-        <div class="banner-announcement-box">7</div>
+        <div class="banner-announcement-box">
+          <div class="announcement-title">平台公告</div>
+          <!-- paginationContent -->
+          <div class="pagination-content">
+          <ul v-for="(item, index) in announcementList" :key="index">
+            <div class="flex-box" @click="goAnnouncementDetail(item.id)">
+              <span>{{ item.title }}</span>
+              <p>{{ item.createTime }}</p>
+            </div>
+          </ul>
+          </div>
+          <!-- 分页 -->
+          <el-pagination
+            small
+            layout="prev, pager, next"
+            @current-change="handleCurrentChange"
+            :current-page="anouncementCurrentPage"
+            :page-size="anouncementPageSize"
+            :total="anouncementTotal"
+          >
+          </el-pagination>
+        </div>
       </div>
     </div>
   </div>
@@ -126,35 +147,35 @@ export default {
     },
 
     //   // 携带二级分类前往搜索页面
-    //   goSearchPage(secondSortName) {
-    //     this.$router.push({
-    //       name: "goods-search-page",
-    //       query: { secondSortName: secondSortName },
-    //     });
-    //   },
+      goSearchPage(secondSortName) {
+        this.$router.push({
+          name: "goods-search-page",
+          query: { secondSortName: secondSortName },
+        });
+      },
 
     //   // 获取公告
-    //   getAnnouncement() {
-    //     let params = {
-    //       pageNo: this.anouncementCurrentPage,
-    //       pageSize: this.anouncementPageSize,
-    //     };
-    //     getAnnouncementPagination(params).then((res) => {
-    //       // console.log(res);
-    //       if (res.code === 200) {
-    //         this.announcementList = res.result.records;
-    //         // console.log("announcementList---", this.announcementList);
-    //         this.anouncementTotal = res.result.total;
-    //         // console.log("this.total---", this.total);
-    //       }
-    //     });
-    //   },
+      getAnnouncement() {
+        let params = {
+          pageNo: this.anouncementCurrentPage,
+          pageSize: this.anouncementPageSize,
+        };
+        getAnnouncementPagination(params).then((res) => {
+          // console.log(res);
+          if (res.code === 200) {
+            this.announcementList = res.result.records;
+            // console.log("announcementList---", this.announcementList);
+            this.anouncementTotal = res.result.total;
+            // console.log("this.total---", this.total);
+          }
+        });
+      },
 
-    //   // 选择当前是第几页
-    //   handleCurrentChange(val) {
-    //     this.anouncementCurrentPage = val;
-    //     this.getAnnouncement();
-    //   },
+      // 选择当前是第几页
+      handleCurrentChange(val) {
+        this.anouncementCurrentPage = val;
+        this.getAnnouncement();
+      },
 
     //   // 获取一级分类标题
     getIndexSortFirst() {
@@ -193,12 +214,12 @@ export default {
     },
 
     //   // 跳转到公告详情
-    //   goAnnouncementDetail(id) {
-    //     this.$router.push({
-    //       name: "announcement-detail",
-    //       query: { id: id },
-    //     });
-    //   },
+      goAnnouncementDetail(id) {
+        this.$router.push({
+          name: "announcement-detail",
+          query: { id: id },
+        });
+      },
   },
 
   mounted() {
@@ -207,7 +228,7 @@ export default {
 
     this.getBanner();
 
-    // this.getAnnouncement();
+    this.getAnnouncement();
 
     this.getIndexSortFirst();
 
@@ -269,13 +290,14 @@ export default {
           height: calc(490px / 6);
           text-align: start;
           font-size: 16px;
+          font-weight: bold;
         }
 
         span > .el-button::after {
           content: ">";
           float: right;
           font-size: 20px;
-          color: #C7C7C7;
+          color: #c7c7c7;
         }
       }
     }
@@ -298,7 +320,82 @@ export default {
     .banner-right-box {
       width: 240px;
       height: 570px;
-      background: blue;
+      background: #ffffff;
+
+      .banner-login-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .banner-avatar-box {
+          width: 80px;
+          height: 80px;
+          background-image: url("../assets/img/index-avtar-default.png");
+          background-size: cover;
+          margin: 30px 0 10px;
+        }
+
+        .banner-welcome-text {
+          color: #666666;
+          font-size: 14px;
+          margin-bottom: 30px;
+        }
+
+        .banner-button-box {
+          width: 160px;
+          display: flex;
+          justify-content: space-between;
+
+          button:first-child {
+            width: 70px;
+            height: 30px;
+            background: #2979ff;
+            border-radius: 50px 50px 50px 50px;
+            color: #ffffff;
+            border: none;
+          }
+          button:last-child {
+            width: 70px;
+            height: 30px;
+            background: #ffffff;
+            border-radius: 50px 50px 50px 50px;
+            color: #2979ff;
+            border: 1px solid #2979ff;
+          }
+        }
+      }
+
+      .banner-announcement-box {
+        height: 270px;
+        padding: 20px;
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        .announcement-title {
+          font-size: 16px;
+          font-weight: bold;
+          color: #000000;
+        }
+
+        .pagination-content {
+          flex: 1;
+          ul {
+            margin: 10px 0;
+            font-size: 14px;
+            line-height: 20px;
+
+            p {
+              color: #C7C7C7;
+              margin-top: 10px;
+            }
+          }
+        }
+
+        .el-pagination {
+          margin: 0 auto;
+          text-align: center;
+        }
+      }
     }
   }
 }
