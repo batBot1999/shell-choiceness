@@ -38,9 +38,9 @@
         </el-row> -->
       </el-header>
       <el-main>
-        <div v-if="num == 1" class="el-main-son">
-          <IndexSearchBox @searchInput="getGoodsSearchInput" />
-
+        <!-- <div v-if="num == 1" class="el-main-son"> -->
+        <div>
+          <IndexSearchBox @searchInput="getIndexSearchInput" />
 
           <!-- <GoodsSearchBox @searchInput="getGoodsSearchInput" />
           <GoodsBannerBox />
@@ -62,7 +62,6 @@
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
 import IndexSearchBox from "../components/IndexSearchBox.vue";
-
 
 // import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
@@ -95,7 +94,7 @@ export default {
   },
 
   methods: {
-    getGoodsSearchInput(value) {
+    getIndexSearchInput(value) {
       // console.log(value);
       this.$router.push({
         name: "goods-search-page",
@@ -103,13 +102,22 @@ export default {
       });
     },
 
-    getServiceSearchInput(value) {
-      // console.log(value);
-      this.$router.push({
-        name: "service-search-page",
-        query: { name: value },
-      });
-    },
+    // getGoodsSearchInput(value) {
+    //   // console.log(value);
+    //   this.$router.push({
+    //     name: "goods-search-page",
+    //     query: { name: value },
+    //   });
+    // },
+
+    //   getServiceSearchInput(value) {
+    //     // console.log(value);
+    //     this.$router.push({
+    //       name: "service-search-page",
+    //       query: { name: value },
+    //     });
+    //   },
+    // },
   },
 };
 </script>
@@ -118,11 +126,11 @@ export default {
 .el-container {
   .el-header {
     padding: 0;
+    height: 40px!important;
+  }
 
-
-
-
-
+  .el-main {
+    padding: 0;
   }
 }
 

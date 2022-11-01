@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-box">
-      <img src="../assets/img/searchIcon.png" class="search-img" alt="" />
+      <!-- <img src="../assets/img/searchIcon.png" class="search-img" alt="" /> -->
       <el-select v-model="value" placeholder="服务名称">
         <el-option
           v-for="item in options"
