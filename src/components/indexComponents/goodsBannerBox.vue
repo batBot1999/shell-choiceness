@@ -1,7 +1,6 @@
 <template>
   <div class="goodsBannerBox">
     <div class="bannerLeft">
-      <!-- @mouseover.native="getIndexSortHover(item1.id)" -->
       <el-popover
         width="200"
         trigger="hover"
