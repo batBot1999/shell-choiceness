@@ -30,4 +30,8 @@ body,
 ul {
   list-style-type: none;
 }
+
+span p {
+  font-family: Microsoft YaHei-Regular;
+}
 </style>

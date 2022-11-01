@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-container>
-      <!-- header包含了贝壳精选和商品服务tab -->
       <el-header>
-        <el-row :gutter="28">
+        <HeaderNav />
+        <!-- <el-row :gutter="28">
           <el-col :span="3"
             ><div class="grid-content shell-choiceness">贝壳精选</div></el-col
           >
@@ -35,37 +35,23 @@
           <el-col :span="2"><div class="grid-content"></div></el-col>
           <el-col :span="2"><div class="grid-content"></div></el-col>
           <el-col :span="2"><div class="grid-content"></div></el-col>
-        </el-row>
+        </el-row> -->
       </el-header>
-
       <el-main>
         <div v-if="num == 1" class="el-main-son">
-          <!-- 2.在父组件中通过v-on监听子组件中自定义的事件 -->
-          <!-- 商品搜索box -->
-          <GoodsSearchBox @searchInput="getGoodsSearchInput" />
-          <!-- 商品搜索box -->
+          <IndexSearchBox @searchInput="getGoodsSearchInput" />
 
-          <!-- 商品轮播图box -->
+
+          <!-- <GoodsSearchBox @searchInput="getGoodsSearchInput" />
           <GoodsBannerBox />
-          <!-- 商品轮播图box -->
-
-          <!-- 商品推荐 -->
-          <GoodsRecommand />
-          <!-- 商品推荐 -->
+          <GoodsRecommand /> -->
         </div>
-        <div v-if="num == 2" class="el-main-son">
-          <!-- 服务搜索box  -->
-          <ServiceSearchBox  @searchInput="getServiceSearchInput"  />
-          <!-- 服务轮播图box -->
+        <!-- <div v-if="num == 2" class="el-main-son">
+          <ServiceSearchBox @searchInput="getServiceSearchInput" />
           <ServiceBannerBox />
-          <!-- 精选服务 -->
           <SelectedService />
           <PartnerBox />
-        </div>
-
-        <!-- <router-link to="/about">About</router-link>
-        <router-link to="/login">Login</router-link>
-        <router-link to="/register">Register</router-link> -->
+        </div> -->
       </el-main>
     </el-container>
     <Footer />
@@ -73,8 +59,12 @@
 </template>
 
 <script>
+import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
-import GoodsSearchBox from "../components/GoodsSearchBox.vue";
+import IndexSearchBox from "../components/IndexSearchBox.vue";
+
+
+// import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
 import GoodsBannerBox from "../components/indexComponents/GoodsBannerBox.vue";
 import ServiceBannerBox from "../components/indexComponents/ServiceBannerBox.vue";
@@ -92,8 +82,10 @@ export default {
   },
 
   components: {
+    HeaderNav,
     Footer,
-    GoodsSearchBox,
+    IndexSearchBox,
+    // GoodsSearchBox,
     ServiceSearchBox,
     GoodsBannerBox,
     ServiceBannerBox,
@@ -111,7 +103,7 @@ export default {
       });
     },
 
-        getServiceSearchInput(value) {
+    getServiceSearchInput(value) {
       // console.log(value);
       this.$router.push({
         name: "service-search-page",
@@ -125,38 +117,49 @@ export default {
 <style lang="less" scoped>
 .el-container {
   .el-header {
-    .grid-content {
-      height: 36px;
-      text-align: center;
-      line-height: 36px;
-    }
-    .shell-choiceness {
-      background: #0e6ebe;
-      color: #fff;
-      height: 60px;
-      text-align: center;
-      line-height: 60px;
-      font-size: 20px;
-      margin: 20px 0 0 20px;
-    }
+    padding: 0;
 
-    .tab-button {
-      margin-top: 40px;
-      background: #fff0f3;
-      font-weight: bolder;
-    }
 
-    .active {
-      background: #fff;
-    }
-  }
 
-  .el-main {
-    .el-main-son {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+
+
   }
 }
+
+// .el-container {
+//   .el-header {
+//     .grid-content {
+//       height: 36px;
+//       text-align: center;
+//       line-height: 36px;
+//     }
+//     .shell-choiceness {
+//       background: #0e6ebe;
+//       color: #fff;
+//       height: 60px;
+//       text-align: center;
+//       line-height: 60px;
+//       font-size: 20px;
+//       margin: 20px 0 0 20px;
+//     }
+
+//     .tab-button {
+//       margin-top: 40px;
+//       background: #fff0f3;
+//       font-weight: bolder;
+//     }
+
+//     .active {
+//       background: #fff;
+//     }
+//   }
+
+//   .el-main {
+//     .el-main-son {
+//       display: flex;
+//       flex-wrap: wrap;
+//       justify-content: center;
+//     }
+//   }
+// }
 </style>

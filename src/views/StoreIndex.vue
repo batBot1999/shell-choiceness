@@ -126,13 +126,13 @@ export default {
   methods: {
     // 选择一页显示多少条数据
     handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
+      // console.log(`每页 ${val} 条`);
       this.pageSize = val;
       this.getPoemList();
     },
     // 选择当前是第几页
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
+      // console.log(`当前页: ${val}`);
       this.currentPage = val;
       this.getPoemList();
     },
@@ -141,7 +141,7 @@ export default {
         header: { "Content-Type": "application/json" },
         params: { page: this.currentPage, size: this.pageSize },
       }).then((res) => {
-        console.log("res---", res);
+        // console.log("res---", res);
         if (res.data.code === 200) {
           this.tableData = res.data.result.list;
           this.total = res.data.result.total;

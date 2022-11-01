@@ -226,7 +226,7 @@ export default {
           if (res.code === 200) {
             this.serviceRecommendNav = res.result;
             this.serviceRecommendNav.unshift(this.recommendTabItem);
-            console.log("serviceRecommendNav", this.serviceRecommendNav);
+            // console.log("serviceRecommendNav", this.serviceRecommendNav);
           }
         })
         .catch((e) => {});
@@ -273,7 +273,7 @@ export default {
 
     // 拿到在首页搜索时候传递的搜索参数
     this.name = this.$route.query.name;
-    console.log("this.name---", this.name);
+    // console.log("this.name---", this.name);
 
     // 拿到在首页点击二级分类时候传递的搜索参数
     // this.secondSortName = this.$route.query.secondSortName;
