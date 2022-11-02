@@ -136,9 +136,9 @@ export default {
       // console.log("id---",this.id);
       getGoodsDetail(this.id)
         .then((res) => {
-          console.log("res---", res);
+          // console.log("res---", res);
           this.goodsItem = res.result;
-          console.log("goodsItem---", this.goodsItem);
+          // console.log("goodsItem---", this.goodsItem);
         })
         .catch((e) => {
           console.log("e---", e);

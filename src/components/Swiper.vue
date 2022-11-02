@@ -54,7 +54,7 @@ export default {
       goodsRecommendList(params).then((res) => {
         // console.log("res---", res);
         this.goodsList = res.result.records;
-        console.log("goodsList---", this.goodsList);
+        // console.log("goodsList---", this.goodsList);
       });
     },
   },

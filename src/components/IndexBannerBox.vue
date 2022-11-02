@@ -43,8 +43,8 @@
           <div class="banner-avatar-box"></div>
           <div class="banner-welcome-text">您好，欢迎来到贝壳精选！</div>
           <div class="banner-button-box">
-            <button>登录</button>
-            <button>注册</button>
+            <button @click="goLogin">登录</button>
+            <button @click="goRegister">注册</button>
           </div>
         </div>
         <div class="banner-announcement-box">
@@ -353,6 +353,7 @@ export default {
             border-radius: 50px 50px 50px 50px;
             color: #ffffff;
             border: none;
+            cursor: pointer;
           }
           button:last-child {
             width: 70px;
@@ -361,6 +362,7 @@ export default {
             border-radius: 50px 50px 50px 50px;
             color: #2979ff;
             border: 1px solid #2979ff;
+            cursor: pointer;
           }
         }
       }

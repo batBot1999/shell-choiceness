@@ -116,3 +116,11 @@ export function getServiceDetail(data) {
 
     })
 }
+
+// 商品首页只传一个id不分页
+export function getIdGoodsList(data) {
+    return get({
+        url: "/bio/app/bioItem/parent/item?id=" + data,
+
+    })
+}

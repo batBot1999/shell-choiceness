@@ -85,9 +85,10 @@ export default {
 
     .search-box-text {
       height: 41px;
-      font-family: Arial-Bold Italic, Arial;
+      font-style: italic;
       color: #2979ff;
       font-size: 36px;
+
       // flex:1;
     }
 

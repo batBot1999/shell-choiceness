@@ -7,7 +7,7 @@
         <span @click="goRegister" class="blue-text">免费注册</span>
       </div>
       <div>
-        <span>首页</span>|<span class="shop-car-text"
+        <span style="cursor: pointer;">首页</span>|<span class="shop-car-text"
           >购物车&nbsp<span class="number-text">({{ 0 }})</span></span
         >|
         <span>我的订单</span>
@@ -53,6 +53,8 @@ export default {
 
       .blue-text {
         color: #2979ff;
+            cursor: pointer;
+
       }
 
       .shop-car-text {

@@ -46,6 +46,10 @@
 
           <HotRecommendBox />
 
+          <IndexGoodsList />
+
+
+
           <!-- <GoodsSearchBox @searchInput="getGoodsSearchInput" />
           <GoodsBannerBox />
           <GoodsRecommand /> -->
@@ -68,6 +72,8 @@ import Footer from "../components/Footer.vue";
 import IndexSearchBox from "../components/IndexSearchBox.vue";
 import IndexBannerBox from "../components/IndexBannerBox.vue";
 import HotRecommendBox from "../components/HotRecommendBox.vue";
+import IndexGoodsList from "../components/IndexGoodsList.vue";
+
 
 // import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
@@ -92,6 +98,7 @@ export default {
     IndexSearchBox,
     IndexBannerBox,
     HotRecommendBox,
+    IndexGoodsList,
 
 
     // GoodsSearchBox,
