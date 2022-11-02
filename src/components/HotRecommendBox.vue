@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Swiper from "./Swiper.vue"
+import Swiper from "./Swiper.vue";
 export default {
   data() {
     return {};
@@ -25,13 +25,9 @@ export default {
     Swiper,
   },
 
-  methods: {
+  methods: {},
 
-  },
-
-mounted: {
-
-  },
+  mounted(){},
 };
 </script>
 
@@ -74,7 +70,6 @@ mounted: {
     }
 
     .got-recommend-container {
-
     }
   }
 }

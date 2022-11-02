@@ -8,11 +8,16 @@
           v-for="(item, index) in goodsList"
           :key="index"
         >
-          <p>{{ item.name }}</p>
-          <p>货号:{{ item.itemNo }}</p>
-          <p>规格:{{ item.specificationDesc }}</p>
-          <p>{{ item.price }}</p>
-          <p>{{ item.enterpriseName }}</p>
+          <div class="swiper-slide-img">
+            <img src="../assets/img/goodsImage.png" alt="" />
+          </div>
+          <div class="swiper-slide-text">
+            <p>{{ item.name }}</p>
+            <p>货号:{{ item.itemNo }}</p>
+            <p>规格:{{ item.specificationDesc }}</p>
+            <p>{{ item.price }}</p>
+            <p>{{ item.enterpriseName }}</p>
+          </div>
         </div>
       </div>
       <!-- 如果需要导航按钮 -->
@@ -76,6 +81,8 @@ export default {
       },
       // 同时显示
       slidesPerView: 3,
+      // 滚动几个一组·
+      // slidesPerGroup: 3,
       // 自动播放
       autoplay: true,
     });
@@ -88,11 +95,39 @@ export default {
   width: 100%;
   height: 180px;
   margin: 0 auto;
+  background: #f1eff4;
 
   .swiper-slide {
-    width: 33.33%;
+    margin: 0 20px;
+    width: 300px;
     height: 100%;
-    background: red;
+    display: flex;
+
+    .swiper-slide-img {
+      img {
+        width: 200px;
+      }
+    }
+    .swiper-slide-text {
+      width: calc(100% - 200px);
+      padding: 20px;
+      font-size: 14px;
+
+      p {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      p:first-child {
+        font-size: 18px;
+        width: 90%;
+      }
+
+      p:not(P:first-child) {
+        color: #9c9c9c;
+        margin: 10px 0;
+      }
+    }
   }
 }
 </style>

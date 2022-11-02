@@ -243,8 +243,8 @@ export default {
   span:nth-child(2) {
     font-size: 12px;
   }
-  /deep/.el-tabs__item {
-  }
+  // /deep/.el-tabs__item {
+  // }
   /deep/.el-tabs__item.is-active {
     color: #fff;
     background: #0e6ebe;
