@@ -28,7 +28,7 @@
         </el-popover>
       </div>
       <div class="banner-main-box">
-        <el-carousel height="570px">
+        <el-carousel>
           <el-carousel-item v-for="item in bannerList" :key="item.id">
             <img
               :src="item.pic"
@@ -49,7 +49,9 @@
         </div>
         <div class="banner-login-box" v-show="notLogin">
           <div class="banner-avatar-box"></div>
-          <div class="banner-welcome-text">您好&nbsp{{ realname }}，欢迎来到贝壳精选！</div>
+          <div class="banner-welcome-text">
+            您好&nbsp{{ realname }}，欢迎来到贝壳精选！
+          </div>
           <span>所在公司&nbsp:&nbsp{{ companyName }}</span>
         </div>
         <div class="banner-announcement-box">
@@ -262,60 +264,80 @@ export default {
 
 <style lang="less" scoped>
 .index-banner-bg {
-  // width: 100vw;
-  height: 570px;
+  width: 100%;
+  height: 50vh;
   background: url("../assets/img/index-banner-bgimg.png");
   background-size: cover;
   overflow: hidden;
 
   .index-banner-container {
-    width: calc(100vw - 520px);
-    height: 100%;
+    overflow: hidden;
+    width: 90vw;
+    height: 50vh;
     display: flex;
-    margin: 0 auto;
-
+    margin-left: 5vw;
     .banner-left-box {
-      width: 300px;
-      height: 570px;
+      width: 20vw;
+      height: 100%;
       display: flex;
       flex-direction: column;
+      gap: 0;
+      justify-content: space-evenly;
       background-color: #ffffff;
 
       .sort-title {
         font-size: 16px;
         text-align: center;
         color: #2979ff;
-        height: 80px;
-        line-height: 80px;
+        // height: 80px;
+        // line-height: 50px;
+        height: calc(50vh / 7);
       }
 
       span {
-        width: 300px;
+        width: 15vw;
 
         span > .el-button {
-          width: 300px;
-          height: calc(490px / 6);
+          width: 100%;
+          height: calc(50vh / 7);
           text-align: start;
-          font-size: 16px;
+          font-size: 12px;
           font-weight: bold;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
 
-        span > .el-button::after {
-          content: ">";
-          float: right;
-          font-size: 20px;
-          color: #c7c7c7;
-        }
+        // span > .el-button::after {
+        //   content: ">";
+        //   float: right;
+        //   font-size: 12px;
+        //   color: #c7c7c7;
+        // }
       }
     }
 
     .banner-main-box {
-      width: 860px;
-      height: 570px;
+      width: 100%;
+      height: 50vh;
+      // height: 100%;
+
+      /deep/.el-carousel {
+        height: 50vh;
+
+        .el-carousel__container {
+          height: 100%;
+          .el-carousel-item {
+            height: 50vh;
+          }
+        }
+      }
 
       // 宽度优先自适应
       .el-carousel__item img {
         width: 100%;
+        // height: 100%;
+        height: 50vh;
       }
 
       // 轮播图左右按钮大小
@@ -325,27 +347,31 @@ export default {
     }
 
     .banner-right-box {
-      width: 240px;
-      height: 570px;
+      width: 20vw;
+      height: 50vh;
       background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 0 20px;
 
       .banner-login-box {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: space-evenly;
 
         .banner-avatar-box {
-          width: 80px;
-          height: 80px;
+          width: 50px;
+          height: 50px;
           background-image: url("../assets/img/index-avtar-default.png");
           background-size: cover;
-          margin: 30px 0 10px;
         }
 
         .banner-welcome-text {
           color: #666666;
           font-size: 14px;
-          margin-bottom: 30px;
         }
 
         .banner-button-box {
@@ -375,9 +401,7 @@ export default {
       }
 
       .banner-announcement-box {
-        height: 270px;
         padding: 20px;
-        margin-top: 50px;
         display: flex;
         flex-direction: column;
         .announcement-title {
@@ -387,15 +411,18 @@ export default {
         }
 
         .pagination-content {
-          flex: 1;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
           ul {
-            margin: 10px 0;
             font-size: 14px;
             line-height: 20px;
+            div {
 
+            }
             p {
               color: #c7c7c7;
-              margin-top: 10px;
+              // margin-top: 10px;
             }
           }
         }

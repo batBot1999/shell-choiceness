@@ -2,7 +2,7 @@
   <div>
     <HeaderNav />
     <div class="header-search-box">
-      <div class="shell-choiceness"  @click="goHome">贝壳精选</div>
+      <div class="shell-choiceness" @click="goHome">贝壳精选</div>
       <GoodsSearchBox @searchInput="getGoodsSearchInput" />
     </div>
     <div class="header-tab-box">
@@ -15,7 +15,7 @@
       >
         全部商品
       </div>
-      <div
+      <!-- <div
         style=""
         type="button"
         class="grid-content tab-button"
@@ -23,7 +23,7 @@
         @click="num = 2"
       >
         首页
-      </div>
+      </div> -->
     </div>
     <el-main>
       <div v-if="num == 1" class="el-main-son1">
@@ -75,6 +75,7 @@
           </el-table>
           <!-- 分页 -->
           <el-pagination
+            class="pagination-box"
             @current-change="handleCurrentChange"
             :current-page="currentPage"
             :page-size="pageSize"
@@ -98,10 +99,12 @@ import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
 import { getIndexSort } from "../request/api.js";
+import { showLoading, hideLoading } from "../util/Loading";
 import axios from "axios";
 export default {
   data() {
     return {
+      // loading: true,
       activeName: "22",
       goodsRecommendNav: [],
       num: 1,
@@ -129,10 +132,10 @@ export default {
     HeaderNav,
   },
   methods: {
-        goHome () {
+    goHome() {
       this.$router.push({
         name: "home",
-      })
+      });
     },
     // 标记1
     goGoodsDetail(row) {
@@ -203,6 +206,9 @@ export default {
             this.tableData = res.data.result.records;
             // console.log(this.tableData);
             this.total = res.data.result.total;
+            setTimeout(() => {
+              hideLoading();
+            }, 500);
           }
         })
         .catch((e) => {});
@@ -263,6 +269,10 @@ export default {
   },
 
   mounted() {
+    showLoading();
+
+    // loading
+    // this.openFullScreen1();
     // this.getgoodsList();
 
     // 拿到在首页搜索时候传递的搜索参数
@@ -387,6 +397,11 @@ export default {
         /deep/.el-radio-button__inner:hover {
           color: #0e6ebe;
         }
+      }
+
+      .pagination-box {
+        display: flex;
+        justify-content: center;
       }
     }
   }

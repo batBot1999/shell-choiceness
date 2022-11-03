@@ -9,7 +9,7 @@
           :key="index"
         >
           <div class="swiper-slide-img">
-            <img src="../assets/img/goodsImage.png" alt="" />
+            <img :src="item.mainPic" alt="" />
           </div>
           <div class="swiper-slide-text">
             <p>{{ item.name }}</p>
@@ -52,9 +52,9 @@ export default {
         pageSize: 1000,
       };
       goodsRecommendList(params).then((res) => {
-        // console.log("res---", res);
+        console.log("res-----", res);
         this.goodsList = res.result.records;
-        // console.log("goodsList---", this.goodsList);
+        console.log("goodsList-----", this.goodsList);
       });
     },
   },
@@ -92,24 +92,27 @@ export default {
 
 <style lang="less" scoped>
 .swiper-container {
-  width: 100%;
-  height: 180px;
-  margin: 0 auto;
+  // width: 100%;
+  height: 40vh;
+  margin: 10px auto;
   background: #f1eff4;
+  // background: red;
+
 
   .swiper-slide {
-    margin: 0 20px;
-    width: 300px;
-    height: 100%;
+    // margin: 0 20px;
+    margin-left: 10px;
     display: flex;
+    align-items: center;
 
     .swiper-slide-img {
       img {
-        width: 200px;
+        width: 10vw;
+        height: 10vw;
       }
     }
     .swiper-slide-text {
-      width: calc(100% - 200px);
+      width: 15vw;
       padding: 20px;
       font-size: 14px;
 
@@ -120,7 +123,7 @@ export default {
       }
       p:first-child {
         font-size: 18px;
-        width: 90%;
+        // width: 90%;
       }
 
       p:not(P:first-child) {

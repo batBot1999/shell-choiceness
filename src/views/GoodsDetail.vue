@@ -53,12 +53,12 @@
         </div>
         <div class="current-goods-box">
           <div class="goods-left-box">
-            <img src="../assets/img/goodsImage.png" alt="" />
-            <el-carousel :interval="4000" type="card" height="100px">
+            <img :src="this.goodsItem.mainPic" alt="" />
+            <!-- <el-carousel :interval="4000" type="card" height="100px">
               <el-carousel-item v-for="item in 6" :key="item">
                 <h3 class="medium">{{ item }}</h3>
               </el-carousel-item>
-            </el-carousel>
+            </el-carousel> -->
           </div>
 
           <div class="goods-right-box">
@@ -88,7 +88,7 @@
                     label="描述文字"
                   ></el-input-number>
                 </div>
-                <div>总价:{{ totalPrice }}</div>
+                <div style="margin-top: 20px">总价:{{ totalPrice }}</div>
               </div>
             </div>
             <button>提交订单</button>
@@ -109,6 +109,7 @@ import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import Footer from "../components/Footer.vue";
 import { getGoodsDetail } from "../request/api.js";
 import { getGoodsDetailSku } from "../request/api.js";
+import { showLoading, hideLoading } from "../util/Loading";
 
 export default {
   components: {
@@ -156,6 +157,9 @@ export default {
         .then((res) => {
           // console.log("res---", res);
           this.goodsItemSku = res.result;
+                      setTimeout(() => {
+              hideLoading();
+            }, 500);
           // console.log("goodsItemSku---", this.goodsItemSku);
           // 遍历每一个sku然后给他加一个计数器,一开始直接加进去没有响应式地更新视图,去网上查发现可以用这个this.$set(obj, key, value)给对象加键值对
           this.goodsItemSku.map((item) => {
@@ -182,6 +186,8 @@ export default {
   },
 
   mounted() {
+    showLoading();
+
     this.id = this.$route.query.id;
     console.log(this.id);
     this.getGoodsDetailItem();
@@ -338,6 +344,7 @@ export default {
           display: flex;
           flex-direction: column;
           span {
+            margin-top: 10px;
           }
           .sku-item {
             display: flex;
@@ -346,7 +353,8 @@ export default {
             line-height: 40px;
 
             .sku-text {
-              border: 1px solid #000;
+              // border: 1px solid #000;
+              line-height: 50px;
             }
             .active {
               border: blue;

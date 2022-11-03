@@ -88,13 +88,14 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+  // mode: 'history',
+  mode: 'hash',
+  // base: process.env.BASE_URL,
   routes
 })
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  if (to.path == '/') {
+  if (to.path == '/' || to.path == '/login' || to.path == '/register') {
     next()
     return
   }

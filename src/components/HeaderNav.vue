@@ -8,17 +8,18 @@
       </div>
       <div class="login-box" v-show="notLogin">
         <span>Hi!欢迎来到贝壳精选!</span>
-        <span>{{ realname }},您已登录</span>
-        <span>所在公司:{{ companyName }}</span>
+        <span  class="blue-text">{{ realname }}</span><span>您已登录</span>
+        <span>所在公司:</span><span class="blue-text">{{ companyName }}</span>
       </div>
       <div>
-        <span style="cursor: pointer">首页&nbsp</span>&nbsp|&nbsp&nbsp&nbsp
+        <span style="cursor: pointer" @click="goHome">首页&nbsp</span>
+        <!-- &nbsp|&nbsp&nbsp&nbsp
         <span
           class="shop-car-text"
           >购物车&nbsp<span class="number-text">({{ 0 }})&nbsp</span>
           </span
         >|&nbsp
-        <span @click="goMySettlementPage">我的订单</span>
+        <span @click="goMySettlementPage">我的订单</span> -->
       </div>
     </div>
   </div>
@@ -34,6 +35,11 @@ export default {
     };
   },
   methods: {
+        goHome() {
+      this.$router.push({
+        name: "home",
+      });
+    },
     goLogin() {
       this.$router.push({ name: "login" });
     },
@@ -53,10 +59,9 @@ export default {
 
 <style lang="less" scoped>
 .header-nav-bg {
-  width: 100vw;
   background: #f8f9fe;
   .header-nav {
-    width: calc(100vw - 720px);
+    width: 80vw;
     height: 40px;
     margin: 0 auto;
     display: flex;

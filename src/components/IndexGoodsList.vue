@@ -24,8 +24,8 @@
     </div>
     <div
       class="goods-list-item"
-      v-for="(item2, index) in goodsList"
-      :key="index"
+      v-for="(item2, index2) in goodsList"
+      :key="index2"
     >
       <div class="title-box" @click="goSearchPage(item2.name)">
         <p>{{ item2.categoryName }}</p>
@@ -38,11 +38,11 @@
               <div
                 class="swiper-slide"
                 @click="goGoodsDetail(item3.id)"
-                v-for="(item3, index) in item2.bioItemList"
-                :key="index"
+                v-for="(item3, index3) in item2.bioItemList"
+                :key="index3"
               >
                 <div class="swiper-slide-img">
-                  <img src="../assets/img/goodsImage.png" alt="" />
+                  <img :src="item3.mainPic" alt="" />
                 </div>
                 <div class="swiper-slide-text">
                   <p>{{ item3.name }}</p>
@@ -58,16 +58,6 @@
             <div class="swiper-button-next"></div>
           </div>
         </div>
-
-        <!-- <div class="item" v-for="(item3, index) in item2.bioItemList">
-          <img src="../assets/img/index-goods-img.png" alt="" />
-          <div class="item-text-box">
-            <p>{{ item3.name }}</p>
-            <p>规格:{{ item3.specificationDesc }}</p>
-            <p>货号:{{ item3.supplierId }}</p>
-            <p>出品方:{{ item3.supplierName }}</p>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
@@ -83,6 +73,7 @@ import { getIdGoodsList } from "../request/api.js";
 export default {
   data() {
     return {
+      mySwiper: null,
       activeName: "72",
       pageSize: null,
       goodsList: [],
@@ -105,12 +96,12 @@ export default {
   },
 
   methods: {
-    tabSearchButton(item1, index) {
-      this.isActive = index;
-      this.s1 = index;
-      console.log("this.si--", this.s1);
-      console.log("this.isActive---", this.isActive);
-    },
+    // tabSearchButton(item1, index) {
+    //   this.isActive = index;
+    //   this.s1 = index;
+    //   console.log("this.si--", this.s1);
+    //   console.log("this.isActive---", this.isActive);
+    // },
 
     //   // 携带二级分类前往搜索页面
     goSearchPage(secondSortName) {
@@ -134,7 +125,7 @@ export default {
       // let id = this.goodsSortFirst[0].id;
       let id = "72";
       getIdGoodsList(id).then((res) => {
-        // console.log("res---", res);
+        console.log("res---", res);
         this.goodsList = res.result;
         // console.log("goodsList---", this.goodsList);
       });
@@ -152,7 +143,7 @@ export default {
           // console.log("resNav1-----", res);
           if (res.code === 200) {
             this.goodsSortFirst = res.result;
-            console.log("goodsSortFirst---", this.goodsSortFirst);
+            // console.log("goodsSortFirst---", this.goodsSortFirst);
             // this.goodsSortFirst.unshift(this.recommendTabItem);
           }
         })
@@ -188,10 +179,39 @@ export default {
       // console.log("this.isActive---",this.isActive);
       // console.log("item1---", item1);
       this.tabId = item1.id;
-      // console.log("this.tabId---", this.tabId);
+      console.log("this.tabId---", this.tabId);
       getIdGoodsList(this.tabId).then((res) => {
         // console.log("tabSearchButtonRes---", res);
         this.goodsList = res.result;
+        // this.$forceUpdate();
+        // if (this.mySwiper) {
+        //   this.mySwiper.destroy(true, true);
+        // }
+        this.mySwiper = new Swiper(".swiper-container", {
+          loop: true, // 循环模式选项
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper
+          observeParents: false, //修改swiper的父元素时，自动初始化swiper
+
+          // 如果需要分页器
+          // pagination: {
+          //   el: ".swiper-pagination",
+          // },
+
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          // 同时显示
+          slidesPerView: 3,
+          // 滚动几个一组·
+          // slidesPerGroup: 3,
+          // 自动播放
+          autoplay: true,
+        });
+        //         this.mySwiper && this.mySwiper.update();
+        // 　　　this.mySwiper && this.mySwiper.startAutoplay();
+        // 　　 this.mySwiper && this.mySwiper.reLoop();
         // console.log("goodsList---", this.goodsList);
       });
     },
@@ -218,10 +238,10 @@ export default {
     this.getgoodsList();
     setTimeout(() => {
       this.$nextTick(() => {
-        new Swiper(".swiper-container", {
+        this.mySwiper = new Swiper(".swiper-container", {
           loop: true, // 循环模式选项
           observer: true, //修改swiper自己或子元素时，自动初始化swiper
-          observeParents: true, //修改swiper的父元素时，自动初始化swiper
+          observeParents: false, //修改swiper的父元素时，自动初始化swiper
 
           // 如果需要分页器
           // pagination: {
@@ -254,24 +274,26 @@ export default {
   color: #ffffff !important;
 }
 .goods-list-bg {
-  width: 100%;
-  height: 1420px;
+  // width: 100%;
+  height: 1420PX;
   background-image: url("../assets/img/index-goods-list.png");
   background-size: cover;
   overflow: hidden;
 
   .tab-container {
-    margin: 100px 260px 0;
-    height: 80px;
+    margin: 100px 5vw 0;
+    height: 5vw;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     position: relative;
 
     button {
+      margin: 0 20px;
+      padding: 0 10px;
       box-sizing: border-box;
-      width: 220px;
-      height: 80px;
-      line-height: 80px;
+      width: 8vw;
+      height: 5vw;
+      line-height: 5vw;
       text-align: center;
       background: #1d1f27;
       border-radius: 5px 5px 5px 5px;
@@ -370,15 +392,15 @@ export default {
   // 修改tab样式结束
 
   .goods-list-item {
-    margin: 50px 260px 0px;
-    width: calc(100% - 520px);
+    margin: 50px 5vw 0px;
+    width: calc(100% - 10vw);
     height: 360px;
     display: flex;
 
     .title-box {
       box-sizing: border-box;
-      width: 240px;
-      height: 100%;
+      width: 15vw;
+      // height: 100%;
       color: #ffffff;
       background: #2979ff;
       display: flex;
@@ -386,11 +408,12 @@ export default {
       justify-content: space-around;
       align-items: flex-start;
       padding: 0 50px;
+      margin-right: 10px;
       position: relative;
       border-radius: 5px 5px 5px 5px;
 
       p:first-child {
-        width: 140px;
+        // width: 140px;
         font-size: 24px;
       }
 
@@ -419,24 +442,26 @@ export default {
     // }
 
     .item-box {
-      width: calc(100% - 240px);
+      width: calc(100% - 15vw);
       height: 100%;
 
       .swiper-container {
         width: 100%;
         height: 360px;
         margin: 0 auto;
-        background: #f1eff4;
 
         .swiper-wrapper {
+          // gap: 10px;
           .swiper-slide {
+            background: #f1eff4;
             // width: 300px;
-            height: 100%;
+            // height: 100%;
             // margin: 0 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+            text-align: center;
 
             .swiper-slide-img {
               img {
@@ -457,7 +482,6 @@ export default {
               }
               p:first-child {
                 font-size: 18px;
-                width: 90%;
               }
 
               p:not(P:first-child) {

@@ -18,8 +18,8 @@
         <div class="search-button" @click="sendParent()">
           <img src="../assets/img/index-search-img.png" /><span>搜索</span>
         </div>
-        <div class="search-goods-button">找商品</div>
-        <div class="search-service-button">找服务</div>
+        <div class="search-goods-button" @click="goSearchPage">找商品</div>
+        <div class="search-service-button" style="visibility:hidden">找服务</div>
         <!-- <button class="search-button" @click="goGoodsSearch()">
           搜索
           </button> -->
@@ -55,6 +55,11 @@ export default {
   components: {},
 
   methods: {
+    goSearchPage() {
+      this.$router.push({
+        name: "goods-search-page",
+      });
+    },
     // goGoodsSearch() {
     //   // THIS.$EMIT('',)
     //   this.$router.push({
@@ -74,10 +79,10 @@ export default {
 
 <style lang="less" scoped>
 .search-box-bg {
-  margin: 40px 360px 50px;
+  margin: 40px 5vw 50px;
 
   .search-box {
-    width: calc(100vw - 720px);
+    width: 90vw;
     // background: grey;
     display: flex;
     align-items: center;

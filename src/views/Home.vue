@@ -48,8 +48,6 @@
 
           <IndexGoodsList />
 
-
-
           <!-- <GoodsSearchBox @searchInput="getGoodsSearchInput" />
           <GoodsBannerBox />
           <GoodsRecommand /> -->
@@ -73,7 +71,6 @@ import IndexSearchBox from "../components/IndexSearchBox.vue";
 import IndexBannerBox from "../components/IndexBannerBox.vue";
 import HotRecommendBox from "../components/HotRecommendBox.vue";
 import IndexGoodsList from "../components/IndexGoodsList.vue";
-
 
 // import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
@@ -99,7 +96,6 @@ export default {
     IndexBannerBox,
     HotRecommendBox,
     IndexGoodsList,
-
 
     // GoodsSearchBox,
     ServiceSearchBox,
@@ -143,48 +139,11 @@ export default {
 .el-container {
   .el-header {
     padding: 0;
-    height: 40px!important;
+    height: 40px !important;
   }
 
   .el-main {
     padding: 0;
   }
 }
-
-// .el-container {
-//   .el-header {
-//     .grid-content {
-//       height: 36px;
-//       text-align: center;
-//       line-height: 36px;
-//     }
-//     .shell-choiceness {
-//       background: #0e6ebe;
-//       color: #fff;
-//       height: 60px;
-//       text-align: center;
-//       line-height: 60px;
-//       font-size: 20px;
-//       margin: 20px 0 0 20px;
-//     }
-
-//     .tab-button {
-//       margin-top: 40px;
-//       background: #fff0f3;
-//       font-weight: bolder;
-//     }
-
-//     .active {
-//       background: #fff;
-//     }
-//   }
-
-//   .el-main {
-//     .el-main-son {
-//       display: flex;
-//       flex-wrap: wrap;
-//       justify-content: center;
-//     }
-//   }
-// }
 </style>

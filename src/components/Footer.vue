@@ -83,20 +83,21 @@ export default {};
 </script>
 
 <style lang="less" scoped>
-* {
-  box-sizing: border-box;
-}
+// * {
+//   box-sizing: border-box;
+// }
 .footer-box {
+  // margin-top: 100px;
   background-color: #333333;
-  width: 100vw;
-  height: 360px;
+  width: 100%;
+  height: 20vh;
   overflow: hidden;
 
   .footer-container {
     height: 213px;
     margin: 0 auto;
     margin-top: 80px;
-    width: calc(100vw - 720px);
+    width: 80vw;;
     display: flex;
     justify-content: space-between;
 

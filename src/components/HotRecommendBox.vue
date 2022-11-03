@@ -39,20 +39,21 @@ export default {
 
 <style lang="less" coped>
 .hot-recommend-bg {
-  background: #f8f9fe;
-  width: 100%;
-  height: 380px;
+  // background: #f8f9fe;
+  // background: red;
+  // width: 100%;
+  // height: 40vh;
+  overflow: hidden;
 
   .hot-recommend-box {
     background: #ffffff;
-    width: 1400px;
-    height: 280px;
-    margin: 50px auto 0;
+    width: 90vw;
+    // height: 40vh;
     padding: 20px;
+    margin: 0 auto;
 
     .hot-recommend-header {
-      width: 100%;
-      height: 78px;
+      // width: 100%;
       display: flex;
       align-items: center;
 
@@ -74,8 +75,8 @@ export default {
         color: #2979ff;
       }
     }
-
-    .got-recommend-container {
+    .hot-recommend-container {
+      // height: 100%;
     }
   }
 }
