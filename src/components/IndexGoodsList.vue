@@ -53,7 +53,7 @@
                 </div>
               </div>
             </div>
-            <!-- 如果需要导航按钮 -->
+
             <div class="swiper-button-prev"></div>
             <div class="swiper-button-next"></div>
           </div>
@@ -112,13 +112,13 @@ export default {
       console.log("this.isActive---", this.isActive);
     },
 
-        //   // 携带二级分类前往搜索页面
-      goSearchPage(secondSortName) {
-        this.$router.push({
-          name: "goods-search-page",
-          query: { secondSortName: secondSortName },
-        });
-      },
+    //   // 携带二级分类前往搜索页面
+    goSearchPage(secondSortName) {
+      this.$router.push({
+        name: "goods-search-page",
+        query: { secondSortName: secondSortName },
+      });
+    },
 
     // 前往商品详情
     goGoodsDetail(id) {
@@ -208,42 +208,42 @@ export default {
     //   return firstIdContainer;
     // },
   },
-
+  created() {},
   mounted() {
     // 获取商品一级标题
     this.getGoodsSortFirst();
 
-
-    // 一进来就获取获取商品列表第一个tab
-    this.getgoodsList();
-
-
     // 获取商品二级标题
     // this.getGoodsSortSecond();
+    this.getgoodsList();
+    setTimeout(() => {
+      this.$nextTick(() => {
+        new Swiper(".swiper-container", {
+          loop: true, // 循环模式选项
+          observer: true, //修改swiper自己或子元素时，自动初始化swiper
+          observeParents: true, //修改swiper的父元素时，自动初始化swiper
 
-    new Swiper(".swiper-container", {
-      loop: true, // 循环模式选项
-      autoplay: true,
-      observer: true, //修改swiper自己或子元素时，自动初始化swiper
-      observeParents: true, //修改swiper的父元素时，自动初始化swiper
+          // 如果需要分页器
+          // pagination: {
+          //   el: ".swiper-pagination",
+          // },
 
-      // 如果需要分页器
-      // pagination: {
-      //   el: ".swiper-pagination",
-      // },
+          // 如果需要前进后退按钮
+          navigation: {
+            nextEl: ".swiper-button-next",
+            prevEl: ".swiper-button-prev",
+          },
+          // 同时显示
+          slidesPerView: 3,
+          // 滚动几个一组·
+          // slidesPerGroup: 3,
+          // 自动播放
+          autoplay: true,
+        });
+      });
+    }, 1000);
 
-      // 如果需要前进后退按钮
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      // 同时显示
-      slidesPerView: 3,
-      // 滚动几个一组·
-      // slidesPerGroup: 3,
-      // 自动播放
-      autoplay: true,
-    });
+    // 一进来就获取获取商品列表第一个tab
   },
 };
 </script>
@@ -265,7 +265,7 @@ export default {
     height: 80px;
     display: flex;
     justify-content: space-between;
-      position: relative;
+    position: relative;
 
     button {
       box-sizing: border-box;
@@ -429,14 +429,14 @@ export default {
         background: #f1eff4;
 
         .swiper-wrapper {
-
           .swiper-slide {
-            width: 300px;
+            // width: 300px;
             height: 100%;
-            margin: 0 40px;
+            // margin: 0 40px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            align-items: center;
 
             .swiper-slide-img {
               img {
@@ -447,6 +447,7 @@ export default {
             .swiper-slide-text {
               width: 100%;
               padding: 20px;
+              margin-left: 50px;
               font-size: 14px;
 
               p {

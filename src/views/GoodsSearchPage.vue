@@ -2,7 +2,7 @@
   <div>
     <HeaderNav />
     <div class="header-search-box">
-      <div class="shell-choiceness">贝壳精选</div>
+      <div class="shell-choiceness"  @click="goHome">贝壳精选</div>
       <GoodsSearchBox @searchInput="getGoodsSearchInput" />
     </div>
     <div class="header-tab-box">
@@ -129,6 +129,11 @@ export default {
     HeaderNav,
   },
   methods: {
+        goHome () {
+      this.$router.push({
+        name: "home",
+      })
+    },
     // 标记1
     goGoodsDetail(row) {
       // console.log("row---", row.id);

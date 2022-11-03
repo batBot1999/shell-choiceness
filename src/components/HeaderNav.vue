@@ -1,16 +1,24 @@
 <template>
   <div class="header-nav-bg">
     <div class="header-nav">
-      <div>
+      <div class="login-box" v-show="!notLogin">
         <span>Hi!欢迎来到贝壳精选!</span>
         <span>请<span @click="goLogin" class="blue-text">登录</span></span>
         <span @click="goRegister" class="blue-text">免费注册</span>
       </div>
+      <div class="login-box" v-show="notLogin">
+        <span>Hi!欢迎来到贝壳精选!</span>
+        <span>{{ realname }},您已登录</span>
+        <span>所在公司:{{ companyName }}</span>
+      </div>
       <div>
-        <span style="cursor: pointer;">首页</span>|<span class="shop-car-text"
-          >购物车&nbsp<span class="number-text">({{ 0 }})</span></span
-        >|
-        <span>我的订单</span>
+        <span style="cursor: pointer">首页&nbsp</span>&nbsp|&nbsp&nbsp&nbsp
+        <span
+          class="shop-car-text"
+          >购物车&nbsp<span class="number-text">({{ 0 }})&nbsp</span>
+          </span
+        >|&nbsp
+        <span @click="goMySettlementPage">我的订单</span>
       </div>
     </div>
   </div>
@@ -18,6 +26,13 @@
 
 <script>
 export default {
+  data() {
+    return {
+      notLogin: false,
+      realname: localStorage.realname,
+      companyName: localStorage.companyName,
+    };
+  },
   methods: {
     goLogin() {
       this.$router.push({ name: "login" });
@@ -25,6 +40,13 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
+    goMySettlementPage() {
+      this.$router.push({ name: "settlement-page" });
+    },
+  },
+
+  mounted() {
+    this.notLogin = localStorage.getItem("token") ? true : false;
   },
 };
 </script>
@@ -47,31 +69,29 @@ export default {
       line-height: 24px;
     }
 
-    div {
+    .login-box {
       display: flex;
       gap: 20px;
 
       .blue-text {
         color: #2979ff;
-            cursor: pointer;
-
+        cursor: pointer;
       }
-
-      .shop-car-text {
-        .number-text {
-          color: #f8494d;
-        }
+    }
+    .shop-car-text {
+      .number-text {
+        color: #f8494d;
       }
+    }
 
-      .shop-car-text::before {
-        content: "";
-        display: inline-block;
-        width: 14px;
-        height: 14px;
-        transform: translate(-8px,2px);
-        background: url("../assets/img/shop-car-img.png");
-        background-size:cover;
-      }
+    .shop-car-text::before {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      transform: translate(-8px, 2px);
+      background: url("../assets/img/shop-car-img.png");
+      background-size: cover;
     }
   }
 }

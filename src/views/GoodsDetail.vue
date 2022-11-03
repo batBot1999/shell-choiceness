@@ -2,18 +2,17 @@
   <div>
     <HeaderNav />
     <div class="header-search-box">
-      <div class="shell-choiceness">贝壳精选</div>
+      <div class="shell-choiceness" @click="goHome">贝壳精选</div>
       <img src="../assets/img/shell-icon.png" alt="" />
       <div>
         <p>贝壳社</p>
         <p>服务电话: 0581-86658021</p>
       </div>
-      <GoodsSearchBox class="goods-search-box" />
-      <button class="search-button">搜全站</button>
+      <!-- <GoodsSearchBox class="goods-search-box" /> -->
     </div>
 
     <div class="header-tab-box">
-      <div
+      <!-- <div
         style=""
         type="button"
         class="grid-content tab-button"
@@ -21,7 +20,7 @@
         @click="num = 1"
       >
         企业全部商品
-      </div>
+      </div> -->
       <div
         style=""
         type="button"
@@ -31,7 +30,7 @@
       >
         当前商品
       </div>
-      <div
+      <!-- <div
         style=""
         type="button"
         class="grid-content tab-button"
@@ -39,7 +38,7 @@
         @click="num = 3"
       >
         联系方式
-      </div>
+      </div> -->
     </div>
 
     <el-main>
@@ -128,6 +127,12 @@ export default {
     };
   },
   methods: {
+
+    goHome () {
+      this.$router.push({
+        name: "home",
+      })
+    },
     handleChange(value) {
       console.log(value);
     },
@@ -190,7 +195,7 @@ export default {
   width: 90vw;
   margin-left: 5vw;
   display: flex;
-  justify-content: center;
+  justify-content: start;
 
   .shell-choiceness {
     width: 150px;

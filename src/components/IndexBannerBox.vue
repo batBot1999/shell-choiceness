@@ -39,7 +39,7 @@
         </el-carousel>
       </div>
       <div class="banner-right-box">
-        <div class="banner-login-box">
+        <div class="banner-login-box" v-show="!notLogin">
           <div class="banner-avatar-box"></div>
           <div class="banner-welcome-text">您好，欢迎来到贝壳精选！</div>
           <div class="banner-button-box">
@@ -47,16 +47,21 @@
             <button @click="goRegister">注册</button>
           </div>
         </div>
+        <div class="banner-login-box" v-show="notLogin">
+          <div class="banner-avatar-box"></div>
+          <div class="banner-welcome-text">您好&nbsp{{ realname }}，欢迎来到贝壳精选！</div>
+          <span>所在公司&nbsp:&nbsp{{ companyName }}</span>
+        </div>
         <div class="banner-announcement-box">
           <div class="announcement-title">平台公告</div>
           <!-- paginationContent -->
           <div class="pagination-content">
-          <ul v-for="(item, index) in announcementList" :key="index">
-            <div class="flex-box" @click="goAnnouncementDetail(item.id)">
-              <span>{{ item.title }}</span>
-              <p>{{ item.createTime }}</p>
-            </div>
-          </ul>
+            <ul v-for="(item, index) in announcementList" :key="index">
+              <div class="flex-box" @click="goAnnouncementDetail(item.id)">
+                <span>{{ item.title }}</span>
+                <p>{{ item.createTime }}</p>
+              </div>
+            </ul>
           </div>
           <!-- 分页 -->
           <el-pagination
@@ -147,35 +152,35 @@ export default {
     },
 
     //   // 携带二级分类前往搜索页面
-      goSearchPage(secondSortName) {
-        this.$router.push({
-          name: "goods-search-page",
-          query: { secondSortName: secondSortName },
-        });
-      },
+    goSearchPage(secondSortName) {
+      this.$router.push({
+        name: "goods-search-page",
+        query: { secondSortName: secondSortName },
+      });
+    },
 
     //   // 获取公告
-      getAnnouncement() {
-        let params = {
-          pageNo: this.anouncementCurrentPage,
-          pageSize: this.anouncementPageSize,
-        };
-        getAnnouncementPagination(params).then((res) => {
-          // console.log(res);
-          if (res.code === 200) {
-            this.announcementList = res.result.records;
-            // console.log("announcementList---", this.announcementList);
-            this.anouncementTotal = res.result.total;
-            // console.log("this.total---", this.total);
-          }
-        });
-      },
+    getAnnouncement() {
+      let params = {
+        pageNo: this.anouncementCurrentPage,
+        pageSize: this.anouncementPageSize,
+      };
+      getAnnouncementPagination(params).then((res) => {
+        // console.log(res);
+        if (res.code === 200) {
+          this.announcementList = res.result.records;
+          // console.log("announcementList---", this.announcementList);
+          this.anouncementTotal = res.result.total;
+          // console.log("this.total---", this.total);
+        }
+      });
+    },
 
-      // 选择当前是第几页
-      handleCurrentChange(val) {
-        this.anouncementCurrentPage = val;
-        this.getAnnouncement();
-      },
+    // 选择当前是第几页
+    handleCurrentChange(val) {
+      this.anouncementCurrentPage = val;
+      this.getAnnouncement();
+    },
 
     //   // 获取一级分类标题
     getIndexSortFirst() {
@@ -214,15 +219,17 @@ export default {
     },
 
     //   // 跳转到公告详情
-      goAnnouncementDetail(id) {
-        this.$router.push({
-          name: "announcement-detail",
-          query: { id: id },
-        });
-      },
+    goAnnouncementDetail(id) {
+      this.$router.push({
+        name: "announcement-detail",
+        query: { id: id },
+      });
+    },
   },
 
   mounted() {
+    this.notLogin = localStorage.getItem("token") ? true : false;
+
     // console.log(localStorage.getItem('token'));
     // this.notLogin = localStorage.getItem("token") ? true : false;
 
@@ -387,7 +394,7 @@ export default {
             line-height: 20px;
 
             p {
-              color: #C7C7C7;
+              color: #c7c7c7;
               margin-top: 10px;
             }
           }

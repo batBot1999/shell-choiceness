@@ -2,7 +2,7 @@
   <div>
     <HeaderNav />
     <div class="header-search-box">
-      <div class="shell-choiceness">贝壳精选</div>
+      <div class="shell-choiceness" @click="goHome">贝壳精选</div>
       <img src="../assets/img/shell-icon.png" alt="" />
       <div>
         <p>贝壳社</p>
@@ -124,6 +124,11 @@ export default {
   },
 
   methods: {
+        goHome () {
+      this.$router.push({
+        name: "home",
+      })
+    },
     // 选择一页显示多少条数据
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);

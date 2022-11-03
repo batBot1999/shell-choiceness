@@ -5,10 +5,10 @@
         <img src="../assets/img/index-recommend-img.png" alt="" />
         <span>热门推荐</span>
         <span>爆款产品推荐</span>
-        <span>更多 →</span>
+        <span @click="goSearchPage">更多 →</span>
       </div>
       <div class="hot-recommend-container">
-        <Swiper/>
+        <Swiper />
       </div>
     </div>
   </div>
@@ -25,9 +25,15 @@ export default {
     Swiper,
   },
 
-  methods: {},
+  methods: {
+    goSearchPage() {
+      this.$router.push({
+        name: "goods-search-page",
+      });
+    },
+  },
 
-  mounted(){},
+  mounted() {},
 };
 </script>
 

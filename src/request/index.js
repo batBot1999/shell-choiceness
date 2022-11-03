@@ -1,5 +1,7 @@
 import axios from "axios"
 import qs from "qs"
+// import VueRouter from 'vue-router'
+// import router from './router'
 
 // 创建axios实例
 const service = axios.create({
@@ -28,6 +30,10 @@ service.interceptors.response.use((res) => {
   if (code != 200) {
     return Promise.reject(res.data)
   }
+  // 401 token失效
+    if (code == 401) {
+      this.$router.push({name: "home"})
+    }
   // 成功的返回
   return res.data
 }, (err) => {
@@ -35,7 +41,10 @@ service.interceptors.response.use((res) => {
 })
 
 // get
-export function get({url, data}) {
+export function get({
+  url,
+  data
+}) {
   // console.log(data);
   // console.log(qs.stringify(data));
   let str = data ? `${qs.stringify(data)}` : '';
@@ -45,7 +54,10 @@ export function get({url, data}) {
 
 
 // post
-export function post({url,data}) {
+export function post({
+  url,
+  data
+}) {
   // console.log(url, data);
   let headers = {
     'Content-Type': "application/json",

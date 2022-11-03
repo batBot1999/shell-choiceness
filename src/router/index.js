@@ -13,6 +13,7 @@ import ServiceDetail from '../views/ServiceDetail.vue'
 import SettlementPage from '../views/SettlementPage.vue'
 import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 
+
 // 解决vue-router在3.0版本以上重复点报错问题
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -91,5 +92,16 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+// 路由守卫
+router.beforeEach((to, from, next) => {
+  if (to.path == '/') {
+    next()
+    return
+  }
+  if (window.localStorage.getItem("token")) {
+    next()
+    return
+  }
+  next("/")
+})
 export default router
