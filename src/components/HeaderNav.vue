@@ -4,7 +4,7 @@
       <div class="login-box" v-show="!notLogin">
         <span>Hi!欢迎来到贝壳精选!</span>
         <span>请<span @click="goLogin" class="blue-text">登录</span></span>
-        <span @click="goRegister" class="blue-text">免费注册</span>
+        <span @click="goRegister" class="blue-text">注册</span>
       </div>
       <div class="login-box" v-show="notLogin">
         <span>Hi!欢迎来到贝壳精选!</span>
@@ -58,10 +58,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
 .header-nav-bg {
   background: #f8f9fe;
   .header-nav {
-    width: 80vw;
+    width:  62.5%;
     height: 40px;
     margin: 0 auto;
     display: flex;
@@ -72,6 +76,7 @@ export default {
       color: #666666;
       font-size: 14px;
       line-height: 24px;
+      font-family: alibaba-Regular;
     }
 
     .login-box {

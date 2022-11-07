@@ -17,9 +17,10 @@
           :class="index == s1 ? 'isActive' : ''"
           @click="tabSearchButton(item1, index)"
         >
-          {{ item1.name }}
+          <span>{{ item1.name }}</span>
+          <span>→</span>
         </button>
-        <div class="item-name-total">{{ item1.name }}</div>
+        <!-- <div class="item-name-total">{{ item1.name }}</div> -->
       </div>
     </div>
     <div
@@ -27,7 +28,11 @@
       v-for="(item2, index2) in goodsList"
       :key="index2"
     >
-      <div class="title-box" @click="goSearchPage(item2.name)">
+      <div
+        class="title-box"
+        @click="goSearchPage(item2.name)"
+        :class="'title-color' + (index2 % 3)"
+      >
         <p>{{ item2.categoryName }}</p>
         <p>更多 →</p>
       </div>
@@ -46,9 +51,9 @@
                 </div>
                 <div class="swiper-slide-text">
                   <p>{{ item3.name }}</p>
-                  <p>货号:{{ item3.itemNo }}</p>
-                  <p>规格:{{ item3.specificationDesc }}</p>
-                  <p>{{ item3.price }}</p>
+                  <!-- <p>货号:{{ item3.itemNo }}</p> -->
+                  <!-- <p>规格:{{ item3.specificationDesc }}</p> -->
+                  <p>￥:{{ item3.price }}</p>
                   <p>{{ item3.enterpriseName }}</p>
                 </div>
               </div>
@@ -103,7 +108,7 @@ export default {
     //   console.log("this.isActive---", this.isActive);
     // },
 
-    //   // 携带二级分类前往搜索页面
+    // 携带二级分类前往搜索页面
     goSearchPage(secondSortName) {
       this.$router.push({
         name: "goods-search-page",
@@ -127,6 +132,31 @@ export default {
       getIdGoodsList(id).then((res) => {
         console.log("res---", res);
         this.goodsList = res.result;
+
+        this.$nextTick(() => {
+          this.mySwiper = new Swiper(".swiper-container", {
+            loop: true, // 循环模式选项
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: false, //修改swiper的父元素时，自动初始化swiper
+
+            // 如果需要分页器
+            // pagination: {
+            //   el: ".swiper-pagination",
+            // },
+
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+            // 同时显示
+            slidesPerView: 3,
+            // 滚动几个一组·
+            // slidesPerGroup: 3,
+            // 自动播放
+            autoplay: true,
+          });
+        });
         // console.log("goodsList---", this.goodsList);
       });
     },
@@ -179,35 +209,39 @@ export default {
       // console.log("this.isActive---",this.isActive);
       // console.log("item1---", item1);
       this.tabId = item1.id;
-      console.log("this.tabId---", this.tabId);
+      // console.log("this.tabId---", this.tabId);
       getIdGoodsList(this.tabId).then((res) => {
-        // console.log("tabSearchButtonRes---", res);
+        console.log("tabSearchButtonRes---", res);
+        // this.goodsList = [];
+        console.log("清空容器", this.goodsList);
         this.goodsList = res.result;
         // this.$forceUpdate();
         // if (this.mySwiper) {
         //   this.mySwiper.destroy(true, true);
         // }
-        this.mySwiper = new Swiper(".swiper-container", {
-          loop: true, // 循环模式选项
-          observer: true, //修改swiper自己或子元素时，自动初始化swiper
-          observeParents: false, //修改swiper的父元素时，自动初始化swiper
+        this.$nextTick(() => {
+          this.mySwiper = new Swiper(".swiper-container", {
+            loop: true, // 循环模式选项
+            observer: true, //修改swiper自己或子元素时，自动初始化swiper
+            observeParents: false, //修改swiper的父元素时，自动初始化swiper
 
-          // 如果需要分页器
-          // pagination: {
-          //   el: ".swiper-pagination",
-          // },
+            // 如果需要分页器
+            // pagination: {
+            //   el: ".swiper-pagination",
+            // },
 
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          // 同时显示
-          slidesPerView: 3,
-          // 滚动几个一组·
-          // slidesPerGroup: 3,
-          // 自动播放
-          autoplay: true,
+            // 如果需要前进后退按钮
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+            // 同时显示
+            slidesPerView: 3,
+            // 滚动几个一组·
+            // slidesPerGroup: 3,
+            // 自动播放
+            autoplay: true,
+          });
         });
         //         this.mySwiper && this.mySwiper.update();
         // 　　　this.mySwiper && this.mySwiper.startAutoplay();
@@ -236,32 +270,32 @@ export default {
     // 获取商品二级标题
     // this.getGoodsSortSecond();
     this.getgoodsList();
-    setTimeout(() => {
-      this.$nextTick(() => {
-        this.mySwiper = new Swiper(".swiper-container", {
-          loop: true, // 循环模式选项
-          observer: true, //修改swiper自己或子元素时，自动初始化swiper
-          observeParents: false, //修改swiper的父元素时，自动初始化swiper
+    // setTimeout(() => {
+    // this.$nextTick(() => {
+    //   this.mySwiper = new Swiper(".swiper-container", {
+    //     loop: true, // 循环模式选项
+    //     observer: true, //修改swiper自己或子元素时，自动初始化swiper
+    //     observeParents: false, //修改swiper的父元素时，自动初始化swiper
 
-          // 如果需要分页器
-          // pagination: {
-          //   el: ".swiper-pagination",
-          // },
+    //     // 如果需要分页器
+    //     // pagination: {
+    //     //   el: ".swiper-pagination",
+    //     // },
 
-          // 如果需要前进后退按钮
-          navigation: {
-            nextEl: ".swiper-button-next",
-            prevEl: ".swiper-button-prev",
-          },
-          // 同时显示
-          slidesPerView: 3,
-          // 滚动几个一组·
-          // slidesPerGroup: 3,
-          // 自动播放
-          autoplay: true,
-        });
-      });
-    }, 1000);
+    //     // 如果需要前进后退按钮
+    //     navigation: {
+    //       nextEl: ".swiper-button-next",
+    //       prevEl: ".swiper-button-prev",
+    //     },
+    //     // 同时显示
+    //     slidesPerView: 3,
+    //     // 滚动几个一组·
+    //     // slidesPerGroup: 3,
+    //     // 自动播放
+    //     autoplay: true,
+    //   });
+    // });
+    // }, 100);
 
     // 一进来就获取获取商品列表第一个tab
   },
@@ -275,145 +309,95 @@ export default {
 }
 .goods-list-bg {
   // width: 100%;
-  height: 1420PX;
+  height: 1420px;
   background-image: url("../assets/img/index-goods-list.png");
   background-size: cover;
   overflow: hidden;
 
   .tab-container {
-    margin: 100px 5vw 0;
-    height: 5vw;
+    width: 80%;
+    // background: red;
+    margin: 50px auto 0;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     position: relative;
 
     button {
-      margin: 0 20px;
+      // margin: 0 20px;
       padding: 0 10px;
       box-sizing: border-box;
-      width: 8vw;
-      height: 5vw;
-      line-height: 5vw;
-      text-align: center;
-      background: #1d1f27;
+      width: 11.45vw;
+      height: 4.16vw;
+      line-height: 4.16vw;
+      // text-align: center;
+      background: #1e202b;
       border-radius: 5px 5px 5px 5px;
       font-size: 18px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap;
       color: #ffffff;
+      border: none;
+      display: flex;
+      justify-content: space-around;
     }
-    .item-name-total {
-      box-sizing: border-box;
-      display: none;
-      height: 80px;
-      position: absolute;
-      top: -90px;
-      // right: 0;
-      font-size: 30px;
-      line-height: 80px;
-      text-align: center;
-      color: #000;
-      background: #ffffff;
-      border-radius: 5px;
-      padding: 0 20px;
-    }
+    // .item-name-total {
+    //   box-sizing: border-box;
+    //   display: none;
+    //   height: 80px;
+    //   position: absolute;
+    //   top: -90px;
+    //   font-size: 30px;
+    //   line-height: 80px;
+    //   text-align: center;
+    //   color: #000;
+    //   background: #ffffff;
+    //   border-radius: 5px;
+    //   padding: 0 20px;
+    // }
 
-    button:hover + .item-name-total {
-      display: block;
-      z-index: 999;
-    }
+    // button:hover + .item-name-total {
+    //   display: block;
+    // }
 
     button:hover {
       color: #2979ff;
+      cursor: pointer;
+      background: #3b3e4c;
+    }
+
+    button:active {
+      border: none;
     }
   }
 
-  // .goods-list-bg .hover-span {
-  //   // display: none;
-  //   color: #ffffff;
-  //   font-size: 50px;
-  // }
-
-  // 修改tab样式开始
-  // /deep/ .el-tabs__nav-scroll {
-  //   width: calc(100% - 520px);
-  //   margin: 0 260px;
-  // }
-
-  // /deep/ .el-tabs__nav {
-  //   margin-top: 50px;
-  //   width: 100%;
-  //   display: flex;
-  //   justify-content: space-between;
-
-  //   .el-tabs__item {
-  //     width: 220px;
-  //     height: 80px;
-  //     text-align: center;
-  //     line-height: 80px;
-  //     color: #ffffff;
-  //     padding: 0px;
-  //   }
-
-  //   .el-tabs__item:hover {
-  //     color: #2979ff;
-  //   }
-  // }
-
-  // /deep/ .el-tabs--card > .el-tabs__header {
-  //   border-bottom: 0;
-  //   margin: 0;
-  // }
-
-  // /deep/.el-tabs__nav-wrap {
-  //   margin-bottom: 0;
-  // }
-
-  // /deep/.el-tabs--card > .el-tabs__header .el-tabs__item {
-  //   background: #1d1f27;
-  //   border-radius: 5px 5px 5px 5px;
-  //   font-size: 18px;
-  //   text-overflow: ellipsis;
-  //   overflow: hidden;
-  //   white-space: nowrap;
-  //   border: 0;
-  //   padding: 0 30px;
-  // }
-
-  // /deep/.el-tabs--card > .el-tabs__header .el-tabs__nav {
-  //   border: 0;
-  // }
-
-  // /deep/ .is-active {
-  //   background-color: #2979ff !important;
-  //   color: #ffffff !important;
-  // }
-  // 修改tab样式结束
-
   .goods-list-item {
-    margin: 50px 5vw 0px;
-    width: calc(100% - 10vw);
-    height: 360px;
+    margin: 50px auto 0px;
+    width: 80%;
     display: flex;
+    height: 360px;
+    border-radius: 5px 5px 5px 5px;
 
     .title-box {
       box-sizing: border-box;
-      width: 15vw;
-      // height: 100%;
+      width: 14%;
+      height: 100%;
       color: #ffffff;
-      background: #2979ff;
+      // background: url("../assets/img/goods-list-title.png");
+      // background-size: cover;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      align-items: flex-start;
-      padding: 0 50px;
-      margin-right: 10px;
-      position: relative;
+      // align-items: center;
+      // text-align: center;
+      // padding: 0 50px;
       border-radius: 5px 5px 5px 5px;
 
+      p {
+        margin-left: 30px;
+      }
+
       p:first-child {
-        // width: 140px;
         font-size: 24px;
       }
 
@@ -421,58 +405,49 @@ export default {
         font-size: 14px;
         cursor: pointer;
       }
-
-      // div {
-      //   position: absolute;
-      //   display: none;
-      //   width: 240px;
-      //   font-size: 24px;
-      //   line-height: 30px;
-      //   right: 0px;
-      //   top: 0px;
-      //   text-align: center;
-      //   color: #000;
-      //   background: #ffffff;
-      //   border-radius: 5px;
-      // }
     }
 
-    // .title-box:hover div {
-    //   display: block;
-    // }
+    .title-color0 {
+      background: url("../assets/img/title-bg-blue.png");
+    }
+
+    .title-color1 {
+      background: url("../assets/img/title-bg-red.png");
+    }
+
+    .title-color2 {
+      background: url("../assets/img/title-bg-pink.png");
+    }
 
     .item-box {
-      width: calc(100% - 15vw);
-      height: 100%;
-
+      background: #f1eff4;
+      width: 86%;
+      // padding-left: 20px;
       .swiper-container {
-        width: 100%;
-        height: 360px;
-        margin: 0 auto;
-
         .swiper-wrapper {
-          // gap: 10px;
           .swiper-slide {
-            background: #f1eff4;
-            // width: 300px;
-            // height: 100%;
-            // margin: 0 40px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             align-items: center;
-            text-align: center;
+            overflow: hidden;
 
             .swiper-slide-img {
+              height: 200px;
+              width: 200px;
+              overflow: hidden;
               img {
-                width: 300px;
-                height: 170px;
+                width: 100%;
+                height: 100%;
               }
             }
             .swiper-slide-text {
-              width: 100%;
+              text-align: center;
+              width: 80%;
+              // height: calc(100% - 200px);
+              height: 100%;
+              // background: green;
               padding: 20px;
-              margin-left: 50px;
+              padding-left: 50px;
               font-size: 14px;
 
               p {
@@ -481,7 +456,15 @@ export default {
                 white-space: nowrap;
               }
               p:first-child {
+                width: 80%;
+                display: inline-block;
                 font-size: 18px;
+                font-weight: bold;
+              }
+
+              p:nth-child(2) {
+                font-size: 20px;
+                color: #f8494d !important;
               }
 
               p:not(P:first-child) {

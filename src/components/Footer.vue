@@ -83,21 +83,26 @@ export default {};
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
 // * {
 //   box-sizing: border-box;
 // }
 .footer-box {
-  // margin-top: 100px;
+  // margin-top: 500px;
   background-color: #333333;
   width: 100%;
-  height: 20vh;
+  // height: 20vh;
   overflow: hidden;
+  font-family: alibaba-Regular;
 
   .footer-container {
-    height: 213px;
-    margin: 0 auto;
-    margin-top: 80px;
-    width: 80vw;;
+    // height: 213px;
+    margin: 80px auto;
+    // margin-top: 80px;
+    width: 80%;
     display: flex;
     justify-content: space-between;
 

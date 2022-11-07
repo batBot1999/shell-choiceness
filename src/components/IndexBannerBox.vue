@@ -2,8 +2,34 @@
   <div class="index-banner-bg">
     <div class="index-banner-container">
       <div class="banner-left-box">
-        <div class="sort-title">全部商品分类</div>
-        <el-popover
+        <div class="goods-sort-title">全部商品分类</div>
+        <div
+          class="goods-sort-item"
+          v-for="(item1, index1) in totalSortFirst"
+          :key="index1"
+          @mouseover="hoverShow(item1.id)"
+        >
+          <span>{{ item1.name }}</span>
+          <div class="sort-item-after"></div>
+          <div class="sort-total-item">
+            <div class="sort-flex-box">
+              <div
+                class="flex-item"
+                v-for="(item2, index2) in totalSortSecond"
+                :key="index2"
+                @click="goSearchPage(item2.name)"
+              >
+                <img
+                  src="../assets/img/bioClub.png"
+                  style="width: 80px"
+                  alt=""
+                />
+                <span>{{ item2.name }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <el-popover
           popper-class="popover-style"
           trigger="hover"
           placement="right-start"
@@ -11,21 +37,21 @@
           v-for="(item1, index) in totalSortFirst"
           :key="index"
           @show="hoverShow(item1.id)"
+          :close-delay="1000000"
         >
           <div v-if="slotIsShow">
-            <!-- slot插入开始 -->
             <div
               v-for="(item2, _index) in totalSortSecond"
               :key="_index"
               @click="goSearchPage(item2.name)"
               class="sort-second-item"
             >
+              <img class="popover-item-img" style="width: 100px; height: 50px" src="../assets/img/bioClub.png" />
               {{ item2.name }}
             </div>
           </div>
-          <!-- slot插入结束 -->
           <el-button slot="reference">{{ item1.name }}</el-button>
-        </el-popover>
+        </el-popover> -->
       </div>
       <div class="banner-main-box">
         <el-carousel>
@@ -33,6 +59,7 @@
             <img
               :src="item.pic"
               class="small"
+              style="width: 50vw; height: 100%"
               @click="goBannerDetail(item.id, item.skipType, item.skipUrl)"
             />
           </el-carousel-item>
@@ -50,7 +77,7 @@
         <div class="banner-login-box" v-show="notLogin">
           <div class="banner-avatar-box"></div>
           <div class="banner-welcome-text">
-            您好&nbsp{{ realname }}，欢迎来到贝壳精选！
+            {{ realname }}，欢迎来到贝壳精选！
           </div>
           <span>所在公司&nbsp:&nbsp{{ companyName }}</span>
         </div>
@@ -60,7 +87,7 @@
           <div class="pagination-content">
             <ul v-for="(item, index) in announcementList" :key="index">
               <div class="flex-box" @click="goAnnouncementDetail(item.id)">
-                <span>{{ item.title }}</span>
+                <p>{{ item.title }}</p>
                 <p>{{ item.createTime }}</p>
               </div>
             </ul>
@@ -212,7 +239,7 @@ export default {
       getIndexSort(params)
         .then((res) => {
           if (res.code === 200) {
-            // console.log("res---", res);
+            // console.log("item2.res---", res);
             this.totalSortSecond = res.result;
             this.slotIsShow = true;
           }
@@ -222,6 +249,7 @@ export default {
 
     //   // 跳转到公告详情
     goAnnouncementDetail(id) {
+      // console.log("id", id);
       this.$router.push({
         name: "announcement-detail",
         query: { id: id },
@@ -248,10 +276,15 @@ export default {
 
 <style lang="less">
 .popover-style {
+  @font-face {
+    font-family: alibaba-Regular;
+    src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+  }
   width: 300px;
   border: none;
   transform: translate(-11px, -5px);
   div {
+    // font-family: alibaba-Regular;
     font-size: 16px;
     cursor: pointer;
   }
@@ -260,84 +293,213 @@ export default {
     color: #2979ff;
   }
 }
+.banner-left-box .el-popover__reference {
+  font-family: alibaba-Regular !important;
+}
 </style>
 
 <style lang="less" scoped>
+*::-webkit-scrollbar {
+	display: none;
+}
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
+
+@font-face {
+  font-family: alibaba-Medium;
+  src: url("../assets/font/AlibabaPuHuiTi-2-65-Medium.ttf");
+}
+
+@media screen and (max-width: 1600px) {
+  .banner-right-box {
+    font-size: 12px;
+    display: flex;
+    justify-content: flex-start !important;
+
+    .banner-login-box {
+      .banner-avatar-box {
+        width: 60px !important;
+        height: 60px !important;
+      }
+    }
+
+    .banner-announcement-box {
+      margin-top: 20px;
+
+      .announcement-title {
+        margin-bottom: 10px;
+      }
+
+      .el-pagination {
+        margin: 20px;
+      }
+    }
+  }
+}
+
 .index-banner-bg {
   width: 100%;
-  height: 50vh;
+  height: 30vw;
   background: url("../assets/img/index-banner-bgimg.png");
   background-size: cover;
   overflow: hidden;
 
   .index-banner-container {
     overflow: hidden;
-    width: 90vw;
-    height: 50vh;
+    width: 80%;
+    height: 100%;
     display: flex;
-    margin-left: 5vw;
+    margin: 0 auto;
     .banner-left-box {
-      width: 20vw;
-      height: 100%;
+      width: 20%;
       display: flex;
       flex-direction: column;
-      gap: 0;
-      justify-content: space-evenly;
       background-color: #ffffff;
+      font-family: alibaba-Regular !important;
+      position: relative;
 
-      .sort-title {
-        font-size: 16px;
+      .goods-sort-title {
+        height: 80px;
+        line-height: 80px;
         text-align: center;
         color: #2979ff;
-        // height: 80px;
-        // line-height: 50px;
-        height: calc(50vh / 7);
+        font-size: 20px;
       }
+      .goods-sort-item {
+        // width: 45vw;
+        height: calc((30vw - 80px) / 6);
+        line-height: calc((30vw - 80px) / 6);
+        text-align: left;
+        color: #000000;
+        padding-left: 50px;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
 
-      span {
-        width: 15vw;
+        .sort-total-item {
+          display: none;
+          position: absolute;
+          top: 0;
+          left: 100%;
+          width: 48vw;
+          background: #ffffff;
+          z-index: 999;
+          .sort-flex-box {
+            overflow-y: scroll;
+            height: 30vw;
+            display: flex;
+            // flex-direction: column;
+            // flex-wrap: wrap;
+            // background: #ffffff;
+            flex-direction: row;
+            writing-mode: vertical-lr;
+            .flex-item {
+              writing-mode: horizontal-tb;
+              box-sizing: border-box;
+              // background: #ffffff;
+              height: 6vw;
+              line-height: 6vw;
+              width: 12vw;
+              text-align: center;
+              padding: 0 20px;
+              display: flex;
+              align-items: center;
+              span {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+              }
+            }
 
-        span > .el-button {
-          width: 100%;
-          height: calc(50vh / 7);
-          text-align: start;
-          font-size: 12px;
-          font-weight: bold;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-        }
-
-        // span > .el-button::after {
-        //   content: ">";
-        //   float: right;
-        //   font-size: 12px;
-        //   color: #c7c7c7;
-        // }
-      }
-    }
-
-    .banner-main-box {
-      width: 100%;
-      height: 50vh;
-      // height: 100%;
-
-      /deep/.el-carousel {
-        height: 50vh;
-
-        .el-carousel__container {
-          height: 100%;
-          .el-carousel-item {
-            height: 50vh;
+            .flex-item:hover {
+              color: #2979ff;
+            }
           }
         }
       }
 
-      // 宽度优先自适应
-      .el-carousel__item img {
+      .goods-sort-item > .sort-item-after {
+        width: 15px;
+        height: 15px;
+        border: solid #c7c7c7;
+        border-width: 0 3px 3px 0;
+        transform: translate(-200%, 0%) rotate(-45deg);
+      }
+
+      .goods-sort-item:hover {
+        background: #ecf5ff;
+        cursor: pointer;
+      }
+      .goods-sort-item:hover > span {
+        color: #2979ff;
+      }
+
+      .goods-sort-item:hover > .sort-item-after {
+        border-bottom-color: #2979ff;
+        border-right-color: #2979ff;
+      }
+
+      .goods-sort-item:hover > .sort-total-item {
+        display: block;
+      }
+
+      // span > .el-button {
+      //   border: none;
+      //   width: 100%;
+      //   height: calc((30vw - 80px) / 6);
+      //   text-align: left;
+      //   font-weight: 400;
+      //   color: #000000;
+      // }
+
+      // span > .el-button:hover {
+      //   color: #2979ff;
+
+      //   span > .el-button:hover:after {
+      //     border: #2979ff;
+      //     color: black;
+      //   }
+      // }
+
+      // /deep/.el-button > span {
+      //   font-size: 18px;
+      //   display: inline-block;
+      //   width: 80%;
+      //   text-overflow: ellipsis;
+      //   white-space: nowrap;
+      //   overflow: hidden;
+      // }
+
+      // span > .el-button::after {
+      //   content: "";
+      //   width: 10px;
+      //   height: 10px;
+      //   border: solid #c7c7c7;
+      //   border-width: 0 2px 2px 0;
+      //   transform: translate(-50%, 20%) rotate(-45deg);
+      //   float: right;
+      // }
+    }
+
+    .banner-main-box {
+      width: 60%;
+
+      /deep/.el-carousel {
+        height: 100%;
         width: 100%;
-        // height: 100%;
-        height: 50vh;
+
+        .el-carousel__container {
+          height: 100%;
+
+          .el-carousel-item {
+            .el-carousel__item img {
+            }
+          }
+        }
       }
 
       // 轮播图左右按钮大小
@@ -347,35 +509,41 @@ export default {
     }
 
     .banner-right-box {
-      width: 20vw;
-      height: 50vh;
+      font-family: alibaba-Regular;
+      overflow: hidden;
+      width: 20%;
+      height: 100%;
       background: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-evenly;
-      padding: 0 20px;
+      justify-content: space-around;
 
       .banner-login-box {
+        margin-top: 20px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: space-around;
 
         .banner-avatar-box {
-          width: 50px;
-          height: 50px;
+          width: 80px;
+          height: 80px;
           background-image: url("../assets/img/index-avtar-default.png");
           background-size: cover;
         }
 
         .banner-welcome-text {
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
           color: #666666;
           font-size: 14px;
+          margin-bottom: 10px;
         }
 
         .banner-button-box {
-          width: 160px;
+          width: 100%;
           display: flex;
           justify-content: space-between;
 
@@ -401,28 +569,39 @@ export default {
       }
 
       .banner-announcement-box {
-        padding: 20px;
+        height: 50%;
+        // padding: 0 10px;
+        // margin-top: 20px;
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
+        align-items: start;
+        // padding: 10px;
         .announcement-title {
           font-size: 16px;
+          font-family: alibaba-Medium;
           font-weight: bold;
-          color: #000000;
         }
 
         .pagination-content {
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
           ul {
             font-size: 14px;
             line-height: 20px;
-            div {
-
-            }
-            p {
-              color: #c7c7c7;
-              // margin-top: 10px;
+            .flex-box {
+              p:first-child {
+                // display: inline-block;
+                width: 11vw;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                // display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                color: #666666;
+              }
+              p:last-child {
+                color: #c7c7c7;
+                margin-bottom: 10px;
+              }
             }
           }
         }

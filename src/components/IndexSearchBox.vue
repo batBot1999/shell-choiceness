@@ -4,22 +4,24 @@
       <!-- <img src="../assets/img/searchIcon.png" class="search-img" alt="" /> -->
       <span class="search-box-text">BEKE</span>
       <div class="search-box-container">
-        <el-select v-model="value" placeholder="商品名称">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-select>
-        <!-- <span>|</span> -->
-        <el-input v-model="input" placeholder="请输入关键词"></el-input>
+        <div class="select-and-input">
+          <el-select v-model="value" placeholder="商品名称">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+          <span>|</span>
+          <el-input v-model="input" placeholder="请输入关键词"></el-input>
+        </div>
         <div class="search-button" @click="sendParent()">
           <img src="../assets/img/index-search-img.png" /><span>搜索</span>
         </div>
         <div class="search-goods-button" @click="goSearchPage">找商品</div>
-        <div class="search-service-button" style="visibility:hidden">找服务</div>
+        <div class="search-service-button">找服务</div>
         <!-- <button class="search-button" @click="goGoodsSearch()">
           搜索
           </button> -->
@@ -78,57 +80,92 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
+
 .search-box-bg {
-  margin: 40px 5vw 50px;
+  margin: 40px 0;
+  // background: grey;
+
 
   .search-box {
-    width: 90vw;
+    width: 62.5%;
+    margin: 0 auto;
     // background: grey;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     .search-box-text {
-      height: 41px;
+      height: 40px;
+      line-height: 40px;
       font-style: italic;
       color: #2979ff;
       font-size: 36px;
+      margin-right: 10px;
+      font-family: alibaba-bold;
+      font-weight: bold;
 
       // flex:1;
     }
 
     .search-box-container {
+    font-family: alibaba-Regular;
+
       display: flex;
+      // flex: 1;
       // justify-content: space-between;
       align-items: center;
 
-      .el-select {
-        height: 44px;
-        border: 1px solid #2979ff;
-        border-right: none;
-        width: 130px;
+      .select-and-input {
+        border: 2px solid #2979ff;
+        min-width: 400px;
+        display: flex;
+        align-items: center;
 
-        /deep/ input::-webkit-input-placeholder {
-          color: #2979ff;
-          // font-size: 16px;
-        }
-        /deep/ .el-input__inner {
-          color: #2979ff;
-          height: 44px;
-          text-align: center;
+        .el-select {
+          width: 7vw;
+          min-width: 107px;
+          // height: 40px;
           border-right: none;
-        }
-      }
 
-      .el-input {
-        width: 350px;
-        /deep/.el-input__inner {
-          // background-color: #eff1f2;
-          height: 46px;
-          width: 100%;
-          border: 1px solid #2979ff;
-          border-left: 1px solid #e4e4e4;
-          border-radius: 0;
+          /deep/ input::-webkit-input-placeholder {
+            color: #2979ff;
+            // font-size: 16px;
+          }
+          /deep/ .el-input__inner {
+            color: #2979ff;
+            // height: 40px;
+            text-align: center;
+            // border-right: none;
+            border: none;
+          }
+        }
+
+        span {
+          z-index: 999;
+          // font-size: 30px;
+          color: #e4e4e4;
+        }
+
+        .el-input {
+          // width: 18.22vw;
+          flex: 1;
+          height: 100%;
+          border: none;
+          // flex: 1;
+          /deep/.el-input__inner {
+            height: 42px;
+            // background-color: #eff1f2;
+            // height: 100%;
+            // width: 100%;
+            // border: 1px solid #2979ff;
+            // border-left: 1px solid #e4e4e4;
+            border: none;
+            border-radius: 0;
+          }
         }
       }
 
@@ -141,7 +178,6 @@ export default {
         background: #2979ff;
         border: none;
         font-size: 16px;
-        font-family: Microsoft YaHei-Regular, Microsoft YaHei;
         color: #ffffff;
         line-height: 32px;
 
@@ -158,7 +194,6 @@ export default {
         line-height: 46px;
         text-align: center;
         font-size: 16px;
-        font-family: Microsoft YaHei-Regular, Microsoft YaHei;
         background: #f8494d;
         color: #ffffff;
         margin-left: 10px;

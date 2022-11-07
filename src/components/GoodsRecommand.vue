@@ -199,7 +199,7 @@ export default {
         };
         goodsRecommendList(params).then((res) => {
           // console.log("params---", params);
-          console.log("tabSearchButton---", res);
+          // console.log("tabSearchButton---", res);
           this.goodsList = res.result.records;
           this.currentPage = 1;
           this.total = res.result.total;

@@ -13,9 +13,9 @@
           </div>
           <div class="swiper-slide-text">
             <p>{{ item.name }}</p>
+            <p>￥{{ item.price }}</p>
             <p>货号:{{ item.itemNo }}</p>
-            <p>规格:{{ item.specificationDesc }}</p>
-            <p>{{ item.price }}</p>
+            <!-- <p>规格:{{ item.specificationDesc }}</p> -->
             <p>{{ item.enterpriseName }}</p>
           </div>
         </div>
@@ -52,9 +52,9 @@ export default {
         pageSize: 1000,
       };
       goodsRecommendList(params).then((res) => {
-        console.log("res-----", res);
+        // console.log("res-----", res);
         this.goodsList = res.result.records;
-        console.log("goodsList-----", this.goodsList);
+        // console.log("goodsList-----", this.goodsList);
       });
     },
   },
@@ -92,28 +92,28 @@ export default {
 
 <style lang="less" scoped>
 .swiper-container {
-  // width: 100%;
-  height: 40vh;
-  margin: 10px auto;
-  background: #f1eff4;
-  // background: red;
+  width: 80w;
+  margin: 20px auto;
 
 
   .swiper-slide {
-    // margin: 0 20px;
-    margin-left: 10px;
+    border-radius: 5px;
+    background: #f1eff4;
+    margin: 0 10px;
+    // margin-left: 20px;
     display: flex;
     align-items: center;
 
     .swiper-slide-img {
+      height: 8vw;
       img {
-        width: 10vw;
-        height: 10vw;
+        width: 8vw;
+        height: 100%;
       }
     }
     .swiper-slide-text {
-      width: 15vw;
-      padding: 20px;
+      width: 10vw;
+      padding-left: 20px;
       font-size: 14px;
 
       p {
@@ -123,6 +123,7 @@ export default {
       }
       p:first-child {
         font-size: 18px;
+        font-weight: bold;
         // width: 90%;
       }
 
@@ -130,6 +131,15 @@ export default {
         color: #9c9c9c;
         margin: 10px 0;
       }
+
+      p:nth-child(2) {
+        color: #F8494D!important;
+        font-size: 20px;
+      }
+
+      // p:last-child {
+      //   color: #000000 !important;
+      // }
     }
   }
 }

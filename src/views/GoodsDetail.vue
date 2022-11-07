@@ -145,6 +145,9 @@ export default {
           // console.log("res---", res);
           this.goodsItem = res.result;
           // console.log("goodsItem---", this.goodsItem);
+                            setTimeout(() => {
+              hideLoading();
+            }, 500);
         })
         .catch((e) => {
           console.log("e---", e);
@@ -157,9 +160,7 @@ export default {
         .then((res) => {
           // console.log("res---", res);
           this.goodsItemSku = res.result;
-                      setTimeout(() => {
-              hideLoading();
-            }, 500);
+
           // console.log("goodsItemSku---", this.goodsItemSku);
           // 遍历每一个sku然后给他加一个计数器,一开始直接加进去没有响应式地更新视图,去网上查发现可以用这个this.$set(obj, key, value)给对象加键值对
           this.goodsItemSku.map((item) => {

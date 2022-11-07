@@ -43,14 +43,17 @@ export default {
   // background: red;
   // width: 100%;
   // height: 40vh;
+  background: #F8F9FE;
   overflow: hidden;
+  padding-bottom: 40px;
 
   .hot-recommend-box {
+    box-sizing: border-box;
     background: #ffffff;
-    width: 90vw;
-    // height: 40vh;
+    width: 80%;
+    height: 300px;
     padding: 20px;
-    margin: 0 auto;
+    margin: 50px auto 0;
 
     .hot-recommend-header {
       // width: 100%;
@@ -76,7 +79,7 @@ export default {
       }
     }
     .hot-recommend-container {
-      // height: 100%;
+      // background: red;
     }
   }
 }

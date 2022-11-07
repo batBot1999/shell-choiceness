@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <link rel="icon" href="../public/favicon.ico">
     <router-view />
     <!-- <router-link to="/">Home</router-link> -->
 

@@ -144,8 +144,8 @@ export default {
           pageSize: this.pageSize,
         };
         serviceRecommendListSupplement(params).then((res) => {
-          console.log("params---", params);
-          console.log("tabSearchButton---", res);
+          // console.log("params---", params);
+          // console.log("tabSearchButton---", res);
           this.serviceList = res.result.records;
           // console.log("serviceList---", this.serviceList);
           this.currentPage = 1;

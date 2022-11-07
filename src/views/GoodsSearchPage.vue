@@ -211,7 +211,11 @@ export default {
             }, 500);
           }
         })
-        .catch((e) => {});
+        .catch((e) => {
+                            setTimeout(() => {
+              hideLoading();
+            }, 500);
+        });
     },
 
     // 获取商品推荐tab列表
@@ -226,7 +230,7 @@ export default {
           if (res.code === 200) {
             this.goodsRecommendNav = res.result;
             this.goodsRecommendNav.unshift(this.recommendTabItem);
-            console.log("goodsRecommendNav", this.goodsRecommendNav);
+            // console.log("goodsRecommendNav", this.goodsRecommendNav);
           }
         })
         .catch((e) => {});
