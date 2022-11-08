@@ -21,8 +21,8 @@
         </div>
       </div>
       <!-- 如果需要导航按钮 -->
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+      <!-- <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div> -->
     </div>
   </div>
 </template>
@@ -91,6 +91,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
 .swiper-container {
   width: 80w;
   margin: 20px auto;
@@ -115,6 +119,7 @@ export default {
       width: 10vw;
       padding-left: 20px;
       font-size: 14px;
+      font-family: alibaba-Regular;
 
       p {
         text-overflow: ellipsis;

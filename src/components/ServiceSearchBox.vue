@@ -41,12 +41,12 @@ export default {
   },
 
   methods: {
-    // goServiceSearch() {
-    //   this.$router.push({
-    //     name: "service-search-page",
-    //     query: { name: this.input },
-    //   });
-    // },
+    goServiceSearch() {
+      this.$router.push({
+        name: "service-search-page",
+        query: { name: this.input },
+      });
+    },
 
           // 1.把input内容传给父组件 子组件中通过$emit触发事件
       sendParent() {

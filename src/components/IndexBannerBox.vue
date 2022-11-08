@@ -18,13 +18,20 @@
                 v-for="(item2, index2) in totalSortSecond"
                 :key="index2"
                 @click="goSearchPage(item2.name)"
+                @mouseover="hoverShowThird(item2.id)"
               >
-                <img
-                  src="../assets/img/bioClub.png"
-                  style="width: 80px"
-                  alt=""
-                />
-                <span>{{ item2.name }}</span>
+                <div class="flex-item-txt">
+                  <span>{{ item2.name }}</span>
+                </div>:
+                <div class="sort-third-container">
+                  <div
+                    class="sort-third-item"
+                    v-for="(item3, index3) in totalSortThirdFake"
+                    :key="index3"
+                  >
+                    {{ item3.name }}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -139,10 +146,23 @@ export default {
       totalSortFirst: [],
       // 二级商品分类容器
       totalSortSecond: [],
+      // 三级商品分类容器
+      totalSortThird: [],
       // 全部商品分类控制显示隐藏
       // visible: false,
       slotIsShow: false,
       id: null,
+      totalSortThirdFake: [
+        { name: "假数据" },
+        { name: "假数据假数据" },
+        { name: "假数据假数据假数据" },
+        { name: "假数据" },
+        { name: "假数据假数据" },
+        { name: "假数据假数据假数据" },
+        { name: "假数据" },
+        { name: "假数据假数据" },
+        { name: "假数据假数据假数据" },
+      ],
     };
   },
   methods: {
@@ -228,7 +248,7 @@ export default {
       });
     },
 
-    //   // 获取二级分类标题
+    // 获取二级分类标题
     hoverShow(id) {
       // console.log("id---", id);
       let params = {
@@ -239,9 +259,27 @@ export default {
       getIndexSort(params)
         .then((res) => {
           if (res.code === 200) {
-            // console.log("item2.res---", res);
+            // console.log("itotalSortSecond", res);
             this.totalSortSecond = res.result;
             this.slotIsShow = true;
+          }
+        })
+        .catch((e) => {});
+    },
+
+    // 获取三级分类标题
+    hoverShowThird(id) {
+      let params = {
+        parentId: id,
+        level: 3,
+        type: 1,
+      };
+      getIndexSort(params)
+        .then((res) => {
+          if (res.code === 200) {
+            // console.log("itotalSortThree---", res);
+            this.totalSortThird = res.result;
+            // this.slotIsShow = true;
           }
         })
         .catch((e) => {});
@@ -300,7 +338,7 @@ export default {
 
 <style lang="less" scoped>
 *::-webkit-scrollbar {
-	display: none;
+  display: none;
 }
 @font-face {
   font-family: alibaba-Regular;
@@ -390,34 +428,69 @@ export default {
           z-index: 999;
           .sort-flex-box {
             overflow-y: scroll;
+            // overflow-x: hidden;
             height: 30vw;
             display: flex;
-            // flex-direction: column;
+            width: 100%;
+
+            flex-direction: column;
             // flex-wrap: wrap;
             // background: #ffffff;
-            flex-direction: row;
-            writing-mode: vertical-lr;
+            // flex-direction: row;
+            // writing-mode: vertical-lr;
             .flex-item {
-              writing-mode: horizontal-tb;
+              // writing-mode: horizontal-tb;
+              // position: relative;
               box-sizing: border-box;
-              // background: #ffffff;
-              height: 6vw;
-              line-height: 6vw;
-              width: 12vw;
-              text-align: center;
-              padding: 0 20px;
+              // background: grey;
+              // height: 6vw;
+              // line-height: 6vw;
+              // width: 12vw;
+              // text-align: center;
+              // padding: 0 20px;
               display: flex;
-              align-items: center;
-              span {
+              // align-items: center;
+              // white-space: wrap;
+              // display: flex;
+              // justify-content: space-between;
+
+              .flex-item-txt {
+                padding: 0 10px;
+                width: 15%;
+                color: #2979ff;
                 text-overflow: ellipsis;
-                white-space: nowrap;
+                font-size: 18px;
+                // white-space: nowrap;
                 overflow: hidden;
+                text-align: end;
+                // background: red;
+                white-space: nowrap;
+                // position: absolute;
+                // left: 0;
+                // top: 0;
+                // border-right: 1px solid grey;
+              }
+
+              .sort-third-container {
+                width: 85%;
+                display: flex;
+                flex-wrap: wrap;
+              }
+
+              .sort-third-item {
+                padding: 0 10px;
+                font-size: 16px;
+                color: #666666;
+              }
+
+              .sort-third-item:hover {
+                color: #2979ff;
               }
             }
 
-            .flex-item:hover {
-              color: #2979ff;
-            }
+              .flex-item:hover {
+                color: #2979ff;
+              }
           }
         }
       }
@@ -434,6 +507,7 @@ export default {
         background: #ecf5ff;
         cursor: pointer;
       }
+
       .goods-sort-item:hover > span {
         color: #2979ff;
       }

@@ -14,9 +14,7 @@
     <!-- <button class="search-button" @click="goGoodsSearch()">
       搜索
     </button> -->
-        <button class="search-button" @click="sendParent()">
-      搜索
-    </button>
+    <button class="search-button" @click="sendParent()">搜索</button>
   </div>
 </template>
 
@@ -44,16 +42,13 @@ export default {
     };
   },
 
-  components: {},
-
   methods: {
-    // goGoodsSearch() {
-    //   // THIS.$EMIT('',)
-    //   this.$router.push({
-    //     name: "goods-search-page",
-    //     query: {name: this.input}
-    //   }),
-    // },
+    goGoodsSearch() {
+      this.$router.push({
+        name: "goods-search-page",
+        query: { name: this.input },
+      })
+    },
 
       // 1.把input内容传给父组件 子组件中通过$emit触发事件
       sendParent() {

@@ -48,7 +48,7 @@
           <!-- 标记1 按照官方文档来， @row-click="goGoodsDetail"方法不能加括号，也不能加参数，下边接受参数就行了-->
           <el-table
             :data="tableData"
-            style="width: 100%"
+            style="width: 100%; font-family: alibaba-Regular"
             @row-click="goGoodsDetail"
           >
             <el-table-column prop="name" label="商品名称"> </el-table-column>
@@ -158,7 +158,7 @@ export default {
       // console.log(value);
       axios
         .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list",
+          "http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list",
           {
             params: {
               name: value,
@@ -191,10 +191,10 @@ export default {
     getSearchPageGoodsList() {
       axios
         .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list",
+          "http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list",
           {
             params: {
-              name: this.name,
+              // name: this.name,
               pageNo: this.currentPage,
               pageSize: this.pageSize,
             },
@@ -202,7 +202,7 @@ export default {
         )
         .then((res) => {
           if (res.data.code === 200) {
-            // console.log("res-----", res.data.result.records);
+            console.log("res-----", res.data.result.records);
             this.tableData = res.data.result.records;
             // console.log(this.tableData);
             this.total = res.data.result.total;
@@ -212,9 +212,9 @@ export default {
           }
         })
         .catch((e) => {
-                            setTimeout(() => {
-              hideLoading();
-            }, 500);
+          setTimeout(() => {
+            hideLoading();
+          }, 500);
         });
     },
 
@@ -242,14 +242,14 @@ export default {
 
       // 如果点击了热门推荐，就不传参数直接请求，如果点击其他的tab就传对应参数
       if (this.tabId == 22) {
-        // console.log("this.tabId---", this.tabId);
+        console.log("this.tabId---", this.tabId);
         let params = {
           pageNo: this.currentPage,
           pageSize: this.pageSize,
         };
         goodsRecommendList(params).then((res) => {
           // console.log("params---", params);
-          console.log("tabSearchButton---", res);
+          // console.log("tabSearchButton---", res);
           this.tableData = res.result.records;
           this.currentPage = 1;
           this.total = res.result.total;
@@ -274,30 +274,34 @@ export default {
 
   mounted() {
     showLoading();
+    // 拿到在首页搜索时候传递的搜索参数
+    this.name = this.$route.query.name;
+    // console.log("this.name--", this.name);
 
     // loading
     // this.openFullScreen1();
     // this.getgoodsList();
 
-    // 拿到在首页搜索时候传递的搜索参数
-    this.name = this.$route.query.name;
-    // console.log(this.name);
-
     // 在这个页面请求和渲染
     this.getSearchPageGoodsList();
-
     this.getGoodsRecommendNav();
   },
 };
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
 .header-search-box {
   width: 100vw;
   display: flex;
   justify-content: center;
 
   .shell-choiceness {
+    font-family: alibaba-Regular;
+
     width: 150px;
     height: 36px;
     text-align: center;
@@ -335,7 +339,9 @@ export default {
     display: flex;
     flex-direction: column;
 
-    .sort-radio-box {
+    /deep/.sort-radio-box {
+      font-family: alibaba-Regular;
+
       // display: flex;
       // text-align: center;
 
@@ -404,6 +410,8 @@ export default {
       }
 
       .pagination-box {
+        font-family: alibaba-Regular;
+
         display: flex;
         justify-content: center;
       }

@@ -65,11 +65,10 @@
             <p>{{ this.goodsItem.name }}</p>
             <div class="text-box">
               <div class="detail-box">
-                <span>货号：{{ this.goodsItem.itemNo }}</span>
-                <span>规格：{{ this.goodsItem.specificationDesc }}</span>
-                <!-- <span>价格: {{ this.goodsItem.price }} </span> -->
-                <span>{{ this.goodsItem.enterpriseName }}</span>
-                <span>购买数量：</span>
+                <p>货号：{{ this.goodsItem.itemNo }}</p>
+                <p>规格：{{ this.goodsItem.specificationDesc }}</p>
+                <p>{{ this.goodsItem.supplierName }}</p>
+                <p>购买数量：</p>
                 <div
                   class="sku-item"
                   v-for="item in goodsItemSku"
@@ -88,13 +87,16 @@
                     label="描述文字"
                   ></el-input-number>
                 </div>
-                <div style="margin-top: 20px">总价:{{ totalPrice }}</div>
+                <p>总价:{{ totalPrice }}</p>
               </div>
             </div>
-            <button>提交订单</button>
+            <button style="font-family: alibaba-Regular">提交订单</button>
           </div>
         </div>
-        <div v-html="this.goodsItem.itemDesc"></div>
+        <div
+          v-html="this.goodsItem.itemDesc"
+          style="font-family: alibaba-Regular !important"
+        ></div>
       </div>
 
       <div v-if="num == 3" class="el-main-page3">3</div>
@@ -128,26 +130,26 @@ export default {
     };
   },
   methods: {
-
-    goHome () {
+    goHome() {
       this.$router.push({
         name: "home",
-      })
+      });
     },
     handleChange(value) {
       console.log(value);
+      zzz;
     },
 
     getGoodsDetailItem() {
       // console.log("id---",this.id);
       getGoodsDetail(this.id)
         .then((res) => {
-          // console.log("res---", res);
+          console.log("res---", res);
           this.goodsItem = res.result;
           // console.log("goodsItem---", this.goodsItem);
-                            setTimeout(() => {
-              hideLoading();
-            }, 500);
+          setTimeout(() => {
+            hideLoading();
+          }, 500);
         })
         .catch((e) => {
           console.log("e---", e);
@@ -198,6 +200,10 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
 .header-search-box {
   width: 90vw;
   margin-left: 5vw;
@@ -286,20 +292,28 @@ export default {
   }
 }
 .el-main > .el-main-page2 {
+  font-family: alibaba-Regular;
+
   .center-text {
     text-align: center;
   }
 
   .current-goods-box {
     width: 90%;
-    margin-left: 5%;
-    margin-top: 20px;
+    height: 60vh;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
+    // border: 1px solid red;
+    gap: 10%;
+
     .goods-left-box {
-      margin-right: 50px;
-      float: left;
+      height: 70%;
+      border: 1px solid #000;
+      overflow: hidden;
+
       img {
-        width: 300px;
-        border: 1px solid #fff;
+        width: 100%;
       }
       .el-carousel {
         width: 300px;
@@ -322,36 +336,39 @@ export default {
     }
 
     .goods-right-box {
+      // border: 1px solid blue;
+      flex: 1;
       overflow: hidden;
-      height: 432px;
-      // background: green;
+      height: 100%;
+      padding-left: 20px;
+
       p:first-child {
         font-weight: bold;
-        font-size: 20px;
+        font-size: 30px;
         margin: 20px 0;
       }
 
-      p:nth-child(2) {
-        font-size: 20px;
-        font-weight: bold;
-        color: red;
-      }
-
       .text-box {
-        margin-bottom: 15px;
+        // margin-bottom: 15px;
         // display: flex;
-        gap: 100px;
+        // gap: 100px;
         .detail-box {
           display: flex;
           flex-direction: column;
-          span {
-            margin-top: 10px;
+          p {
+            font-size: 18px;
+            font-family: alibaba-Regular;
+            font-weight: normal;
+            margin-top: 15px;
           }
           .sku-item {
             display: flex;
             // flex-direction: column;
             font-size: 40px;
             line-height: 40px;
+            justify-content: space-around;
+            align-items: center;
+            margin-top: 20px;
 
             .sku-text {
               // border: 1px solid #000;

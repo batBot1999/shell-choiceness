@@ -10,6 +10,7 @@
       </el-tab-pane>
     </el-tabs> -->
 
+    <!-- tab切换按钮容器 -->
     <div class="tab-container">
       <div v-for="(item1, index) in goodsSortFirst" :key="index">
         <button
@@ -23,6 +24,7 @@
         <!-- <div class="item-name-total">{{ item1.name }}</div> -->
       </div>
     </div>
+
     <div
       class="goods-list-item"
       v-for="(item2, index2) in goodsList"
@@ -51,16 +53,15 @@
                 </div>
                 <div class="swiper-slide-text">
                   <p>{{ item3.name }}</p>
-                  <!-- <p>货号:{{ item3.itemNo }}</p> -->
                   <!-- <p>规格:{{ item3.specificationDesc }}</p> -->
-                  <p>￥:{{ item3.price }}</p>
+                  <p>货号:{{ item3.itemNo }}</p>
+                  <p>￥{{ item3.price }}</p>
                   <p>{{ item3.enterpriseName }}</p>
                 </div>
               </div>
             </div>
-
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
+            <!-- <div style="opacity: 1" class="swiper-button-prev" v-if="item2.bioItemList.length > 3 ? true : false"></div> -->
+            <!-- <div style="opacity: 1" class="swiper-button-next" v-if="item2.bioItemList.length > 3 ? true : false"></div> -->
           </div>
         </div>
       </div>
@@ -97,6 +98,9 @@ export default {
       goodsSortSecond: [],
       isActive: 0,
       s1: 0,
+      // 根据元素数量决定是否循环，来解决元素数量小于3时重复显示的问题
+      loopState: false,
+      buttonIsShow: false,
     };
   },
 
@@ -130,12 +134,12 @@ export default {
       // let id = this.goodsSortFirst[0].id;
       let id = "72";
       getIdGoodsList(id).then((res) => {
-        console.log("res---", res);
+        // console.log("res---", res);
         this.goodsList = res.result;
 
         this.$nextTick(() => {
           this.mySwiper = new Swiper(".swiper-container", {
-            loop: true, // 循环模式选项
+            loop: this.loopState, // 循环模式选项
             observer: true, //修改swiper自己或子元素时，自动初始化swiper
             observeParents: false, //修改swiper的父元素时，自动初始化swiper
 
@@ -211,9 +215,9 @@ export default {
       this.tabId = item1.id;
       // console.log("this.tabId---", this.tabId);
       getIdGoodsList(this.tabId).then((res) => {
-        console.log("tabSearchButtonRes---", res);
+        // console.log("tabSearchButtonRes---", res);
         // this.goodsList = [];
-        console.log("清空容器", this.goodsList);
+        // console.log("清空容器", this.goodsList);
         this.goodsList = res.result;
         // this.$forceUpdate();
         // if (this.mySwiper) {
@@ -221,7 +225,7 @@ export default {
         // }
         this.$nextTick(() => {
           this.mySwiper = new Swiper(".swiper-container", {
-            loop: true, // 循环模式选项
+            loop: this.loopState, // 循环模式选项
             observer: true, //修改swiper自己或子元素时，自动初始化swiper
             observeParents: false, //修改swiper的父元素时，自动初始化swiper
 
@@ -268,6 +272,7 @@ export default {
     this.getGoodsSortFirst();
 
     // 获取商品二级标题
+    // 一进来就获取获取商品列表第一个tab
     // this.getGoodsSortSecond();
     this.getgoodsList();
     // setTimeout(() => {
@@ -296,33 +301,40 @@ export default {
     //   });
     // });
     // }, 100);
-
-    // 一进来就获取获取商品列表第一个tab
   },
 };
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
+
 .isActive {
   background: #2979ff !important;
   color: #ffffff !important;
 }
 .goods-list-bg {
+  padding: 50px;
   // width: 100%;
-  height: 1420px;
+  // height: 1420px;
   background-image: url("../assets/img/index-goods-list.png");
   background-size: cover;
-  overflow: hidden;
+  // overflow: hidden;
+  overflow-y: visible;
 
   .tab-container {
     width: 80%;
     // background: red;
-    margin: 50px auto 0;
+    margin: 0 auto;
+    // padding: 50px 0;
     display: flex;
     justify-content: space-between;
     position: relative;
 
     button {
+      font-family: alibaba-Regular !important;
       // margin: 0 20px;
       padding: 0 10px;
       box-sizing: border-box;
@@ -377,10 +389,12 @@ export default {
     display: flex;
     height: 360px;
     border-radius: 5px 5px 5px 5px;
+    font-family: alibaba-Regular !important;
+    // background: red;
 
     .title-box {
       box-sizing: border-box;
-      width: 14%;
+      width: 17%;
       height: 100%;
       color: #ffffff;
       // background: url("../assets/img/goods-list-title.png");
@@ -388,10 +402,11 @@ export default {
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      margin-right: 3%;
       // align-items: center;
       // text-align: center;
       // padding: 0 50px;
-      border-radius: 5px 5px 5px 5px;
+      // border-radius: 5px 5px 5px 5px;
 
       p {
         margin-left: 30px;
@@ -409,69 +424,97 @@ export default {
 
     .title-color0 {
       background: url("../assets/img/title-bg-blue.png");
+      background-size: cover;
     }
 
     .title-color1 {
       background: url("../assets/img/title-bg-red.png");
+      background-size: cover;
     }
 
     .title-color2 {
       background: url("../assets/img/title-bg-pink.png");
+      background-size: cover;
     }
 
     .item-box {
-      background: #f1eff4;
-      width: 86%;
+      height: 100%;
+      // background: #f1eff4;
+      width: 80%;
       // padding-left: 20px;
+      // overflow-y: hidden;
       .swiper-container {
+        // overflow-y: visibel;
+        // height: 100%;
+        --swiper-navigation-color: #2979ff; /* 单独设置按钮颜色 */
+        --swiper-navigation-size: 50px; /* 设置按钮大小 */
         .swiper-wrapper {
+          // height: 100%;
+
           .swiper-slide {
+            padding-left: 20px;
+            // background: red;
+            // height: 100%;
+            box-sizing: border-box;
+            // border: 2px solid red;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            overflow: hidden;
+            // align-items: start;
+            // overflow: hidden;
+            // margin: 0 20px;
 
             .swiper-slide-img {
+              // height: 100%;
               height: 200px;
-              width: 200px;
-              overflow: hidden;
+              background: #ffffff;
+              // width: calc(100%-40px);
+              width: 100%;
+              // overflow: hidden;
               img {
                 width: 100%;
-                height: 100%;
               }
             }
             .swiper-slide-text {
-              text-align: center;
-              width: 80%;
+              text-align: start;
+              width: 100%;
               // height: calc(100% - 200px);
-              height: 100%;
-              // background: green;
-              padding: 20px;
-              padding-left: 50px;
+              height: 160px;
+              background: #ffffff;
+              // padding: 20px;
+              // padding-left: 50px;
               font-size: 14px;
 
               p {
                 text-overflow: ellipsis;
                 overflow: hidden;
                 white-space: nowrap;
+                margin: 10px 0 0 10px;
               }
               p:first-child {
+                margin-top: 20px;
                 width: 80%;
                 display: inline-block;
                 font-size: 18px;
                 font-weight: bold;
               }
 
-              p:nth-child(2) {
+              p:nth-child(3) {
                 font-size: 20px;
                 color: #f8494d !important;
               }
 
               p:not(P:first-child) {
                 color: #9c9c9c;
-                margin: 10px 0;
               }
             }
+          }
+
+          .swiper-button-prev {
+            opacity: 1 !important;
+          }
+
+          .swiper-button-next {
+            opacity: 1 !important;
           }
         }
       }

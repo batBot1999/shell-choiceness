@@ -105,9 +105,16 @@ export default {
 </script>
 
 <style lang="less" scoped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
+
 .anouncementBackground {
   width: 100vw;
   background: grey;
+  font-family: alibaba-Regular;
+
 
   .anouncementContainer {
     width: 85%;

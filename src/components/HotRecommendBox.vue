@@ -38,6 +38,10 @@ export default {
 </script>
 
 <style lang="less" coped>
+@font-face {
+  font-family: alibaba-Regular;
+  src: url("../assets/font/AlibabaPuHuiTi-2-55-Regular.ttf");
+}
 .hot-recommend-bg {
   // background: #f8f9fe;
   // background: red;
@@ -51,11 +55,12 @@ export default {
     box-sizing: border-box;
     background: #ffffff;
     width: 80%;
-    height: 300px;
+    // height: 300px;
     padding: 20px;
     margin: 50px auto 0;
 
     .hot-recommend-header {
+      font-family: alibaba-Regular;
       // width: 100%;
       display: flex;
       align-items: center;
