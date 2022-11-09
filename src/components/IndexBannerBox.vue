@@ -352,6 +352,7 @@ export default {
 
 @media screen and (max-width: 1600px) {
   .banner-right-box {
+    // color: red;
     font-size: 12px;
     display: flex;
     justify-content: flex-start !important;
@@ -362,19 +363,8 @@ export default {
         height: 60px !important;
       }
     }
-
-    .banner-announcement-box {
-      margin-top: 20px;
-
-      .announcement-title {
-        margin-bottom: 10px;
-      }
-
-      .el-pagination {
-        margin: 20px;
-      }
-    }
   }
+
 }
 
 .index-banner-bg {
