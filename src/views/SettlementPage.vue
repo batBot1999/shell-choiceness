@@ -21,14 +21,23 @@
             <div class="right-son-box">选择其他配送方式&nbsp</div>
           </div>
           <div class="deliver-box-bottom">
-            <div>
-              <p class="deliver-box-title">收货人</p>
-              <p>张三</p>
-              <p>&nbsp</p>
-              <p class="deliver-box-title">收货地址</p>
-              <p>浙江省杭州市滨江区民生医药A幢1楼111室</p>
+            <div class="deliver-box-title">
+              <span>收货人姓名:</span
+              ><input type="text" v-model="receiveName" />
             </div>
-            <div class="right-son-box">更换收货地址&nbsp</div>
+            <div class="deliver-box-title">
+              <span>收货人电话:</span
+              ><input type="text" v-model="receivePhoneNumber" />
+            </div>
+            <div class="block">
+              <p>收货地址</p>
+              <!-- <span class="demonstration">请选择收货地址:</span> -->
+              <el-cascader
+                v-model="receivePlaceValue"
+                :options="options"
+                :props="{ expandTrigger: 'hover' }"
+              ></el-cascader>
+            </div>
           </div>
         </div>
 
@@ -41,14 +50,13 @@
             <p>送达时间:2022年10月30日</p>
             <div class="goods-item">
               <div class="img-box">
-              <img src="../assets/img/goodsImage.png" alt="">
+                <img :src="imgUrl" alt="" />
               </div>
               <div class="goods-item-text">
-                <p>艾本德单道移液器</p>
-                <p>货号：20210330</p>
-                <p>规格：100-1000ul</p>
-                <p>单价：¥999.00</p>
-                <p>销售包装：6支/盒</p>
+                <p>{{ this.itemName }}</p>
+                <p>货号：{{ this.itemNo }}</p>
+                <p>规格：{{ this.specificationDesc }}</p>
+                <p>单价：{{ this.price }}</p>
               </div>
             </div>
           </div>
@@ -72,18 +80,27 @@
         </div>
         <div class="settlement-option">
           <span>商品总计</span>
-          <span>￥1900.00</span>
+          <span>￥{{ this.totalPrice }}</span>
         </div>
         <div class="settlement-option">
           <span>配送费</span>
-          <span>￥100.00</span>
+          <span>￥{{ this.deliverPay }}</span>
         </div>
         <div class="line-box"></div>
         <div class="should-pay-box">
           <span>应付金额</span>
-          <span>¥ 2,098.00</span>
+          <span>￥{{ Number(this.deliverPay) + Number(this.totalPrice) }}</span>
         </div>
-        <div class="button-box">提交订单</div>
+
+        <div class="commit-button-box">
+          <button
+            class="button-box"
+            @click="commitOrder()"
+            :disabled="commitOrderFlag == 0"
+          >
+            提交订单
+          </button>
+        </div>
       </div>
     </div>
 
@@ -94,15 +111,148 @@
 <script>
 import Footer from "../components/Footer.vue";
 import HeaderNav from "../components/HeaderNav.vue";
+import { postOrderCommit } from "../request/api.js";
+import axios from "axios";
 export default {
   components: {
     Footer,
     HeaderNav,
   },
+
   data() {
-    return {};
+    return {
+      commitOrderFlag: 1,
+      supplierId: null,
+      itemId: null,
+      itemName: null,
+      skuId: null,
+      num: null,
+      totalPrice: null,
+      price: null,
+      imgUrl: null,
+      itemNo: null,
+      specificationDesc: null,
+      deliverPay: 100,
+      receiveName: "",
+      receivePhoneNumber: "",
+      receivePlaceValue: [],
+      options: [
+        {
+          value: "省A",
+          label: "省A",
+          children: [
+            {
+              value: "市A",
+              label: "市A",
+              children: [
+                {
+                  value: "县A",
+                  label: "县A",
+                },
+                {
+                  value: "县B",
+                  label: "县B",
+                },
+              ],
+            },
+            {
+              value: "市B",
+              label: "市B",
+              children: [
+                {
+                  value: "县C",
+                  label: "县C",
+                },
+                {
+                  value: "县D",
+                  label: "县D",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          value: "省B",
+          label: "省B",
+          children: [
+            {
+              value: "市C",
+              label: "市C",
+              children: [
+                {
+                  value: "县E",
+                  label: "县E",
+                },
+                {
+                  value: "县F",
+                  label: "县F",
+                },
+              ],
+            },
+            {
+              value: "市D",
+              label: "市D",
+              children: [
+                {
+                  value: "县G",
+                  label: "县G",
+                },
+                {
+                  value: "县H",
+                  label: "县H",
+                },
+              ],
+            },
+            {
+              value: "市E",
+              label: "市E",
+              children: [
+                {
+                  value: "县I",
+                  label: "县I",
+                },
+                {
+                  value: "县K",
+                  label: "县K",
+                },
+                {
+                  value: "县K",
+                  label: "县K",
+                },
+              ],
+            },
+          ],
+        },
+        {
+          value: "省C",
+          label: "省C",
+          children: [
+            {
+              value: "市F",
+              label: "市F",
+            },
+            {
+              value: "市G",
+              label: "市G",
+            },
+            {
+              value: "市H",
+              label: "市H",
+            },
+          ],
+        },
+      ],
+    };
   },
   methods: {
+    // handleChange(value) {
+    //   console.log(value);
+    //   if (value !== 0 && this.receiveName && this.receivePhoneNumber ) {
+    //     this.commitOrderFlag = 1;
+    //   } else {
+    //     this.commitOrderFlag = 0;
+    //   }
+    // },
     goHome() {
       this.$router.push({
         name: "home",
@@ -114,6 +264,78 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
+    commitOrder() {
+      axios
+        .post(
+          "http://bkzx.bioclub.cn/api/jeecg-boot/bio/bioOrder/add",
+          {
+            supplierId: this.supplierId,
+            itemId: this.itemId,
+            itemName: this.itemName,
+            skuId: this.skuId,
+            num: this.num,
+            totalPrice: Number(this.deliverPay) + Number(this.totalPrice),
+            price: this.price,
+            receiverName: this.receiveName,
+            receiverPhone: this.receivePhoneNumber,
+            receiverAddress: this.receivePlaceValue.toString(),
+          },
+          {
+            headers: {
+              "content-type": "application/json",
+              token: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.code === 200) {
+            console.log("res-----", res);
+          }
+        })
+        .catch((e) => {});
+    },
+  },
+  // /bio/bioOrder/add
+  computed: {
+    // shouldPay () {
+    //   let sum = this.totalPrice;
+    //   sum += this.deliverPay;
+    //   return sum;
+    // }
+
+    // canButtonUse() {
+    //   if (this.receivePlaceValue&&this.receiveName&&this.receivePhoneNumber) {
+    //     this.commitOrderFlag  = 1;
+    //   } else {
+    //     this.commitOrderFlag  = 0;
+    //   }
+    //   console.log("this.commitOrderFlag ---", this.commitOrderFlag );
+    //   return;
+    // },
+  },
+
+  mounted() {
+    this.supplierId = this.$route.query.supplierId;
+    this.itemId = this.$route.query.itemId;
+    this.itemName = this.$route.query.itemName;
+    this.skuId = this.$route.query.skuId;
+    this.num = this.$route.query.num;
+    this.totalPrice = this.$route.query.totalPrice;
+    this.price = this.$route.query.price;
+    this.imgUrl = this.$route.query.imgUrl;
+    this.itemNo = this.$route.query.itemNo;
+    this.specificationDesc = this.$route.query.specificationDesc;
+
+    // console.log("1企业id:", this.supplierId);
+    // console.log("2商品id:", this.itemId);
+    // console.log("3商品名称:", this.itemName);
+    // console.log("4skuid:", this.skuId);
+    // console.log("5购买数量:", this.num);
+    // console.log("6总价:", this.totalPrice);
+    // console.log("7单价:", this.price);
+    // console.log("8图片URL:", this.imgUrl);
+    // console.log("9货号:", this.itemNo);
+    // console.log("10规格:", this.specificationDesc);
   },
 };
 </script>
@@ -210,18 +432,29 @@ export default {
       }
 
       .deliver-box-bottom {
+        // background: blue;
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0 20px;
+        flex-direction: column;
+        padding: 20px;
 
-        div {
+        .deliver-box-title {
+          margin: 10px 0;
+          width: 20vw;
+          display: flex;
+          justify-content: space-between;
+          color: #757678;
+        }
+
+        .block {
+          width: 23vw;
+          padding: 20px 0;
+          // background: red;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
           p {
-            line-height: 20px;
-          }
-
-          .deliver-box-title {
-            color: #757678;
+            white-space: nowrap;
           }
         }
 
@@ -273,29 +506,31 @@ export default {
 
         .goods-item {
           margin: 20px;
-          width:500px;
+          width: 500px;
           display: flex;
           // background: green;
 
           .img-box {
             width: 200px;
+            height: 200px;
+            overflow: hidden;
             img {
               width: 100%;
-              height: 100%;
+              // height: 100%;
             }
           }
 
           .goods-item-text {
-           padding: 20px;
+            padding: 20px;
 
-           p:first-child {
-            font-size: 20px;
-            font-weight: bold;
-           }
+            p:first-child {
+              font-size: 20px;
+              font-weight: bold;
+            }
 
-           p:not(p:first-child) {
-            margin: 10px 0;
-           }
+            p:not(p:first-child) {
+              margin: 10px 0;
+            }
           }
         }
       }
@@ -314,6 +549,7 @@ export default {
     padding: 20px;
     width: 40%;
     // height: 50vh;
+    // text-align: center;
 
     border-left: 1px solid #000000;
 
@@ -384,19 +620,31 @@ export default {
       font-size: 20px;
       font-weight: bold;
     }
-
+    .commit-button-box {
+      width: 100%;
+      // background: red;
+      text-align: center;
+    }
     .button-box {
-      width: 80%;
-      height: 7vh;
-      line-height: 7vh;
+      width: 300px;
+      height: 80px;
+      line-height: 80px;
       text-align: center;
       border-radius: 50px;
-      color: #ffffff;
-      background: #0e6ebe;
+      color: #000000;
+      // background: #0e6ebe;
       border: none;
       outline: none;
-      margin: 50px auto 0;
+      margin: 50px;
       font-size: 20px;
+
+      .usefulButton {
+        background: green !important;
+      }
+
+      .notUsefulButton {
+        background: red !important;
+      }
     }
   }
 }

@@ -45,7 +45,7 @@
         </div>
 
         <div class="search-pagination-box">
-          <!-- 标记1 按照官方文档来， @row-click="goGoodsDetail"方法不能加括号，也不能加参数，下边接受参数就行了-->
+          <!-- 标记999 按照官方文档来， @row-click="goGoodsDetail"方法不能加括号，也不能加参数，下边接受参数就行了-->
           <el-table
             :data="tableData"
             style="width: 100%; font-family: alibaba-Regular"
@@ -137,7 +137,7 @@ export default {
         name: "home",
       });
     },
-    // 标记1
+    // 标记999
     goGoodsDetail(row) {
       // console.log("row---", row.id);
       this.$router.push({

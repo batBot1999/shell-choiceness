@@ -124,3 +124,21 @@ export function getIdGoodsList(data) {
 
     })
 }
+
+// 首页商品分类hover一级返传一级id,返回二三级直接渲染
+export function getIdGoodsSortAll(data) {
+    return get({
+        url: "/bio/app/bioClassification/app/next?",
+        data,
+
+    })
+}
+
+
+// 订单页面点击提交
+export function postOrderCommit(data) {
+    return post({
+        url: "/bio/bioOrder/add?",
+        data,
+    })
+}

@@ -18,15 +18,15 @@
                 v-for="(item2, index2) in totalSortSecond"
                 :key="index2"
                 @click="goSearchPage(item2.name)"
-                @mouseover="hoverShowThird(item2.id)"
               >
+                <!-- @mouseover="hoverShowThird(item2.id)" -->
                 <div class="flex-item-txt">
                   <span>{{ item2.name }}</span>
                 </div>:
                 <div class="sort-third-container">
                   <div
                     class="sort-third-item"
-                    v-for="(item3, index3) in totalSortThirdFake"
+                    v-for="(item3, index3) in item2.bioClassificationDTOList"
                     :key="index3"
                   >
                     {{ item3.name }}
@@ -119,6 +119,7 @@
 import { getBanner } from "../request/api.js";
 import { getAnnouncementPagination } from "../request/api.js";
 import { getIndexSort } from "../request/api.js";
+import { getIdGoodsSortAll } from "../request/api.js";
 
 export default {
   data() {
@@ -250,40 +251,41 @@ export default {
 
     // 获取二级分类标题
     hoverShow(id) {
-      // console.log("id---", id);
+      console.log("id---", id);
       let params = {
         parentId: id,
         level: 2,
         type: 1,
       };
-      getIndexSort(params)
+      // console.log("params---", params);
+      getIdGoodsSortAll(params)
         .then((res) => {
           if (res.code === 200) {
-            // console.log("itotalSortSecond", res);
+            console.log("getIdGoodsSortAll---", res);
             this.totalSortSecond = res.result;
-            this.slotIsShow = true;
-          }
-        })
-        .catch((e) => {});
-    },
-
-    // 获取三级分类标题
-    hoverShowThird(id) {
-      let params = {
-        parentId: id,
-        level: 3,
-        type: 1,
-      };
-      getIndexSort(params)
-        .then((res) => {
-          if (res.code === 200) {
-            // console.log("itotalSortThree---", res);
-            this.totalSortThird = res.result;
             // this.slotIsShow = true;
           }
         })
         .catch((e) => {});
     },
+
+// 首页商品分类hover一级返传一级id,返回二三级直接渲染 标记1 latest
+    // hoverShowThird(id) {
+    //   let params = {
+    //     parentId: id,
+    //     level: 3,
+    //     type: 1,
+    //   };
+    //   getIndexSort(params)
+    //     .then((res) => {
+    //       if (res.code === 200) {
+    //         // console.log("itotalSortThree---", res);
+    //         this.totalSortThird = res.result;
+    //         // this.slotIsShow = true;
+    //       }
+    //     })
+    //     .catch((e) => {});
+    // },
 
     //   // 跳转到公告详情
     goAnnouncementDetail(id) {

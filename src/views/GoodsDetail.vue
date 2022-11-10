@@ -42,7 +42,7 @@
     </div>
 
     <el-main>
-      <div v-if="num == 1" class="el-main-page1">1</div>
+      <!-- <div v-if="num == 1" class="el-main-page1">1</div> -->
       <div v-if="num == 2" class="el-main-page2">
         <div class="center-text">
           <span
@@ -90,7 +90,13 @@
                 <p>总价:{{ totalPrice }}</p>
               </div>
             </div>
-            <button style="font-family: alibaba-Regular">提交订单</button>
+            <button
+              style="font-family: alibaba-Regular"
+              @click="sendDataToOrderPage()"
+              :disabled="commitOrderFlag == 0"
+            >
+              提交订单
+            </button>
           </div>
         </div>
         <div
@@ -99,7 +105,7 @@
         ></div>
       </div>
 
-      <div v-if="num == 3" class="el-main-page3">3</div>
+      <!-- <div v-if="num == 3" class="el-main-page3">3</div> -->
     </el-main>
 
     <Footer />
@@ -121,12 +127,15 @@ export default {
   },
   data() {
     return {
+      commitOrderFlag: 0,
       num: 2,
       levels: ["实验常规仪器", "移液器", "单道移液器"],
       counter: 0,
       goodsItem: [],
       goodsItemSku: [],
       id: null,
+      counterValue: null,
+      goodsTotalPrice: null,
     };
   },
   methods: {
@@ -136,8 +145,13 @@ export default {
       });
     },
     handleChange(value) {
-      console.log(value);
-      zzz;
+      this.counterValue = value;
+      console.log(this.counterValue);
+      if (value !== 0) {
+        this.commitOrderFlag = 1;
+      } else {
+        this.commitOrderFlag = 0;
+      }
     },
 
     getGoodsDetailItem() {
@@ -174,7 +188,33 @@ export default {
         });
     },
 
-    submitOrder() {},
+    sendDataToOrderPage() {
+      console.log("1企业id:", this.goodsItem.supplierId);
+      console.log("2商品id:", this.goodsItem.bioSkuList[0].id);
+      console.log("3商品名称:", this.goodsItem.name);
+      console.log("4 skuid:", this.goodsItem.bioSkuList[0].skuNo);
+      console.log("5购买数量:", this.counterValue);
+      console.log("6总价:", this.goodsTotalPrice);
+      console.log("7单价:", this.goodsItem.bioSkuList[0].price);
+      console.log("7图片路径:", this.goodsItem.mainUrl);
+      console.log("9货号:", this.itemNo);
+      console.log("10规格:", this.specificationDesc);
+      this.$router.push({
+        name: "settlement-page",
+        query: {
+          supplierId: this.goodsItem.supplierId,
+          itemId: this.goodsItem.bioSkuList[0].id,
+          itemName: this.goodsItem.name,
+          skuId: this.goodsItem.bioSkuList[0].skuNo,
+          num: this.counterValue,
+          totalPrice: this.goodsTotalPrice,
+          price: this.goodsItem.bioSkuList[0].price,
+          imgUrl: this.goodsItem.mainPic,
+          itemNo: this.goodsItem.itemNo,
+          specificationDesc: this.goodsItem.specificationDesc,
+        },
+      });
+    },
   },
 
   computed: {
@@ -184,13 +224,15 @@ export default {
       this.goodsItemSku.map((item) => {
         a += item.price * item.counter;
       });
+
+      this.goodsTotalPrice = a;
       return a;
     },
   },
 
   mounted() {
     showLoading();
-
+    this.notLogin = localStorage.getItem("token") ? true : false;
     this.id = this.$route.query.id;
     console.log(this.id);
     this.getGoodsDetailItem();
@@ -366,7 +408,7 @@ export default {
             // flex-direction: column;
             font-size: 40px;
             line-height: 40px;
-            justify-content: space-around;
+            justify-content: start;
             align-items: center;
             margin-top: 20px;
 
@@ -391,7 +433,7 @@ export default {
       }
 
       button:first-child {
-        background: #0e6ebe;
+        // background: #0e6ebe;
         color: #fff;
       }
     }

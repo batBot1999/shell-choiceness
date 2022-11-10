@@ -334,6 +334,7 @@ export default {
     position: relative;
 
     button {
+      outline: none;
       font-family: alibaba-Regular !important;
       // margin: 0 20px;
       padding: 0 10px;
