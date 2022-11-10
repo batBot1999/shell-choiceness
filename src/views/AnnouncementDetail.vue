@@ -49,11 +49,11 @@ export default {
   methods: {
     getAnouncementDetailItem() {
       getAnouncementDetail(this.id).then((res) => {
-        // console.log("res--", res);
-        this.anouncementDetailContent = res.result;
         setTimeout(() => {
           hideLoading();
         }, 500);
+        // console.log("res--", res);
+        this.anouncementDetailContent = res.result;
         // console.log(
         //   "this.anouncementDetailContent---",
         //   this.anouncementDetailContent

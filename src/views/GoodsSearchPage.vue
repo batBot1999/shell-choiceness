@@ -157,16 +157,13 @@ export default {
     getGoodsSearchInput(value) {
       // console.log(value);
       axios
-        .get(
-          "http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list",
-          {
-            params: {
-              name: value,
-              pageNo: this.currentPage,
-              pageSize: this.pageSize,
-            },
-          }
-        )
+        .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
+          params: {
+            name: value,
+            pageNo: this.currentPage,
+            pageSize: this.pageSize,
+          },
+        })
         .then((res) => {
           if (res.data.code === 200) {
             // console.log("res-----", res.data.result.records);
@@ -190,31 +187,26 @@ export default {
     // 获取商品列表
     getSearchPageGoodsList() {
       axios
-        .get(
-          "http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list",
-          {
-            params: {
-              // name: this.name,
-              pageNo: this.currentPage,
-              pageSize: this.pageSize,
-            },
-          }
-        )
+        .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
+          params: {
+            // name: this.name,
+            pageNo: this.currentPage,
+            pageSize: this.pageSize,
+          },
+        })
         .then((res) => {
+          setTimeout(() => {
+            hideLoading();
+          }, 500);
           if (res.data.code === 200) {
             console.log("res-----", res.data.result.records);
             this.tableData = res.data.result.records;
             // console.log(this.tableData);
             this.total = res.data.result.total;
-            setTimeout(() => {
-              hideLoading();
-            }, 500);
           }
         })
         .catch((e) => {
-          setTimeout(() => {
-            hideLoading();
-          }, 500);
+          console.log(e);
         });
     },
 
@@ -239,7 +231,6 @@ export default {
     // 切换tab重新分页
     tabSearchButton(tab, event) {
       this.tabId = tab.name;
-
       // 如果点击了热门推荐，就不传参数直接请求，如果点击其他的tab就传对应参数
       if (this.tabId == 22) {
         console.log("this.tabId---", this.tabId);
