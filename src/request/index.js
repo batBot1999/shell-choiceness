@@ -5,9 +5,9 @@ import qs from "qs"
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: "http://bkzx.bioclub.cn/api/jeecg-boot",
-  // baseURL: "http://linzhiying123.natapp1.cc/jeecg-boot",
-  // http://linzhiying123.natapp1.cc/jeecg-boot
+  baseURL:
+  // "http://bkzx.bioclub.cn/api/jeecg-boot",
+  "http://linzhiying123.natapp1.cc/jeecg-boot",
   timeout: 1000,
   headers: {
     // "Content-Type" : "application/json;charset=utf-8"

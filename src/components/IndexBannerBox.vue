@@ -555,6 +555,7 @@ export default {
       width: 60%;
 
       /deep/.el-carousel {
+        cursor: pointer;
         height: 100%;
         width: 100%;
 
@@ -651,6 +652,7 @@ export default {
 
         .pagination-content {
           ul {
+        cursor: pointer;
             font-size: 14px;
             line-height: 20px;
             .flex-box {

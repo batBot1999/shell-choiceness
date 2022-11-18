@@ -394,6 +394,7 @@ export default {
     // background: red;
 
     .title-box {
+        cursor: pointer;
       box-sizing: border-box;
       width: 17%;
       height: 100%;
@@ -453,6 +454,7 @@ export default {
           // height: 100%;
 
           .swiper-slide {
+        cursor: pointer;
             padding-left: 20px;
             // background: red;
             // height: 100%;

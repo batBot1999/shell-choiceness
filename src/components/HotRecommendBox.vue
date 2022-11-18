@@ -79,6 +79,7 @@ export default {
       }
 
       span:last-child {
+        cursor: pointer;
         font-size: 14px;
         color: #2979ff;
       }

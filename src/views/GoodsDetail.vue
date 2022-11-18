@@ -44,13 +44,13 @@
     <el-main>
       <!-- <div v-if="num == 1" class="el-main-page1">1</div> -->
       <div v-if="num == 2" class="el-main-page2">
-        <div class="center-text">
+        <!-- <div class="center-text">
           <span
             >{{ levels[0] }}&nbsp>&nbsp{{ levels[1] }}&nbsp>&nbsp{{
               levels[2]
             }}</span
           >
-        </div>
+        </div> -->
         <div class="current-goods-box">
           <div class="goods-left-box">
             <img :src="this.goodsItem.mainPic" alt="" />
@@ -91,6 +91,7 @@
               </div>
             </div>
             <button
+            class="commit-order-button"
               style="font-family: alibaba-Regular"
               @click="sendDataToOrderPage()"
               :disabled="commitOrderFlag == 0"
@@ -338,10 +339,12 @@ export default {
 }
 .el-main > .el-main-page2 {
   font-family: alibaba-Regular;
+  margin-bottom: 50px;
+  // background: green;
 
-  .center-text {
-    text-align: center;
-  }
+  // .center-text {
+  //   text-align: center;
+  // }
 
   .current-goods-box {
     width: 90%;
@@ -386,11 +389,13 @@ export default {
       overflow: hidden;
       height: 100%;
       padding-left: 20px;
+      display: flex;
+      flex-direction: column;
 
       p:first-child {
         font-weight: bold;
         font-size: 30px;
-        margin: 20px 0;
+        margin: 10px 0;
       }
 
       .text-box {
@@ -404,7 +409,7 @@ export default {
             font-size: 18px;
             font-family: alibaba-Regular;
             font-weight: normal;
-            margin-top: 15px;
+            margin-top: 10px;
           }
           .sku-item {
             display: flex;
@@ -413,7 +418,7 @@ export default {
             line-height: 40px;
             justify-content: start;
             align-items: center;
-            margin-top: 20px;
+            margin-top: 10px;
 
             .sku-text {
               // border: 1px solid #000;
@@ -427,6 +432,7 @@ export default {
       }
 
       button {
+        cursor: pointer;
         margin-top: 30px;
         width: 150px;
         height: 80px;

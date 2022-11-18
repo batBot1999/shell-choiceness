@@ -101,6 +101,7 @@ export default {
 
 
   .swiper-slide {
+        cursor: pointer;
     border-radius: 5px;
     background: #f1eff4;
     margin: 0 10px;

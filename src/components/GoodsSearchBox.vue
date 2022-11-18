@@ -92,6 +92,7 @@ export default {
   }
 
   .search-button {
+        cursor: pointer;
     width: 200px;
     height: 60px;
     color: #fff;

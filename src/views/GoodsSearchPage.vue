@@ -58,8 +58,7 @@
             <el-table-column prop="price" label="价格"> </el-table-column>
             <el-table-column prop="createTime" label="发货时间">
             </el-table-column>
-            <el-table-column prop=" enterpriseName" label="供应商">
-              <el-button type="text" size="small">科加奥</el-button>
+            <el-table-column prop="enterpriseName" label="供应商">
             </el-table-column>
             <el-table-column prop="operarion" label="操作">
               <template slot-scope="scope">
@@ -291,6 +290,7 @@ export default {
   justify-content: center;
 
   .shell-choiceness {
+    cursor: pointer;
     font-family: alibaba-Regular;
 
     width: 150px;
@@ -333,43 +333,6 @@ export default {
     /deep/.sort-radio-box {
       font-family: alibaba-Regular;
 
-      // display: flex;
-      // text-align: center;
-
-      // span {
-      //   height: 50px;
-      //   line-height: 50px;
-      //   width: 10%;
-      //   font-weight: bold;
-      //   font-size: 25px;
-      // }
-
-      // .el-radio-group {
-      //   width: 90%;
-      // }
-
-      // // 这一端css是在elementui的radio基础上改的,要理清hover active checked之间的关系
-      // .el-radio-group > .el-radio-button {
-      //   width: 11%;
-
-      //   /deep/.el-radio-button__orig-radio:checked + .el-radio-button__inner {
-      //     background: #0e6ebe;
-      //     color: #fff;
-      //   }
-
-      //   /deep/.el-radio-button__inner {
-      //     padding: 0 0;
-      //     width: 100%;
-      //     border: none;
-      //     height: 50px;
-      //     line-height: 50px;
-      //     transition: none;
-      //   }
-
-      //   /deep/.el-radio-button__inner:hover {
-      //     color: #0e6ebe;
-      //   }
-      // }
     }
 
     .search-pagination-box {
@@ -408,5 +371,11 @@ export default {
       }
     }
   }
+}
+
+/deep/.cell {
+          text-overflow: ellipsis!important;
+        white-space: nowrap!important;
+        overflow: hidden!important;
 }
 </style>

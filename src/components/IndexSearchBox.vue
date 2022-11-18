@@ -170,6 +170,7 @@ export default {
       }
 
       .search-button {
+        cursor: pointer;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -188,6 +189,7 @@ export default {
       }
 
       .search-goods-button {
+        cursor: pointer;
         box-sizing: border-box;
         width: 120px;
         height: 46px;
@@ -200,6 +202,7 @@ export default {
       }
 
       .search-service-button {
+        cursor: pointer;
         box-sizing: border-box;
         width: 120px;
         height: 46px;
