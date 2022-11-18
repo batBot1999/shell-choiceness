@@ -22,7 +22,8 @@
                 <!-- @mouseover="hoverShowThird(item2.id)" -->
                 <div class="flex-item-txt">
                   <span>{{ item2.name }}</span>
-                </div>:
+                </div>
+                :
                 <div class="sort-third-container">
                   <div
                     class="sort-third-item"
@@ -77,8 +78,8 @@
           <div class="banner-avatar-box"></div>
           <div class="banner-welcome-text">您好，欢迎来到贝壳精选！</div>
           <div class="banner-button-box">
-            <button @click="goLogin">登录</button>
-            <button @click="goRegister">注册</button>
+            <button @click="goLogin">会员登录</button>
+            <button @click="goRegister">免费注册</button>
           </div>
         </div>
         <div class="banner-login-box" v-show="notLogin">
@@ -89,7 +90,10 @@
           <span>所在公司&nbsp:&nbsp{{ companyName }}</span>
         </div>
         <div class="banner-announcement-box">
-          <div class="announcement-title">平台公告</div>
+          <div class="announcement-title">
+            <span>平台公告</span>
+            <span @click="goAnnouncementPage">更多</span>
+          </div>
           <!-- paginationContent -->
           <div class="pagination-content">
             <ul v-for="(item, index) in announcementList" :key="index">
@@ -100,7 +104,7 @@
             </ul>
           </div>
           <!-- 分页 -->
-          <el-pagination
+          <!-- <el-pagination
             small
             layout="prev, pager, next"
             @current-change="handleCurrentChange"
@@ -108,7 +112,7 @@
             :page-size="anouncementPageSize"
             :total="anouncementTotal"
           >
-          </el-pagination>
+          </el-pagination> -->
         </div>
       </div>
     </div>
@@ -128,13 +132,12 @@ export default {
       realname: localStorage.realname,
       companyName: localStorage.companyName,
       announcementList: [],
-
       currentPage: 1,
       pageSize: 5,
       total: 0,
       // 公告分页参数
       anouncementCurrentPage: 1,
-      anouncementPageSize: 3,
+      anouncementPageSize: 5,
       anouncementTotal: 0,
       // 轮播图容器
       bannerType: 1,
@@ -173,6 +176,9 @@ export default {
     goRegister() {
       this.$router.push({ name: "register" });
     },
+    goAnnouncementPage() {
+      this.$router.push({ name: "announcement-page" });
+    },
 
     // 获取轮播图
     getBanner() {
@@ -209,7 +215,7 @@ export default {
       });
     },
 
-    //   // 获取公告
+    // 获取公告
     getAnnouncement() {
       let params = {
         pageNo: this.anouncementCurrentPage,
@@ -269,7 +275,7 @@ export default {
         .catch((e) => {});
     },
 
-// 首页商品分类hover一级返传一级id,返回二三级直接渲染 标记1 latest
+    // 首页商品分类hover一级返传一级id,返回二三级直接渲染 标记1 latest
     // hoverShowThird(id) {
     //   let params = {
     //     parentId: id,
@@ -352,22 +358,22 @@ export default {
   src: url("../assets/font/AlibabaPuHuiTi-2-65-Medium.ttf");
 }
 
-@media screen and (max-width: 1600px) {
-  .banner-right-box {
-    // color: red;
-    font-size: 12px;
-    display: flex;
-    justify-content: flex-start !important;
+// @media screen and (max-width: 1600px) {
+//   .banner-right-box {
+//     // color: red;
+//     font-size: 12px;
+//     display: flex;
+//     justify-content: flex-start !important;
 
-    .banner-login-box {
-      .banner-avatar-box {
-        width: 60px !important;
-        height: 60px !important;
-      }
-    }
-  }
+//     .banner-login-box {
+//       .banner-avatar-box {
+//         width: 60px !important;
+//         height: 60px !important;
+//       }
+//     }
+//   }
 
-}
+// }
 
 .index-banner-bg {
   width: 100%;
@@ -480,9 +486,9 @@ export default {
               }
             }
 
-              .flex-item:hover {
-                color: #2979ff;
-              }
+            .flex-item:hover {
+              color: #2979ff;
+            }
           }
         }
       }
@@ -576,26 +582,33 @@ export default {
     }
 
     .banner-right-box {
-      font-family: alibaba-Regular;
+      font-family: alibaba-Regular !important;
       overflow: hidden;
       width: 20%;
+      min-width: 270px;
       height: 100%;
       background: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-around;
+      justify-content: space-between;
+      padding: 20px;
+      box-sizing: border-box;
 
       .banner-login-box {
-        margin-top: 20px;
+        width: 100%;
+        // height: 100%;
+        // background: red;
+        // gap: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-around;
+        gap: 20px;
+        // justify-content: space-around;
 
         .banner-avatar-box {
-          width: 80px;
-          height: 80px;
+          width: 150px;
+          height: 150px;
           background-image: url("../assets/img/index-avtar-default.png");
           background-size: cover;
         }
@@ -605,18 +618,24 @@ export default {
           white-space: nowrap;
           overflow: hidden;
           color: #666666;
-          font-size: 14px;
-          margin-bottom: 10px;
+          font-size: 16px;
         }
 
         .banner-button-box {
           width: 100%;
           display: flex;
-          justify-content: space-between;
+          justify-content: center;
+          // flex-direction: column;
+          align-items: center;
+          gap: 20px;
+          // background: red;
 
           button:first-child {
-            width: 70px;
-            height: 30px;
+            font-family: alibaba-Regular !important;
+
+            font-size: 18px;
+            width: 40%;
+            height: 40px;
             background: #2979ff;
             border-radius: 50px 50px 50px 50px;
             color: #ffffff;
@@ -624,8 +643,11 @@ export default {
             cursor: pointer;
           }
           button:last-child {
-            width: 70px;
-            height: 30px;
+            font-family: alibaba-Regular !important;
+
+            font-size: 18px;
+            width: 40%;
+            height: 40px;
             background: #ffffff;
             border-radius: 50px 50px 50px 50px;
             color: #2979ff;
@@ -636,48 +658,89 @@ export default {
       }
 
       .banner-announcement-box {
-        height: 50%;
+        width: 100%;
+        overflow: hidden;
+        // min-height: 270px;
+        // background: yellow;
+        // height: 50%;
         // padding: 0 10px;
         // margin-top: 20px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        align-items: start;
+        align-items: center;
         // padding: 10px;
         .announcement-title {
+          // margin: 10px 0;
+          // background: green;
+          width: 100%;
           font-size: 16px;
           font-family: alibaba-Medium;
-          font-weight: bold;
+          display: flex;
+          justify-content: space-between;
+          span:first-child {
+            font-family: alibaba-Regular !important;
+
+            font-weight: bold;
+            margin-left: 10px;
+          }
+          span:last-child {
+            font-family: alibaba-Regular !important;
+
+            color: #999999;
+            margin-right: 10px;
+            cursor: pointer;
+          }
+
+          span:last-child:hover {
+            color: #2979ff;
+          }
         }
 
         .pagination-content {
+          width: 100%;
+          min-height: 100%;
           ul {
-        cursor: pointer;
+            cursor: pointer;
             font-size: 14px;
             line-height: 20px;
+            margin: 10px 0;
             .flex-box {
               p:first-child {
+                font-family: alibaba-Regular !important;
                 // display: inline-block;
-                width: 11vw;
+                width: 100%;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 // display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
+                // -webkit-box-orient: vertical;
+                white-space: nowrap;
+
+                // -webkit-line-clamp: 1;
                 color: #666666;
               }
               p:last-child {
+                font-family: alibaba-Regular !important;
+                width: 100%;
                 color: #c7c7c7;
-                margin-bottom: 10px;
+                // margin-bottom: 10px;
+              }
+
+              p:first-child:hover {
+                color: #2979ff;
+              }
+
+              p:first-child:hover + p:last-child {
+                color: #2979ff;
               }
             }
           }
         }
 
-        .el-pagination {
-          margin: 0 auto;
-          text-align: center;
-        }
+        // .el-pagination {
+        //   margin: 0 auto;
+        //   text-align: center;
+        // }
       }
     }
   }

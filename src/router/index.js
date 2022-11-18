@@ -13,6 +13,7 @@ import ServiceDetail from '../views/ServiceDetail.vue'
 import SettlementPage from '../views/SettlementPage.vue'
 import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 import PaymentSuccess from '../views/PaymentSuccess.vue'
+import AnnouncementPage from '../views/AnnouncementPage.vue'
 
 // 解决vue-router在3.0版本以上重复点报错问题
 const originalPush = VueRouter.prototype.push
@@ -88,6 +89,11 @@ const routes = [
     path: '/payment-success',
     name: 'payment-success',
     component: PaymentSuccess
+  },
+  {
+    path: '/announcement-page',
+    name: 'announcement-page',
+    component: AnnouncementPage
   }
 
 ]

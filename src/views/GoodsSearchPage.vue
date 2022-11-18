@@ -194,9 +194,6 @@ export default {
           },
         })
         .then((res) => {
-          setTimeout(() => {
-            hideLoading();
-          }, 500);
           if (res.data.code === 200) {
             console.log("res-----", res.data.result.records);
             this.tableData = res.data.result.records;
@@ -263,7 +260,10 @@ export default {
   },
 
   mounted() {
-    showLoading();
+           showLoading();
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
     // 拿到在首页搜索时候传递的搜索参数
     this.name = this.$route.query.name;
     // console.log("this.name--", this.name);

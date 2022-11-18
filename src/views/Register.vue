@@ -65,12 +65,12 @@
             ></el-input>
           </el-form-item>
 
-          <el-form-item label="账号用途" prop="type">
+          <!-- <el-form-item label="账号用途" prop="type">
             <el-radio-group v-model="ruleForm.type">
               <el-radio label="采购"></el-radio>
               <el-radio label="销售"></el-radio>
             </el-radio-group>
-          </el-form-item>
+          </el-form-item> -->
 
           <el-form-item>
             <el-button
@@ -92,14 +92,20 @@ import { Message } from "element-ui";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
-        }
-        callback();
+       let reg= /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/;
+       if(!reg.test(value)){callback(new Error('密码必须是由6-20位字母+数字组合'))
+      }else{
+          callback()
       }
+      // if (value === "") {
+      //   callback(new Error("请输入密码"));
+      // } else {
+      //   if (this.ruleForm.checkPass !== "") {
+      //     this.$refs.ruleForm.validateField("checkPass");
+      //   }
+      //   callback();
+      // }
+
     };
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {

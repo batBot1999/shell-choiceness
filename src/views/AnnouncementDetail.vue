@@ -49,9 +49,6 @@ export default {
   methods: {
     getAnouncementDetailItem() {
       getAnouncementDetail(this.id).then((res) => {
-        setTimeout(() => {
-          hideLoading();
-        }, 500);
         // console.log("res--", res);
         this.anouncementDetailContent = res.result;
         // console.log(
@@ -93,7 +90,10 @@ export default {
   },
 
   mounted() {
-    showLoading();
+            showLoading();
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
 
     this.id = this.$route.query.id;
     // console.log(this.id);

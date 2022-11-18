@@ -159,9 +159,6 @@ export default {
       // console.log("id---",this.id);
       getGoodsDetail(this.id)
         .then((res) => {
-                    setTimeout(() => {
-            hideLoading();
-          }, 500);
           // console.log("res---", res);
           this.goodsItem = res.result;
           // console.log("goodsItem---", this.goodsItem);
@@ -235,7 +232,10 @@ export default {
   },
 
   mounted() {
-    showLoading();
+        showLoading();
+    setTimeout(() => {
+      hideLoading();
+    }, 500);
     this.notLogin = localStorage.getItem("token") ? true : false;
     this.id = this.$route.query.id;
     console.log(this.id);
