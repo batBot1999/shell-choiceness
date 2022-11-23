@@ -19,7 +19,8 @@ const service = axios.create({
 service.interceptors.request.use((config) => {
   config.headers = config.headers || {}
   if (localStorage.getItem("token")) {
-    config.headers.token = localStorage.getItem("token") || ""
+    // 对象的属性不止可以"."也可以[]
+    config.headers['X-Access-Token'] = localStorage.getItem("token") || ""
   }
   // console.log(localStorage)
   return config

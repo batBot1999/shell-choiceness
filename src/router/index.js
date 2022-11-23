@@ -14,6 +14,7 @@ import SettlementPage from '../views/SettlementPage.vue'
 import AnnouncementDetail from '../views/AnnouncementDetail.vue'
 import PaymentSuccess from '../views/PaymentSuccess.vue'
 import AnnouncementPage from '../views/AnnouncementPage.vue'
+import EnterpriseCertification from '../views/EnterpriseCertification.vue'
 
 // 解决vue-router在3.0版本以上重复点报错问题
 const originalPush = VueRouter.prototype.push
@@ -94,9 +95,15 @@ const routes = [
     path: '/announcement-page',
     name: 'announcement-page',
     component: AnnouncementPage
-  }
-
+  },
+  // 新页面企业校验
+  {
+    path: '/enterprise-certification',
+    name: 'enterprise-certification',
+    component: EnterpriseCertification
+  },
 ]
+
 
 const router = new VueRouter({
   // mode: 'history',
@@ -105,15 +112,15 @@ const router = new VueRouter({
   routes
 })
 // 路由守卫
-router.beforeEach((to, from, next) => {
-  if (to.path == '/' || to.path == '/login' || to.path == '/register') {
-    next()
-    return
-  }
-  if (window.localStorage.getItem("token")) {
-    next()
-    return
-  }
-  next("/")
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.path == '/' || to.path == '/login' || to.path == '/register') {
+//     next()
+//     return
+//   }
+//   if (window.localStorage.getItem("token")) {
+//     next()
+//     return
+//   }
+//   next("/")
+// })
 export default router

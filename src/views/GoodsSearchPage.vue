@@ -98,7 +98,7 @@ import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
 import { getIndexSort } from "../request/api.js";
-import { showLoading, hideLoading } from "../util/Loading";
+import { showLoading, hideLoading } from "../utils/Loading";
 import axios from "axios";
 export default {
   data() {

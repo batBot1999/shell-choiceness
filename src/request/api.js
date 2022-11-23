@@ -85,7 +85,7 @@ export function getAnouncementDetail(data) {
 }
 
 // 首页商品和服务分类
-    // 获取商品和服务推荐tab列表 只传level=2 type=1
+// 获取商品和服务推荐tab列表 只传level=2 type=1
 export function getIndexSort(data) {
     return get({
         url: "/bio/app/bioClassification/app/parent?",
@@ -140,5 +140,24 @@ export function postOrderCommit(data) {
     return post({
         url: "/bio/bioOrder/add?",
         data,
+    })
+}
+
+// 获取用户基本信息 只传token
+export function getUserImformation(data) {
+    return get({
+        url: "/bio/user/getMyBioUser?",
+        data,
+
+    })
+}
+
+
+// 图片上传
+export function uploadimage(data) {
+    return post({
+        // url的地址改成自己的本地地址或者是线上地址
+        //   url: `http://localhost:9528/template/api/admin/article/uploadimg`,
+        data: data,
     })
 }

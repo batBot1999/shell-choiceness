@@ -26,7 +26,7 @@ import Footer from "../components/Footer.vue";
 import { getAnouncementDetail } from "../request/api.js";
 import moment from "moment";
 // import { Loading } from "element-ui";
-import { showLoading, hideLoading } from "../util/Loading";
+import { showLoading, hideLoading } from "../utils/Loading";
 export default {
   components: {
     HeaderNav,
@@ -90,7 +90,7 @@ export default {
   },
 
   mounted() {
-            showLoading();
+    showLoading();
     setTimeout(() => {
       hideLoading();
     }, 500);
@@ -114,7 +114,6 @@ export default {
   width: 100vw;
   background: grey;
   font-family: alibaba-Regular;
-
 
   .anouncementContainer {
     width: 85%;

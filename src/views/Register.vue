@@ -81,6 +81,17 @@
             >
           </el-form-item>
         </el-form>
+        <el-dialog
+  title="认证提醒"
+  :visible.sync="centerDialogVisible"
+  width="30%"
+  center>
+  <span class="modal-content">用户需要进行企业认证后,认证通过后方可进行采购操作.</span>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="goHome">直接进入首页</el-button>
+    <el-button type="primary" @click="goEnterpriseCertification">前往认证页面</el-button>
+  </span>
+</el-dialog>
       </div>
     </div>
   </div>
@@ -89,6 +100,7 @@
 <script>
 import { register } from "../request/api.js";
 import { Message } from "element-ui";
+import { login } from "../request/api.js";
 export default {
   data() {
     var validatePass = (rule, value, callback) => {
@@ -144,6 +156,7 @@ export default {
         position: [{ required: true, message: "请输入职位", trigger: "blur" }],
         type: [{ trigger: "change" }],
       },
+      centerDialogVisible: false,
     };
   },
 
@@ -152,6 +165,7 @@ export default {
       this.$router.push({ name: "login" });
     },
     submitForm(formName) {
+      this.centerDialogVisible = true;
       this.$refs[formName].validate((valid) => {
         if (valid) {
           register({
@@ -163,16 +177,17 @@ export default {
             position: this.ruleForm.position,
             type: 0,
           }).then((res) => {
-            // console.log("res---", res);
-            // console.log("res.code---", res.code);
-            // 如果成功的话
+            console.log("register-res---", res);
             if (res.code === 200) {
+              window.localStorage.setItem("token", res.result.token);
+              window.localStorage.setItem("type", res.result.type);
               this.$message({
                 showClose: true,
                 message: res.message,
                 type: "success",
               });
-              this.$router.push({ name: "login" });
+      // this.centerDialogVisible = true;
+              // this.$router.push({ name: "login" });
             }
           }).catch((e) => {
             // 如果账号已存在
@@ -185,11 +200,18 @@ export default {
               });
             }
           })
+
         } else {
           return false;
         }
       });
     },
+    goHome () {
+      this.$router.push({ name: "home" });
+    },
+    goEnterpriseCertification () {
+      this.$router.push({ name: "enterprise-certification" });
+    }
   },
 };
 </script>
@@ -251,6 +273,11 @@ export default {
 
       h1 {
         margin-bottom: 50px;
+      }
+
+      /deep/.el-dialog--center .el-dialog__body {
+        text-align: center !important;;
+        font-size: 18px;
       }
     }
   }

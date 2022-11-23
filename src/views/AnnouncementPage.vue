@@ -36,7 +36,7 @@ import IndexSearchBox from "../components/IndexSearchBox.vue";
 import { getAnnouncementPagination } from "../request/api.js";
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
-import { showLoading, hideLoading } from "../util/Loading";
+import { showLoading, hideLoading } from "../utils/Loading";
 export default {
   data() {
     return {
@@ -108,6 +108,7 @@ export default {
 
   computed: {
     // 愚蠢的想法
+
     // textFilter() {
     //   const a = this.announcementList.map((item) => {
     //     let b = this.filtersRichText(item.content);

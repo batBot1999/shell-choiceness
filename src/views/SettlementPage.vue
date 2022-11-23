@@ -120,7 +120,7 @@ import Footer from "../components/Footer.vue";
 import HeaderNav from "../components/HeaderNav.vue";
 import { postOrderCommit } from "../request/api.js";
 import axios from "axios";
-import { showLoading, hideLoading } from "../util/Loading";
+import { showLoading, hideLoading } from "../utils/Loading";
 export default {
   components: {
     Footer,

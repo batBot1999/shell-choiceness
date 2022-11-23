@@ -118,7 +118,7 @@ import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import Footer from "../components/Footer.vue";
 import { getGoodsDetail } from "../request/api.js";
 import { getGoodsDetailSku } from "../request/api.js";
-import { showLoading, hideLoading } from "../util/Loading";
+import { showLoading, hideLoading } from "../utils/Loading";
 
 export default {
   components: {
@@ -180,7 +180,7 @@ export default {
 
           // console.log("goodsItemSku---", this.goodsItemSku);
           // 遍历每一个sku然后给他加一个计数器,一开始直接加进去没有响应式地更新视图,去网上查发现可以用这个this.$set(obj, key, value)给对象加键值对
-          this.goodsItemSku.map((item) => {
+          this.goodsItemSku.map((item) => { 
             this.$set(item, "counter", 0);
           });
         })
@@ -217,7 +217,6 @@ export default {
       });
     },
   },
-
   computed: {
     totalPrice() {
       // console.log("this.counter",this.counter);
