@@ -80,7 +80,7 @@ export default {
             email: this.ruleForm.email,
             password: this.ruleForm.password,
           }).then((res) => {
-            // console.log("res---",res);
+            console.log("res---",res);
             if (res.code == 200) {
               // 如果账号密码正确,要把token保存起来
               // console.log("res.result.userInfo---", res.result.userInfo);
@@ -89,6 +89,7 @@ export default {
               // console.log("localStorage.realname---", localStorage.realname);
               // window.localStorage.setItem("companyName", res.result.userInfo.realname);
               window.localStorage.setItem("token", res.result.token);
+              window.localStorage.setItem("type", res.result.type);
               // console.log("res---", res);
               // console.log("localStorage---", localStorage);
               this.$router.push({ name: "home" });

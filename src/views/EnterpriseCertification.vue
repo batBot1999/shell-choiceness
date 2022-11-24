@@ -37,13 +37,29 @@
               账号ID:&nbsp&nbsp&nbsp&nbsp{{ personInformationContainer.id }}
             </p>
             <p>注册时间:&nbsp&nbsp&nbsp&nbsp{{ createTime }}</p>
-            <p>实名认证:&nbsp&nbsp&nbsp&nbsp{{}}</p>
+            <div class="authentication-container">
+              <div>实名认证:&nbsp&nbsp&nbsp&nbsp</div>
+              <div class="not-authentication" v-if="isAuthentication == 1">
+                <div>未认证</div>
+                <div @click="showEnterpriseAuthentication">去认证</div>
+              </div>
+              <div
+                class="already-authentication"
+                v-else="isAuthentication != 1"
+              >
+                已认证
+              </div>
+            </div>
             <p>
               手机号:&nbsp&nbsp&nbsp&nbsp{{ personInformationContainer.phone }}
             </p>
           </div>
         </div>
-        <PersonInformation :information="personInformationContainer" v-if="flag"></PersonInformation>
+        <PersonInformation
+          :information="personInformationContainer"
+          @callback="callback"
+          v-if="flag"
+        ></PersonInformation>
       </div>
       <div class="container-second" v-if="personOrEnterprise == 2">
         <el-steps :active="active">
@@ -140,7 +156,7 @@ import { getUserImformation } from "../request/api.js";
 export default {
   data() {
     return {
-      flag:false,
+      flag: false,
       // 个人信息容器
       personInformationContainer: [],
       // 个人还是企业
@@ -177,10 +193,11 @@ export default {
           { required: true, message: "请上传身份证照片", trigger: "blur" },
         ],
       },
-
       text0: "上传文件",
       text1: "身份证正面",
       text2: "身份证反面",
+      // 实名认证icon
+      authentication: 1,
     };
   },
   components: {
@@ -190,6 +207,9 @@ export default {
     PersonInformation,
   },
   methods: {
+    callback(data) {
+      this.personInformationContainer = data;
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
@@ -226,18 +246,33 @@ export default {
         .then((res) => {
           // console.log("res---", res);
           this.personInformationContainer = res.result;
-          this.flag=true;
+          this.flag = true;
         })
         .catch((e) => {
           console.log("e---", e);
         });
     },
+    // 点击去认证,显示企业认证页面
+    showEnterpriseAuthentication() {
+      this.personOrEnterprise = 2;
+    },
   },
   computed: {
+    // 个人信息创建时间
     createTime() {
       if (this.personInformationContainer.createTime) {
-        return this.personInformationContainer.createTime.slice(0,10);
+        return this.personInformationContainer.createTime.slice(0, 10);
       }
+    },
+    // 是否认证,根据localstorage中的type来判断
+    isAuthentication() {
+      let flag = 0;
+      if (localStorage.type == 1) {
+        flag = 0;
+      } else {
+        flag = 1;
+      }
+      return flag;
     },
   },
   mounted() {
@@ -273,6 +308,37 @@ export default {
         height: 30px;
         line-height: 30px;
         font-size: 16px;
+      }
+      .authentication-container {
+        display: flex;
+        div {
+          height: 30px;
+          line-height: 30px;
+        }
+        .not-authentication {
+          padding: 0 5px;
+          border-radius: 5px;
+          display: flex;
+          div:first-child {
+            height: 30px;
+            line-height: 30px;
+            color: rgb(247, 13, 13);
+            background: rgb(244, 212, 212);
+          }
+          div:last-child {
+            height: 30px;
+            line-height: 30px;
+            color: blue;
+          }
+        }
+        .already-authentication {
+          padding: 0 5px;
+          border-radius: 5px;
+          height: 30px;
+          line-height: 30px;
+          color: green;
+          background: rgb(170, 235, 170);
+        }
       }
     }
   }

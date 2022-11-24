@@ -152,6 +152,40 @@ export function getUserImformation(data) {
     })
 }
 
+// 更新用户基本信息 传很多参数
+export function updateUserImformation(data) {
+    return post({
+        url: "/bio/user/update?",
+        data,
+
+    })
+}
+
+// 个人服务地址信息表格请求数据
+export function getUserImformationAdress(data) {
+    return get({
+        url: "/bio/bioConsigneeAddress/pc/list?",
+        data,
+    })
+}
+
+// 增加个人服务地址信息表格数据
+export function addUserImformationAdress(data) {
+    return post({
+        url: "/bio/bioConsigneeAddress/pc/add?",
+        data,
+
+    })
+}
+
+// 编辑个人服务地址信息表格数据
+export function editUserImformationAdress(data) {
+    return post({
+        url: "/bio/bioConsigneeAddress/pc/edit?",
+        data,
+
+    })
+}
 
 // 图片上传
 export function uploadimage(data) {
