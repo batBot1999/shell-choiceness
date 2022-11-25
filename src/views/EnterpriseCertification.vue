@@ -2,7 +2,8 @@
   <div>
     <HeaderNav />
     <el-row class="tac">
-      <el-col :span="4">
+      <!-- :span="4"  -->
+      <el-col class="leftSide">
         <el-menu
           default-active="2"
           class="el-menu-vertical-demo"
@@ -61,8 +62,8 @@
           v-if="flag"
         ></PersonInformation>
       </div>
-      <div class="container-second" v-if="personOrEnterprise == 2">
-        <el-steps :active="active">
+      <!-- <div class="container-second" v-if="personOrEnterprise == 2">
+        <el-steps :active="active" class="stepsHeader">
           <el-step title="填写信息" class="inVerification"> </el-step>
           <el-step title="人工审核" class="inVerification"> </el-step>
           <el-step title="审核通过" class="inVerification"> </el-step>
@@ -141,7 +142,8 @@
             <p>统一社会信用代码:</p>
           </div>
         </div>
-      </div>
+      </div> -->
+      <EnterpriseInformation v-if="personOrEnterprise == 2"></EnterpriseInformation>
     </el-row>
     <Footer />
   </div>
@@ -153,6 +155,7 @@ import Footer from "../components/Footer.vue";
 import UploadImage from "../components/upload/UploadImage.vue";
 import PersonInformation from "../components/PersonInformation.vue";
 import { getUserImformation } from "../request/api.js";
+import EnterpriseInformation from "../components/EnterpriseInformation.vue"
 export default {
   data() {
     return {
@@ -161,41 +164,8 @@ export default {
       personInformationContainer: [],
       // 个人还是企业
       personOrEnterprise: 1,
-      // 企业步骤第几步
-      active: 1,
-      enterpriseRuleForm: {
-        enterpriseName: "",
-        creditCode: "",
-        legalPersonName: "",
-        IDNumber: "",
-      },
-      enterpriseRules: {
-        enterpriseName: [
-          { required: true, message: "请输入企业名称", trigger: "blur" },
-        ],
-        creditCode: [
-          {
-            required: true,
-            message: "请输入统一社会信用代码",
-            trigger: "blur",
-          },
-        ],
-        businessLicense: [
-          { required: true, message: "请上传营业执照", trigger: "blur" },
-        ],
-        legalPersonName: [
-          { required: true, message: "请输入法人姓名", trigger: "blur" },
-        ],
-        IDNumber: [
-          { required: true, message: "请输入法人身份证号", trigger: "blur" },
-        ],
-        IDImage: [
-          { required: true, message: "请上传身份证照片", trigger: "blur" },
-        ],
-      },
-      text0: "上传文件",
-      text1: "身份证正面",
-      text2: "身份证反面",
+
+
       // 实名认证icon
       authentication: 1,
     };
@@ -203,8 +173,9 @@ export default {
   components: {
     Footer,
     HeaderNav,
-    UploadImage,
+    // UploadImage,
     PersonInformation,
+    EnterpriseInformation,
   },
   methods: {
     callback(data) {
@@ -222,24 +193,8 @@ export default {
     showEnterprise() {
       this.personOrEnterprise = 2;
     },
-    submitForm(formName) {
-      this.next(); // 标记1
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    next() {
-      // if (this.active++ > 2) this.active = 0;
-      if (this.active < 3) {
-        this.active++;
-      }
-      console.log("active", this.active);
-    },
+
+
     // 请求个人信息
     getUserImformationMethod() {
       getUserImformation()
@@ -284,24 +239,35 @@ export default {
 <style lang="less" scoped>
 .tac {
   display: flex;
-  width: 100%;
+  // width: 100%;
+
+}
+/deep/.leftSide {
+  // margin-right: 100px;
+  width: 200px;
 }
 .container-first {
   // background: rgb(213, 211, 211);
-  padding: 30px 150px;
-  width: 100%;
+  margin-top: 50px;
+
+  // width: 100%;
   .person-header {
-    width: 60%;
+    width: 100%;
     display: flex;
     // justify-content: space-around;
     // align-items: center;
     .personal-information {
+      // background: grey;
       display: flex;
       flex-wrap: wrap;
+      justify-content: space-between;
       // background: red;
       margin-left: 100px;
-      width: 100%;
+      width: 50vw;
       p {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
         text-align: left;
         // background: green;
         width: 50%;
@@ -310,6 +276,7 @@ export default {
         font-size: 16px;
       }
       .authentication-container {
+        width: 50%;
         display: flex;
         div {
           height: 30px;
@@ -342,58 +309,5 @@ export default {
       }
     }
   }
-}
-
-.container-second {
-  flex: 1;
-  // background: rgb(216, 214, 214);
-  padding: 100px;
-  .el-step-container1 {
-    display: flex;
-    justify-content: center;
-    .form-box {
-      margin-top: 50px;
-      width: 50%;
-    }
-  }
-  .el-step-container2 {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .step-second-textbox {
-      margin-left: 50px;
-      h1 {
-        margin-bottom: 20px;
-      }
-    }
-  }
-
-  .el-step-container3 {
-    margin-top: 20px;
-    .container3-header {
-      display: flex;
-      justify-content: space-between;
-      span:last-child {
-        color: #409eff;
-      }
-    }
-    .container3-container {
-      width: 100%;
-      // background: green;
-      display: flex;
-      flex-wrap: wrap;
-      p {
-        width: 30%;
-        height: 30px;
-        line-height: 30px;
-        font-size: 14px;
-      }
-    }
-  }
-}
-
-/deep/.el-form-item__content {
-  display: flex;
-  gap: 20px;
 }
 </style>

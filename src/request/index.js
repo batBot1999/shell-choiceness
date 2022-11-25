@@ -71,4 +71,16 @@ export function post({
   });
 }
 
+// delete
+export function deleteItem({
+  url,
+  data
+}) {
+  // console.log(data);
+  // console.log(qs.stringify(data));
+  let str = data ? `${qs.stringify(data)}` : '';
+  // console.log(str);
+  return service.delete(`${url}${str}`);
+}
+
 export default service

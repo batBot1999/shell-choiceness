@@ -12,7 +12,8 @@
         <span>所在公司:</span><span class="blue-text">{{ companyName }}</span>
       </div>
       <div>
-        <span style="cursor: pointer" @click="goHome">首页&nbsp</span>
+        <span style="cursor: pointer" @click="goHome">首页&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</span>
+        <span style="cursor: pointer" @click="goPersonConfig">个人中心&nbsp</span>
         <!-- &nbsp|&nbsp&nbsp&nbsp
         <span
           class="shop-car-text"
@@ -38,6 +39,11 @@ export default {
         goHome() {
       this.$router.push({
         name: "home",
+      });
+    },
+    goPersonConfig() {
+      this.$router.push({
+        name: "enterprise-certification",
       });
     },
     goLogin() {

@@ -62,11 +62,13 @@
               @click="editAdressButton(scope.$index, scope.row)"
               >编辑</el-button
             >
-            <el-button type="text" size="small">设为默认</el-button>
             <el-button
               type="text"
               size="small"
-              @click.native.prevent="deleteRow(scope.$index, tableData)"
+              @click="rowIsDefault(scope.$index, scope.row)"
+              >设为默认</el-button
+            >
+            <el-button type="text" size="small" @click="deleteRow(scope.row)"
               >删除</el-button
             >
           </template>
@@ -102,6 +104,10 @@
               placeholder="请输入地址"
             ></el-input>
           </el-form-item>
+          <el-form-item label="默认" :label-width="formLabelWidth">
+            <el-radio v-model="editForm.radio" :label="1">设为默认</el-radio>
+            <el-radio v-model="editForm.radio" :label="0">不设为默认</el-radio>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="editDialogFormVisible = false">取 消</el-button>
@@ -130,10 +136,13 @@ import { getUserImformationAdress } from "../request/api.js";
 import { addUserImformationAdress } from "../request/api.js";
 import { editUserImformationAdress } from "../request/api.js";
 import { getUserImformation } from "../request/api.js";
+import { deleteUserImformationAdress } from "../request/api.js";
+
 export default {
   props: {},
   data() {
     return {
+      isDefault: "",
       currentPage: 1,
       pageSize: 5,
       // 表格数据
@@ -158,6 +167,7 @@ export default {
         ssq: "",
       },
       editForm: {
+        radio: "1",
         id: "",
         consignee: "",
         consigneePhone: "",
@@ -179,22 +189,21 @@ export default {
         console.log("res---", res);
         this.tableData = res.result.records;
         this.total = res.result.total;
-        // 为了不去组件传参,在地址页面请求个人信息
-        this.getUserImformationMethod();
-        console
-          .log
-          // this.personInformationContainer.provinceCode,
-          // this.personInformationContainer.cityCode,
-          // this.personInformationContainer.areaCode
-          ();
       });
     },
 
     // 删除行
-    // deleteRow(index, rows) {
-    //   rows.splice(index, 1);
-    //   this.getTableData();
-    // },
+    deleteRow(row) {
+      let params = { id: row.id };
+      console.log("删除参数row.id", params);
+      deleteUserImformationAdress(params).then((res) => {
+        // console.log("res---", res);
+        this.getTableData();
+      });
+
+      // rows.splice(index, 1);
+      this.getTableData();
+    },
     // 选择一页显示多少条数据
     handleSizeChange(val) {
       // console.log(`每页 ${val} 条`);
@@ -228,9 +237,10 @@ export default {
       });
     },
     editNewAdress() {
-      console.log("editForm---", this.editForm);
+      // console.log("editForm---", this.editForm);
       this.editDialogFormVisible = false;
       let params = {
+        isDefault: this.editForm.radio,
         id: this.editForm.id,
         consignee: this.editForm.consignee,
         consigneePhone: this.editForm.consigneePhone,
@@ -243,38 +253,61 @@ export default {
         areaCode: this.editForm.ssq[2],
       };
       editUserImformationAdress(params).then((res) => {
-        console.log("res---", res);
+        console.log("编辑行返回res---", res);
         this.getTableData();
       });
     },
-    // 点击按钮显示增加地址的弹窗
+    // 点击增加地址按钮显示增加地址的弹窗
     addAdressButton() {
-      console.log(
-        this.personInformationContainer.provinceCode,
-        this.personInformationContainer.cityCode,
-        this.personInformationContainer.areaCode
-      );
+      // console.log(
+      //   this.personInformationContainer.provinceCode,
+      //   this.personInformationContainer.cityCode,
+      //   this.personInformationContainer.areaCode
+      // );
       this.addForm.consignee = "";
       this.addForm.consigneePhone = "";
       this.addForm.address = "";
       this.dialogFormVisible = true;
     },
-    // 编辑行
+    // 点击编辑按钮显示编辑地址的弹窗
     editAdressButton(index, row) {
-      console.log("row---", row);
+      this.editDialogFormVisible = true;
+      console.log("我是row---", row);
       this.editForm.id = row.id;
       this.editForm.consignee = row.consignee;
       this.editForm.consigneePhone = row.consigneePhone;
       this.editForm.address = row.address;
+      this.editForm.radio = row.isDefault;
 
       this.$set(this.editForm, "ssq", [
         Number(row.provinceCode),
         Number(row.cityCode),
         Number(row.areaCode),
       ]);
-      console.log(this.editForm.ssq);
+      // console.log(this.editForm.ssq);
       this.timer++;
-      this.editDialogFormVisible = true;
+    },
+    // 设为默认按钮
+    rowIsDefault(index, row) {
+      console.log("row---", row);
+      let params = {
+        isDefault: 1,
+        id: row.id,
+        consignee: row.consignee,
+        consigneePhone: row.consigneePhone,
+        address: row.address,
+        province: row.province,
+        provinceCode: row.provinceCode,
+        city: row.city,
+        cityCode: row.cityCode,
+        area: row.area,
+        areaCode: row.areaCode,
+      };
+      console.log("params---", params);
+      editUserImformationAdress(params).then((res) => {
+        console.log("编辑行返回res---", res);
+        this.getTableData();
+      });
     },
     // 请求个人信息
     getUserImformationMethod() {
@@ -313,12 +346,20 @@ export default {
     this.options = city;
 
     this.getTableData();
+    // 为了不去组件传参,在地址页面请求个人信息
+    this.getUserImformationMethod();
   },
 };
 </script>
 
 <style lang="less" scoped>
 .address-table {
-  width: 100%;
+  // width: 100%;
+  .pagination-box {
+    margin: 30px 30px 30px 30%;
+  }
+}
+/deep/.el-radio {
+  margin-top: 10px;
 }
 </style>

@@ -1,7 +1,8 @@
 // import service from "./index";
 import {
     post,
-    get
+    get,
+    deleteItem
 } from "./index";
 
 // 登录
@@ -182,6 +183,15 @@ export function addUserImformationAdress(data) {
 export function editUserImformationAdress(data) {
     return post({
         url: "/bio/bioConsigneeAddress/pc/edit?",
+        data,
+
+    })
+}
+
+// 删除个人服务地址信息表格数据
+export function deleteUserImformationAdress(data) {
+    return deleteItem({
+        url: "/bio/bioConsigneeAddress/pc/delete?",
         data,
 
     })

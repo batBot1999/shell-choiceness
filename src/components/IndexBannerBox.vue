@@ -83,7 +83,7 @@
           </div>
         </div>
         <div class="banner-login-box" v-show="notLogin">
-          <div class="banner-avatar-box"></div>
+          <div class="banner-avatar-box" @click="goPersonConfig"></div>
           <div class="banner-welcome-text">
             {{ realname }}，欢迎来到贝壳精选！
           </div>
@@ -178,6 +178,11 @@ export default {
     },
     goAnnouncementPage() {
       this.$router.push({ name: "announcement-page" });
+    },
+        goPersonConfig() {
+      this.$router.push({
+        name: "enterprise-certification",
+      });
     },
 
     // 获取轮播图
@@ -607,6 +612,7 @@ export default {
         // justify-content: space-around;
 
         .banner-avatar-box {
+          cursor: pointer;
           width: 150px;
           height: 150px;
           background-image: url("../assets/img/index-avtar-default.png");
