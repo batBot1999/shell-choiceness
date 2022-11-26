@@ -62,88 +62,9 @@
           v-if="flag"
         ></PersonInformation>
       </div>
-      <!-- <div class="container-second" v-if="personOrEnterprise == 2">
-        <el-steps :active="active" class="stepsHeader">
-          <el-step title="填写信息" class="inVerification"> </el-step>
-          <el-step title="人工审核" class="inVerification"> </el-step>
-          <el-step title="审核通过" class="inVerification"> </el-step>
-        </el-steps>
-        <div class="el-step-container1" v-if="this.active == 1">
-          <div class="form-box">
-            <el-form
-              :model="enterpriseRuleForm"
-              status-icon
-              :rules="enterpriseRules"
-              ref="enterpriseRuleForm"
-              label-width="200px"
-              class="demo-enterpriseRuleForm"
-            >
-              <el-form-item label="企业名称" prop="enterpriseName">
-                <el-input
-                  placeholder="请输入企业名称"
-                  v-model="enterpriseRuleForm.enterpriseName"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="统一社会信用代码" prop="creditCode">
-                <el-input
-                  placeholder="请输入统一社会信用代码"
-                  v-model="enterpriseRuleForm.creditCode"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="营业执照" prop="businessLicense">
-                <UploadImage :text="text0"></UploadImage>
-              </el-form-item>
-              <el-form-item label="法人姓名" prop="legalPersonName">
-                <el-input
-                  placeholder="请输入法人姓名"
-                  v-model="enterpriseRuleForm.legalPersonName"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="身份证号" prop="IDNumber">
-                <el-input
-                  placeholder="请输入法人身份证号"
-                  v-model="enterpriseRuleForm.IDNumber"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="身份证照片" prop="IDImage">
-                <UploadImage :text="text1"></UploadImage>
-                <UploadImage :text="text2"></UploadImage>
-              </el-form-item>
-              <el-button
-                type="primary"
-                @click="submitForm('enterpriseRuleForm')"
-                style="margin-top: 12px; margin-left: 40%"
-                >提交</el-button
-              >
-            </el-form>
-          </div>
-        </div>
-        <div class="el-step-container2" v-if="this.active == 2">
-          <img src="../assets/img/warning.png" alt="" />
-          <div class="step-second-textbox">
-            <h1>您已成功提交企业认证信息,请耐心等候!</h1>
-            <p>工作人员会在24小时内完成审核,请关注系统通知,谢谢!</p>
-          </div>
-        </div>
-        <div class="el-step-container3" v-if="this.active == 3">
-          <div class="container3-header">
-            <span>企业实名认证</span>
-            <span>修改认证主体</span>
-          </div>
-          <div class="container3-container">
-            <p>账号类型:</p>
-            <p>认证状态:</p>
-            <p>认证时间:</p>
-            <p>法人姓名:</p>
-            <p>法人证件类型:</p>
-            <p>法人身份证号:</p>
-            <p>企业名称:</p>
-            <p>企业证件类型:</p>
-            <p>统一社会信用代码:</p>
-          </div>
-        </div>
-      </div> -->
-      <EnterpriseInformation v-if="personOrEnterprise == 2"></EnterpriseInformation>
+      <EnterpriseInformation
+        v-if="personOrEnterprise == 2"
+      ></EnterpriseInformation>
     </el-row>
     <Footer />
   </div>
@@ -152,10 +73,10 @@
 <script>
 import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
-import UploadImage from "../components/upload/UploadImage.vue";
+// import UploadImage from "../components/upload/UploadImage.vue";
 import PersonInformation from "../components/PersonInformation.vue";
 import { getUserImformation } from "../request/api.js";
-import EnterpriseInformation from "../components/EnterpriseInformation.vue"
+import EnterpriseInformation from "../components/EnterpriseInformation.vue";
 export default {
   data() {
     return {
@@ -164,7 +85,6 @@ export default {
       personInformationContainer: [],
       // 个人还是企业
       personOrEnterprise: 1,
-
 
       // 实名认证icon
       authentication: 1,
@@ -193,7 +113,6 @@ export default {
     showEnterprise() {
       this.personOrEnterprise = 2;
     },
-
 
     // 请求个人信息
     getUserImformationMethod() {
@@ -240,7 +159,6 @@ export default {
 .tac {
   display: flex;
   // width: 100%;
-
 }
 /deep/.leftSide {
   // margin-right: 100px;

@@ -205,3 +205,12 @@ export function uploadimage(data) {
         data: data,
     })
 }
+
+// 企业信息提交表单
+export function postEnterpriseInformation(data) {
+    return post({
+        // url的地址改成自己的本地地址或者是线上地址
+          url: `/bio/bioUserCompany/pc/add`,
+        data: data,
+    })
+}

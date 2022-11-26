@@ -28,7 +28,10 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="营业执照" prop="businessLicense">
-            <UploadImage :text="text0"></UploadImage>
+            <UploadImage
+              @imageValue="getImageValue0"
+              :text="text0"
+            ></UploadImage>
           </el-form-item>
           <el-form-item label="法人姓名" prop="legalPersonName">
             <el-input
@@ -43,8 +46,14 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="身份证照片" prop="IDImage">
-            <UploadImage :text="text1"></UploadImage>
-            <UploadImage :text="text2"></UploadImage>
+            <UploadImage
+              @imageValue="getImageValue1"
+              :text="text1"
+            ></UploadImage>
+            <UploadImage
+              @imageValue="getImageValue2"
+              :text="text2"
+            ></UploadImage>
           </el-form-item>
           <el-button
             type="primary"
@@ -84,10 +93,11 @@
 
 <script>
 import UploadImage from "./upload/UploadImage.vue";
+import { postEnterpriseInformation } from "../request/api.js";
+
 export default {
   components: {
     UploadImage,
-
   },
   data() {
     return {
@@ -98,6 +108,9 @@ export default {
         creditCode: "",
         legalPersonName: "",
         IDNumber: "",
+        businessLicense: "",
+        IDImage1: "",
+        IDImage2: "",
       },
       enterpriseRules: {
         enterpriseName: [
@@ -110,18 +123,18 @@ export default {
             trigger: "blur",
           },
         ],
-        businessLicense: [
-          { required: true, message: "请上传营业执照", trigger: "blur" },
-        ],
+        // businessLicense: [
+        //   { required: true, message: "请上传营业执照", trigger: "blur" },
+        // ],
         legalPersonName: [
           { required: true, message: "请输入法人姓名", trigger: "blur" },
         ],
         IDNumber: [
           { required: true, message: "请输入法人身份证号", trigger: "blur" },
         ],
-        IDImage: [
-          { required: true, message: "请上传身份证照片", trigger: "blur" },
-        ],
+        // IDImage: [
+        //   { required: true, message: "请上传身份证照片", trigger: "blur" },
+        // ],
       },
       text0: "上传文件",
       text1: "身份证正面",
@@ -129,18 +142,65 @@ export default {
     };
   },
   methods: {
+    getImageValue0(value) {
+      this.businessLicense = value;
+      console.log("this.123---", this.businessLicense);
+    },
+    getImageValue1(value) {
+      this.IDImage1 = value;
+      console.log("this.123---", this.IDImage1);
+    },
+    getImageValue2(value) {
+      this.IDImage2 = value;
+      console.log("this.123---", this.IDImage2);
+    },
     submitForm(formName) {
-      this.next(); // 标记1
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          let params = new FormData();
+          params.append("file1", this.businessLicense);
+          params.append("file2", this.IDImage1);
+          params.append("file3", this.IDImage2);
+          params.append("enterpriseName", this.enterpriseRuleForm.enterpriseName);
+          params.append("creditCode", this.enterpriseRuleForm.creditCode);
+          params.append("legalPersonName", this.enterpriseRuleForm.legalPersonName);
+          params.append("IDNumber", this.enterpriseRuleForm.IDNumber);
+
+
+          postEnterpriseInformation({
+            params,
+            // enterpriseName: this.enterpriseRuleForm.enterpriseName,
+            // creditCode: this.enterpriseRuleForm.creditCode,
+            // legalPersonName: this.enterpriseRuleForm.legalPersonName,
+            // IDNumber: this.enterpriseRuleForm.IDNumber,
+            // this.businessLicense,
+          })
+            .then((res) => {
+              if (res.code == 200) {
+                console.log("params-----", params);
+                this.$message({
+                  showClose: true,
+                  message: "信息提交成功!",
+                  type: "success",
+                });
+                console.log("res---", res);
+              }
+            })
+            .catch((e) => {
+              this.$message({
+                showClose: true,
+                message: e.message,
+                type: "error",
+              });
+              console.log("e---", e);
+            });
+          this.next(); // 标记1
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
     },
-        next() {
+    next() {
       // if (this.active++ > 2) this.active = 0;
       if (this.active < 3) {
         this.active++;
