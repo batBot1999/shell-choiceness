@@ -165,7 +165,7 @@ export default {
   width: 200px;
 }
 .container-first {
-  // background: rgb(213, 211, 211);
+  background: rgb(213, 211, 211);
   margin-top: 50px;
 
   // width: 100%;

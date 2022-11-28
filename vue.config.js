@@ -6,6 +6,7 @@ module.exports = defineConfig({
   devServer:{
     proxy:{
       '/api':{
+        // target:"http://linzhiying123.natapp1.cc/jeecg-boot",
         target:"http://bkzx.bioclub.cn/api/jeecg-boot",
         changeOrigin:true,
         pathRewrite:{

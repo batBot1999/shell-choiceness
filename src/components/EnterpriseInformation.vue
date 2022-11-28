@@ -1,6 +1,10 @@
 <template>
   <div class="container-second">
-    <el-steps :active="active" class="stepsHeader">
+    <el-steps
+      :active="active"
+      class="stepsHeader"
+      v-if="this.active != 3 && this.active != 4"
+    >
       <el-step title="填写信息" class="inVerification"> </el-step>
       <el-step title="人工审核" class="inVerification"> </el-step>
       <el-step title="审核通过" class="inVerification"> </el-step>
@@ -74,41 +78,52 @@
     <div class="el-step-container3" v-if="this.active == 3">
       <div class="container3-header">
         <span>企业实名认证</span>
-        <span>修改认证主体</span>
+        <span @click="updateCertification">修改认证主体</span>
       </div>
       <div class="container3-container">
         <p>
-          账号类型:<span>{{ accountType }}</span>
+          账号类型:&nbsp&nbsp&nbsp<span>{{ accountType }}</span>
+        </p>
+        <!-- <p>认证状态:&nbsp&nbsp&nbsp<span>已认证</span></p> -->
+        <div class="authentication-container">
+          <div>实名认证:&nbsp&nbsp&nbsp&nbsp</div>
+          <!-- <div class="not-authentication" v-if="isAuthentication == 1">
+            <div>未认证</div>
+            <div @click="showEnterpriseAuthentication">去认证</div>
+          </div> -->
+          <div class="already-authentication">已认证</div>
+        </div>
+        <p>
+          认证时间:&nbsp&nbsp&nbsp<span>{{ certificationTime }}</span>
         </p>
         <p>
-          认证状态:<span>{{ isCertification }}</span>
+          法人姓名:&nbsp&nbsp&nbsp<span>{{ legalPersonName }}</span>
         </p>
         <p>
-          认证时间:<span>{{ certificationTime }}</span>
+          法人证件类型:&nbsp&nbsp&nbsp<span>{{ legalPersonCardType }}</span>
         </p>
         <p>
-          法人姓名:<span>{{ legalPersonName }}</span>
+          法人身份证号:&nbsp&nbsp&nbsp<span>{{ legalPersonIDNumber }}</span>
         </p>
         <p>
-          法人证件类型:<span>{{ legalPersonCardType }}</span>
+          企业名称:&nbsp&nbsp&nbsp<span>{{ enterpriseName }}</span>
         </p>
         <p>
-          法人身份证号:<span>{{ legalPersonIDNumber }}</span>
+          企业证件类型:&nbsp&nbsp&nbsp<span>{{
+            enterpriseCertificateType
+          }}</span>
         </p>
         <p>
-          企业名称:<span>{{ enterpriseName }}</span>
-        </p>
-        <p>
-          企业证件类型:<span>{{ enterpriseCertificateType }}</span>
-        </p>
-        <p>
-          统一社会信用代码:<span>{{ unifiedSocialCreditCode }}</span>
+          统一社会信用代码:&nbsp&nbsp&nbsp<span>{{
+            unifiedSocialCreditCode
+          }}</span>
         </p>
       </div>
     </div>
-    <div v-if="this.active == 4">
+    <div slot="" class="el-step-container4" v-if="this.active == 4">
       <h3>对不起!审核未能通过！</h3>
       <p>原因为:</p>
+      <p>{{ reason }}</p>
       <p>{{ reason }}</p>
     </div>
   </div>
@@ -116,9 +131,11 @@
 
 <script>
 import UploadImage from "./upload/UploadImage.vue";
-import { postEnterpriseInformation } from "../request/api.js";
-import { getEnterpriseImformationType } from "../request/api.js";
+import { postAddEnterpriseInformation } from "../request/api.js";
+import { postEditEnterpriseInformation } from "../request/api.js";
+import { getEnterpriseInformationType } from "../request/api.js";
 import { getUserImformation } from "../request/api.js";
+import { getEnterpriseInformation } from "../request/api.js";
 
 export default {
   components: {
@@ -136,9 +153,19 @@ export default {
       enterpriseCertificateType: "企业营业执照",
       unifiedSocialCreditCode: "",
 
+      // 企业信息容器
+      enterpriseContainer: null,
       // 企业步骤第几步
       active: 1,
       enterpriseRuleForm: {
+        // enterpriseName: "" || enterpriseContainer.companyName,
+        // creditCode: "" || enterpriseContainer.companyCode,
+        // legalPersonName: "" || enterpriseContainer.legalPersonName,
+        // IDNumber: "" || enterpriseContainer.idCard,
+        // businessLicense: "",
+        // IDImage1: "",
+        // IDImage2: "",
+
         enterpriseName: "",
         creditCode: "",
         legalPersonName: "",
@@ -181,6 +208,10 @@ export default {
       img1: "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF",
       img2: "https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF",
       img3: "https://t7.baidu.com/it/u=1595072465,3644073269&fm=193&f=GIF",
+      // 是否认证,根据localstorage中的type来判断
+
+      // 判断是编辑还首次新增,根据id
+      addOrEdit: null,
     };
   },
   methods: {
@@ -215,35 +246,41 @@ export default {
           // );
           // params.append("IDNumber", this.enterpriseRuleForm.IDNumber);
 
-          postEnterpriseInformation({
-            // params,
-            businessLicensePic:  this.img1,
-            cardFrontPic: this.img2,
-            cardReversePic: this.img3,
-            companyName: this.enterpriseRuleForm.enterpriseName,
-            companyCode: this.enterpriseRuleForm.creditCode,
-            legalPersonName: this.enterpriseRuleForm.legalPersonName,
-            idCard: this.enterpriseRuleForm.IDNumber,
-          })
-            .then((res) => {
-              // if (res. == 200) {
-                // console.log("params-----", params);
-                // this.$message({
-                //   showClose: true,
-                //   message: "信息提交成功!",
-                //   type: "success",
-                // });
-                console.log("res---", res);
-              // }
+          // 如果企业id存在说明是在编辑,如果企业id不存在说明是首次在新增
+          if (this.addOrEdit) {
+            console.log("editOrEdit---");
+            // 如果存在就是编辑
+            // postEditEnterpriseInformation({
+            //   isStatus:1,
+            // }).then((res) => {
+            //   console.log("editRes---", res);
+            // })
+          } else {
+            console.log("addOrEdit---");
+            // 如果不存在就是首次新增
+            postAddEnterpriseInformation({
+              // params,
+              businessLicensePic: this.img1,
+              cardFrontPic: this.img2,
+              cardReversePic: this.img3,
+              companyName: this.enterpriseRuleForm.enterpriseName,
+              companyCode: this.enterpriseRuleForm.creditCode,
+              legalPersonName: this.enterpriseRuleForm.legalPersonName,
+              idCard: this.enterpriseRuleForm.IDNumber,
             })
-            .catch((e) => {
-              this.$message({
-                showClose: true,
-                message: e.message,
-                type: "error",
+              .then((res) => {
+                console.log("addRes---", res);
+              })
+              .catch((e) => {
+                this.$message({
+                  showClose: true,
+                  message: e.message,
+                  type: "error",
+                });
+                console.log("e---", e);
               });
-              console.log("e---", e);
-            });
+          }
+
           // this.next(); // 标记1
         } else {
           return false;
@@ -257,20 +294,26 @@ export default {
       }
       console.log("active", this.active);
     },
+    // 获取type,根据type来判断应该显示哪个页面
     getInformationType() {
-      getEnterpriseImformationType().then((res) => {
-        console.log("type---", res);
+      getEnterpriseInformationType().then((res) => {
+        let type = res.result;
+        console.log("type---", type);
 
         // 初次进入的用户来填表
-        if (res.result == 0) {
+        if (type == 0) {
+          console.log("res.result---", res);
           this.active = 1;
           // 审核中
-        } else if (res.reuslt == 1) {
+        } else if (type == 1) {
+          console.log("res.result---", res);
           this.active = 2;
-        } else if (res.result == 2) {
+        } else if (typet == 2) {
+          console.log("res.result---", res);
           // 审核已通过
           this.active = 3;
-        } else if (res.result == 3) {
+        } else if (type == 3) {
+          console.log("res.result---", res);
           //审核未通过！原因....
           this.active = 4;
         }
@@ -292,18 +335,44 @@ export default {
           console.log("e---", e);
         });
     },
+    // 获取公司信息来显示
+    getEnterpriseInformationMethod() {
+      getEnterpriseInformation().then((res) => {
+        console.log("getEnterpriseInformationRes---", res);
+        this.certificationTime = res.result.createTime;
+        this.legalPersonName = res.result.legalPersonName;
+        this.legalPersonIDNumber = res.result.idCard;
+        this.enterpriseName = res.result.companyName;
+        this.unifiedSocialCreditCode = res.result.companyCode;
+
+        // 放进容器
+        this.addOrEdit = res.result.id;
+        this.enterpriseRuleForm.enterpriseName = res.result.companyName;
+        this.enterpriseRuleForm.creditCode = res.result.companyCode;
+        this.enterpriseRuleForm.legalPersonName = res.result.legalPersonName;
+        this.enterpriseRuleForm.IDNumber = res.result.idCard;
+        // console.log("enterpriseContainer---", this.enterpriseContainer);
+        // console.log("this.addOrEdit = res.result.id", this.addOrEdit);
+      });
+    },
+
+    // 跳转回填表页面重新认证
+    updateCertification() {
+      this.active = 1;
+    },
   },
 
   mounted() {
     // this.getInformationType();
-    this.getUserImformationMethod();
+    // this.getUserImformationMethod();
+    this.getEnterpriseInformationMethod();
   },
 };
 </script>
 
 <style lang="less" scoped>
 .container-second {
-  margin-top: 50px;
+  margin: 50px 100px 0 100px;
   flex: 1;
   // width: 100%;
   // background: rgb(216, 214, 214);
@@ -337,22 +406,79 @@ export default {
     margin-top: 20px;
     .container3-header {
       display: flex;
+      margin-bottom: 20px;
       justify-content: space-between;
+      span:first-child {
+        font-size: 16px;
+        font-weight: 600;
+      }
       span:last-child {
         color: #409eff;
+        font-size: 14px;
       }
     }
     .container3-container {
+      background: rgb(216, 214, 214);
+
       width: 100%;
       // background: green;
       display: flex;
       flex-wrap: wrap;
+      padding: 20px;
+
       p {
-        width: 30%;
+        width: 33.3%;
         height: 30px;
         line-height: 30px;
-        font-size: 14px;
+        font-size: 12px;
+        color: rgb(108, 105, 105);
+        text-align: left;
+
+        span {
+          color: #000000;
+          font-weight: 400;
+        }
       }
+      .authentication-container {
+        width: 33.3%;
+        display: flex;
+        div {
+          height: 30px;
+          line-height: 30px;
+        }
+        .not-authentication {
+          padding: 0 5px;
+          border-radius: 5px;
+          display: flex;
+          div:first-child {
+            height: 30px;
+            line-height: 30px;
+            color: rgb(247, 13, 13);
+            background: rgb(244, 212, 212);
+          }
+          div:last-child {
+            height: 30px;
+            line-height: 30px;
+            color: blue;
+          }
+        }
+        .already-authentication {
+          padding: 0 5px;
+          border-radius: 5px;
+          height: 30px;
+          line-height: 30px;
+          color: green;
+          background: rgb(170, 235, 170);
+        }
+      }
+    }
+  }
+  .el-step-container4 {
+    // background: red;
+    padding: 20px;
+
+    h3 {
+      margin-bottom: 20px;
     }
   }
 }
