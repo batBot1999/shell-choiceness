@@ -206,11 +206,19 @@ export function uploadimage(data) {
     })
 }
 
+// 进入企业认证步骤模块时,要根据type来决定展示哪个页面,type返回0就是未认证,给个表让他填,返回1就是审核中,返回2就是审核通过,返回3就是审核未通过,并给出理由,在字段reason里
+export function getEnterpriseImformationType(data) {
+    return get({
+        url: "/bio/bioUserCompany/user/company/type?",
+        data,
+    })
+}
+
 // 企业信息提交表单
 export function postEnterpriseInformation(data) {
     return post({
         // url的地址改成自己的本地地址或者是线上地址
-          url: `/bio/bioUserCompany/pc/add`,
+        url: `/bio/bioUserCompany/pc/add`,
         data: data,
     })
 }

@@ -84,7 +84,7 @@ export default {
       // 个人信息容器
       personInformationContainer: [],
       // 个人还是企业
-      personOrEnterprise: 1,
+      personOrEnterprise: 2,
 
       // 实名认证icon
       authentication: 1,

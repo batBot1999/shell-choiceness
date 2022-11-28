@@ -77,16 +77,39 @@
         <span>修改认证主体</span>
       </div>
       <div class="container3-container">
-        <p>账号类型:</p>
-        <p>认证状态:</p>
-        <p>认证时间:</p>
-        <p>法人姓名:</p>
-        <p>法人证件类型:</p>
-        <p>法人身份证号:</p>
-        <p>企业名称:</p>
-        <p>企业证件类型:</p>
-        <p>统一社会信用代码:</p>
+        <p>
+          账号类型:<span>{{ accountType }}</span>
+        </p>
+        <p>
+          认证状态:<span>{{ isCertification }}</span>
+        </p>
+        <p>
+          认证时间:<span>{{ certificationTime }}</span>
+        </p>
+        <p>
+          法人姓名:<span>{{ legalPersonName }}</span>
+        </p>
+        <p>
+          法人证件类型:<span>{{ legalPersonCardType }}</span>
+        </p>
+        <p>
+          法人身份证号:<span>{{ legalPersonIDNumber }}</span>
+        </p>
+        <p>
+          企业名称:<span>{{ enterpriseName }}</span>
+        </p>
+        <p>
+          企业证件类型:<span>{{ enterpriseCertificateType }}</span>
+        </p>
+        <p>
+          统一社会信用代码:<span>{{ unifiedSocialCreditCode }}</span>
+        </p>
       </div>
+    </div>
+    <div v-if="this.active == 4">
+      <h3>对不起!审核未能通过！</h3>
+      <p>原因为:</p>
+      <p>{{ reason }}</p>
     </div>
   </div>
 </template>
@@ -94,6 +117,8 @@
 <script>
 import UploadImage from "./upload/UploadImage.vue";
 import { postEnterpriseInformation } from "../request/api.js";
+import { getEnterpriseImformationType } from "../request/api.js";
+import { getUserImformation } from "../request/api.js";
 
 export default {
   components: {
@@ -101,6 +126,16 @@ export default {
   },
   data() {
     return {
+      // 企业实名认证信息
+      accountType: "企业账号",
+      certificationTime: "",
+      legalPersonName: "",
+      legalPersonCardType: "身份证",
+      legalPersonIDNumber: "",
+      enterpriseName: "",
+      enterpriseCertificateType: "企业营业执照",
+      unifiedSocialCreditCode: "",
+
       // 企业步骤第几步
       active: 1,
       enterpriseRuleForm: {
@@ -139,6 +174,13 @@ export default {
       text0: "上传文件",
       text1: "身份证正面",
       text2: "身份证反面",
+      // 审核未通过的原因
+      reason: "",
+      personInformation: "",
+      // 静态图片路径
+      img1: "https://t7.baidu.com/it/u=4162611394,4275913936&fm=193&f=GIF",
+      img2: "https://t7.baidu.com/it/u=1819248061,230866778&fm=193&f=GIF",
+      img3: "https://t7.baidu.com/it/u=1595072465,3644073269&fm=193&f=GIF",
     };
   },
   methods: {
@@ -155,36 +197,44 @@ export default {
       console.log("this.123---", this.IDImage2);
     },
     submitForm(formName) {
+      this.next(); // 标记1
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          let params = new FormData();
-          params.append("file1", this.businessLicense);
-          params.append("file2", this.IDImage1);
-          params.append("file3", this.IDImage2);
-          params.append("enterpriseName", this.enterpriseRuleForm.enterpriseName);
-          params.append("creditCode", this.enterpriseRuleForm.creditCode);
-          params.append("legalPersonName", this.enterpriseRuleForm.legalPersonName);
-          params.append("IDNumber", this.enterpriseRuleForm.IDNumber);
-
+          // let params = new FormData();
+          // params.append("file1", this.img1);
+          // params.append("file2", this.img2);
+          // params.append("file3", this.img3);
+          // params.append(
+          //   "enterpriseName",
+          //   this.enterpriseRuleForm.enterpriseName
+          // );
+          // params.append("creditCode", this.enterpriseRuleForm.creditCode);
+          // params.append(
+          //   "legalPersonName",
+          //   this.enterpriseRuleForm.legalPersonName
+          // );
+          // params.append("IDNumber", this.enterpriseRuleForm.IDNumber);
 
           postEnterpriseInformation({
-            params,
-            // enterpriseName: this.enterpriseRuleForm.enterpriseName,
-            // creditCode: this.enterpriseRuleForm.creditCode,
-            // legalPersonName: this.enterpriseRuleForm.legalPersonName,
-            // IDNumber: this.enterpriseRuleForm.IDNumber,
-            // this.businessLicense,
+            // params,
+            businessLicensePic:  this.img1,
+            cardFrontPic: this.img2,
+            cardReversePic: this.img3,
+            companyName: this.enterpriseRuleForm.enterpriseName,
+            companyCode: this.enterpriseRuleForm.creditCode,
+            legalPersonName: this.enterpriseRuleForm.legalPersonName,
+            idCard: this.enterpriseRuleForm.IDNumber,
           })
             .then((res) => {
-              if (res.code == 200) {
-                console.log("params-----", params);
-                this.$message({
-                  showClose: true,
-                  message: "信息提交成功!",
-                  type: "success",
-                });
+              // if (res. == 200) {
+                // console.log("params-----", params);
+                // this.$message({
+                //   showClose: true,
+                //   message: "信息提交成功!",
+                //   type: "success",
+                // });
                 console.log("res---", res);
-              }
+              // }
             })
             .catch((e) => {
               this.$message({
@@ -194,7 +244,7 @@ export default {
               });
               console.log("e---", e);
             });
-          this.next(); // 标记1
+          // this.next(); // 标记1
         } else {
           return false;
         }
@@ -207,6 +257,46 @@ export default {
       }
       console.log("active", this.active);
     },
+    getInformationType() {
+      getEnterpriseImformationType().then((res) => {
+        console.log("type---", res);
+
+        // 初次进入的用户来填表
+        if (res.result == 0) {
+          this.active = 1;
+          // 审核中
+        } else if (res.reuslt == 1) {
+          this.active = 2;
+        } else if (res.result == 2) {
+          // 审核已通过
+          this.active = 3;
+        } else if (res.result == 3) {
+          //审核未通过！原因....
+          this.active = 4;
+        }
+      });
+    },
+    // 请求个人信息
+    getUserImformationMethod() {
+      getUserImformation()
+        .then((res) => {
+          console.log("res---", res);
+          this.certificationTime = res.result.createTime;
+          this.legalPersonName = res.result.realname;
+          this.legalPersonIDNumber = res.result.idCard;
+          this.enterpriseName = res.result.idCard;
+          this.unifiedSocialCreditCode = res.result.idCard;
+        })
+
+        .catch((e) => {
+          console.log("e---", e);
+        });
+    },
+  },
+
+  mounted() {
+    // this.getInformationType();
+    this.getUserImformationMethod();
   },
 };
 </script>

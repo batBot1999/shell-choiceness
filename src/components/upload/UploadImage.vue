@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-upload
+    <!-- <el-upload
       action="#"
       list-type="picture-card"
       :class="{ hide: hideUpload }"
@@ -8,6 +8,22 @@
       :on-change="uploadChange"
       :auto-upload="false"
       :file-list="fileList"
+      accept=".jpg,.png"
+      class="uploadimg"
+    >
+      <i slot="default" class="el-icon-plus"
+        ><p>{{ text }}</p></i
+      >
+    </el-upload> -->
+    <!-- 自定义指令修改版 -->
+    <el-upload
+      action="#"
+      list-type="picture-card"
+      :class="{ hide: hideUpload }"
+      :on-remove="uploadRemove"
+      :http-request="customRequest"
+      :auto-upload="true"
+      :file-list="cosFileList"
       accept=".jpg,.png"
       class="uploadimg"
     >
@@ -62,12 +78,18 @@ export default {
       dialogImageUrl: "",
       disabled: false,
       fileList: [],
-      params: {},
+      // params: {},
+      // cos 文件容器
+      cosFileListUrl: [], //传给后端的图片
+      cosFileList: [], //
     };
   },
   computed: {
+    // hideUpload: function () {
+    //   return this.fileList.length > 0;
+    // },
     hideUpload: function () {
-      return this.fileList.length > 0;
+      return this.cosFileList.length > 0;
     },
   },
   methods: {
@@ -77,19 +99,64 @@ export default {
     handleDownload(file) {
       console.log(file);
     },
-    uploadChange(file, fileList) {
-      // console.log("file---",file);
-      // this.params = new FormData();
-      this.file = file.raw;
-      // this.params.append("file", this.file);
-      this.fileList.push({ url: file.url, name: "111" });
-      // console.log("this.fileList", this.fileList);
-      this.$emit("imageValue", this.file);
-    },
+    // uploadChange(file, fileList) {
+    //   // console.log("file---",file);
+    //   // this.params = new FormData();
+    //   this.file = file.raw;
+    //   // this.params.append("file", this.file);
+    //   this.fileList.push({ url: file.url, name: "111" });
+    //   // console.log("this.fileList", this.fileList);
+    //   this.$emit("imageValue", this.file);
+    // },
     uploadRemove() {
-      this.fileList = [];
-      this.file = {};
+      // this.fileList = [];
+      // this.file = {};
     },
+    // 自定义上传动作 有个参数 有个file对象，是我们需要上传到腾讯云服务器的内容
+    customRequest(params) {
+      // console.log("cosparams", params);
+      console.log(123123);
+      if (params.file) {
+        //  上传文件到腾讯云
+        // let name = params.file.name
+                var that = this
+        cos.putObject(
+          {
+            Bucket: "sport-shell-1310972349" /* 必须 */,
+            Region: "ap-shanghai" /* 必须 */,
+            Key: "sportshell/" + params.file.name /* 必须 可填文件名*/,
+            StorageClass: "STANDARD",
+            Body: params.file, // 将本地的文件赋值给腾讯云配置
+            onProgress: function (progressData) {
+              // console.log(JSON.stringify(progressData));
+            },
+          },
+          function (err, data) {
+            // that.uploadCount -= 1
+            if (data && data.Location) {
+              let url = "http://" + data.Location;
+              that.cosFileListUrl.push(url);
+              // console.log("cos---", that.fileListUrl);
+              //将拿到的路径转为fileList展示
+              that.cosFileList.push({
+                uid: that.cosFileList.length + 1,
+                name: data.Location,
+                status: "done",
+                url: url,
+              });
+              console.log(this.cosFileList);
+              that.$emit("imageValue", that.cosFileListUrl);
+            } else {
+              // this.$message.error("上传失败");
+            }
+          }
+        );
+      }
+    },
+    // test
+    // aaa() {
+    //   console.log(123123);
+    // },
   },
 };
 </script>
