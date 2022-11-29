@@ -110,6 +110,14 @@ export function serviceRecommendListSupplement(data) {
     })
 }
 
+// 商品搜索页获取商品列表
+export function getSearchPageGoodsList(data) {
+    return get({
+        url: "/bio/app/bioItem/list?",
+        data
+    })
+}
+
 // 服务详情返回id
 export function getServiceDetail(data) {
     return get({

@@ -10,7 +10,9 @@
 <script>
 
 export default {
-
+mounted() {
+  console.log("App---", this);
+}
 };
 </script>
 

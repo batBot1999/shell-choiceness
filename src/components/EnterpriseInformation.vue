@@ -122,9 +122,9 @@
     </div>
     <div slot="" class="el-step-container4" v-if="this.active == 4">
       <h3>对不起!审核未能通过！</h3>
-      <p>原因为:</p>
+      <h4>原因为:</h4>
       <p>{{ reason }}</p>
-      <p>{{ reason }}</p>
+      <el-button @click="updateCertification">点击返回首页</el-button>
     </div>
   </div>
 </template>
@@ -173,6 +173,7 @@ export default {
         businessLicense: "",
         IDImage1: "",
         IDImage2: "",
+        createBy: "",
       },
       enterpriseRules: {
         enterpriseName: [
@@ -212,6 +213,13 @@ export default {
 
       // 判断是编辑还首次新增,根据id
       addOrEdit: null,
+
+      // 向vuex提交状态,判断当前是否处于审核中
+      storeState: 2,
+
+      // 存放后端传回来的state以及reason
+      reason: "",
+      isState: null,
     };
   },
   methods: {
@@ -250,16 +258,36 @@ export default {
           if (this.addOrEdit) {
             console.log("editOrEdit---");
             // 如果存在就是编辑
-            // postEditEnterpriseInformation({
-            //   isStatus:1,
-            // }).then((res) => {
-            //   console.log("editRes---", res);
-            // })
+            postEditEnterpriseInformation({
+              businessLicensePic: this.img1,
+              cardFrontPic: this.img2,
+              cardReversePic: this.img3,
+              companyCode: this.enterpriseRuleForm.creditCode,
+              companyName: this.enterpriseRuleForm.enterpriseName,
+              createBy: this.createBy,
+              createTime: this.certificationTime,
+              id: this.addOrEdit,
+              idCard: this.enterpriseRuleForm.IDNumber,
+              isDelete: this.isDelete,
+              isStatus: 1,
+              legalPersonName: this.enterpriseRuleForm.legalPersonName,
+              reason: this.reason,
+              updateBy: this.updateBy,
+              updateTime: this.updateTime,
+              userId: this.userId,
+            }).then((res) => {
+              console.log("editRes---", res);
+
+              // 提交store修改审核状态
+              this.$store.dispatch("CHANGE_ISAUDITING", 2);
+              this.active = this.$store.state.isAuditing;
+            });
           } else {
             console.log("addOrEdit---");
             // 如果不存在就是首次新增
             postAddEnterpriseInformation({
               // params,
+              isStatus: 1,
               businessLicensePic: this.img1,
               cardFrontPic: this.img2,
               cardReversePic: this.img3,
@@ -270,6 +298,9 @@ export default {
             })
               .then((res) => {
                 console.log("addRes---", res);
+                // 提交store修改审核状态
+                this.$store.dispatch("CHANGE_ISAUDITING", 2);
+                this.active = this.$store.state.isAuditing;
               })
               .catch((e) => {
                 this.$message({
@@ -308,7 +339,7 @@ export default {
         } else if (type == 1) {
           console.log("res.result---", res);
           this.active = 2;
-        } else if (typet == 2) {
+        } else if (type == 2) {
           console.log("res.result---", res);
           // 审核已通过
           this.active = 3;
@@ -320,37 +351,62 @@ export default {
       });
     },
     // 请求个人信息
-    getUserImformationMethod() {
-      getUserImformation()
-        .then((res) => {
-          console.log("res---", res);
-          this.certificationTime = res.result.createTime;
-          this.legalPersonName = res.result.realname;
-          this.legalPersonIDNumber = res.result.idCard;
-          this.enterpriseName = res.result.idCard;
-          this.unifiedSocialCreditCode = res.result.idCard;
-        })
+    // getUserImformationMethod() {
+    //   getUserImformation()
+    //     .then((res) => {
+    //       console.log("res---", res);
+    //       this.certificationTime = res.result.createTime;
+    //       this.legalPersonName = res.result.realname;
+    //       this.legalPersonIDNumber = res.result.idCard;
+    //       this.enterpriseName = res.result.idCard;
+    //       this.unifiedSocialCreditCode = res.result.idCard;
+    //     })
 
-        .catch((e) => {
-          console.log("e---", e);
-        });
-    },
+    //     .catch((e) => {
+    //       console.log("e---", e);
+    //     });
+    // },
     // 获取公司信息来显示
     getEnterpriseInformationMethod() {
       getEnterpriseInformation().then((res) => {
         console.log("getEnterpriseInformationRes---", res);
-        this.certificationTime = res.result.createTime;
-        this.legalPersonName = res.result.legalPersonName;
-        this.legalPersonIDNumber = res.result.idCard;
-        this.enterpriseName = res.result.companyName;
-        this.unifiedSocialCreditCode = res.result.companyCode;
-
-        // 放进容器
-        this.addOrEdit = res.result.id;
+        this.enterpriseRuleForm.IDNumber = res.result.idCard;
+        this.enterpriseRuleForm.legalPersonName = res.result.legalPersonName;
         this.enterpriseRuleForm.enterpriseName = res.result.companyName;
         this.enterpriseRuleForm.creditCode = res.result.companyCode;
-        this.enterpriseRuleForm.legalPersonName = res.result.legalPersonName;
-        this.enterpriseRuleForm.IDNumber = res.result.idCard;
+
+        // 放进容器
+        this.unifiedSocialCreditCode = res.result.companyCode;
+        this.enterpriseName = res.result.companyName;
+        this.createBy = res.result.createBy;
+        this.certificationTime = res.result.createTime;
+        this.addOrEdit = res.result.id;
+        this.legalPersonIDNumber = res.result.idCard;
+        this.isDelete = res.result.isDelete;
+        this.isState = res.result.isStatus;
+        this.legalPersonName = res.result.legalPersonName;
+        this.reason = res.result.reason;
+        this.updateBy = res.result.updateBy;
+        this.updateTime = res.result.updateTime;
+        this.userId = res.result.userId;
+
+        // 如果不存在说明是首次进入企业信息页面，直接跳转填表页面
+        if (!res.result.isStatus) {
+          this.active = 1;
+        }
+        // 如果isState等于1说明是编辑,处于审核中
+        else if (res.result.isStatus == 1) {
+          this.$store.dispatch("CHANGE_ISAUDITING", 2);
+          this.active = this.$store.state.isAuditing;
+          // 如果isState等于2说明审核通过
+        } else if (res.result.isStatus == 2) {
+          this.$store.dispatch("CHANGE_ISAUDITING", 3);
+          this.active = this.$store.state.isAuditing;
+          // 如果isState等于3说明审核未通过
+        } else if (res.result.isStatus == 3) {
+          this.$store.dispatch("CHANGE_ISAUDITING", 4);
+          this.active = this.$store.state.isAuditing;
+        }
         // console.log("enterpriseContainer---", this.enterpriseContainer);
         // console.log("this.addOrEdit = res.result.id", this.addOrEdit);
       });
@@ -366,6 +422,7 @@ export default {
     // this.getInformationType();
     // this.getUserImformationMethod();
     this.getEnterpriseInformationMethod();
+    // this.active = this.$store.state.isAuditing;
   },
 };
 </script>
@@ -476,9 +533,18 @@ export default {
   .el-step-container4 {
     // background: red;
     padding: 20px;
+    text-align: center;
 
     h3 {
       margin-bottom: 20px;
+    }
+
+    h4 {
+      margin-bottom: 20px;
+    }
+
+    .el-button {
+      margin-top: 20px;
     }
   }
 }

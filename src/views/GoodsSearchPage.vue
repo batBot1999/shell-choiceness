@@ -99,6 +99,8 @@ import HeaderNav from "../components/HeaderNav.vue";
 import Footer from "../components/Footer.vue";
 import { getIndexSort } from "../request/api.js";
 import { showLoading, hideLoading } from "../utils/Loading";
+import { getSearchPageGoodsList } from "../request/api.js";
+
 import axios from "axios";
 export default {
   data() {
@@ -149,20 +151,25 @@ export default {
     handleCurrentChange(val) {
       // console.log(`当前页: ${val}`);
       this.currentPage = val;
-      this.getSearchPageGoodsList();
+      this.getSearchPageGoodsListMethod();
     },
 
+    // axios mark
     // 点击搜索按钮
     getGoodsSearchInput(value) {
       // console.log(value);
       axios
-        .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
-          params: {
-            name: value,
-            pageNo: this.currentPage,
-            pageSize: this.pageSize,
-          },
-        })
+        .get(
+          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list",
+          {
+            // .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
+            params: {
+              name: value,
+              pageNo: this.currentPage,
+              pageSize: this.pageSize,
+            },
+          }
+        )
         .then((res) => {
           if (res.data.code === 200) {
             // console.log("res-----", res.data.result.records);
@@ -184,22 +191,40 @@ export default {
     // },
 
     // 获取商品列表
-    getSearchPageGoodsList() {
-      axios
-        .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
-          params: {
-            // name: this.name,
-            pageNo: this.currentPage,
-            pageSize: this.pageSize,
-          },
-        })
+    getSearchPageGoodsListMethod() {
+      // axios
+      //   .get("http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list", {
+
+      //   // .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
+      //     params: {
+      //       // name: this.name,
+      //       pageNo: this.currentPage,
+      //       pageSize: this.pageSize,
+      //     },
+      //   })
+      //   .then((res) => {
+      //     if (res.data.code === 200) {
+      //       console.log("res-----", res.data.result.records);
+      //       this.tableData = res.data.result.records;
+      //       // console.log(this.tableData);
+      //       this.total = res.data.result.total;
+      //     }
+      //   })
+      //   .catch((e) => {
+      //     console.log(e);
+      //   });
+
+      let params = {
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      };
+      getSearchPageGoodsList(params)
         .then((res) => {
-          if (res.data.code === 200) {
-            console.log("res-----", res.data.result.records);
-            this.tableData = res.data.result.records;
-            // console.log(this.tableData);
-            this.total = res.data.result.total;
-          }
+          // if (res.data.code == 200) {
+            console.log("res-----", res);
+            this.tableData = res.result.records;
+            this.total = res.result.total;
+          // }
         })
         .catch((e) => {
           console.log(e);
@@ -260,7 +285,7 @@ export default {
   },
 
   mounted() {
-           showLoading();
+    showLoading();
     setTimeout(() => {
       hideLoading();
     }, 500);
@@ -273,7 +298,7 @@ export default {
     // this.getgoodsList();
 
     // 在这个页面请求和渲染
-    this.getSearchPageGoodsList();
+    this.getSearchPageGoodsListMethod();
     this.getGoodsRecommendNav();
   },
 };
@@ -332,7 +357,6 @@ export default {
 
     /deep/.sort-radio-box {
       font-family: alibaba-Regular;
-
     }
 
     .search-pagination-box {
@@ -374,8 +398,8 @@ export default {
 }
 
 /deep/.cell {
-          text-overflow: ellipsis!important;
-        white-space: nowrap!important;
-        overflow: hidden!important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
 }
 </style>

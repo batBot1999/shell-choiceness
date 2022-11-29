@@ -13,7 +13,7 @@
         <el-input v-model="ruleForm.email" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="密码:" prop="password">
-        <el-input v-model="ruleForm.password" autocomplete="off"></el-input>
+        <el-input type="password" v-model="ruleForm.password" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button
