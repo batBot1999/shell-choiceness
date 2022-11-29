@@ -3,7 +3,7 @@
     <HeaderNav />
     <div class="header-search-box">
       <div class="shell-choiceness" @click="goHome">贝壳精选</div>
-      <GoodsSearchBox @searchInput="getGoodsSearchInput" />
+      <GoodsSearchBox @searchInput="getGoodsSearchInputMethod" />
     </div>
     <div class="header-tab-box">
       <div
@@ -100,6 +100,7 @@ import Footer from "../components/Footer.vue";
 import { getIndexSort } from "../request/api.js";
 import { showLoading, hideLoading } from "../utils/Loading";
 import { getSearchPageGoodsList } from "../request/api.js";
+import { getGoodsSearchInput } from "../request/api.js";
 
 import axios from "axios";
 export default {
@@ -156,29 +157,51 @@ export default {
 
     // axios mark
     // 点击搜索按钮
-    getGoodsSearchInput(value) {
-      // console.log(value);
-      axios
-        .get(
-          "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list",
-          {
-            // .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
-            params: {
-              name: value,
-              pageNo: this.currentPage,
-              pageSize: this.pageSize,
-            },
-          }
-        )
+    getGoodsSearchInputMethod(value) {
+      let params = {
+        name: value,
+        pageNo: this.currentPage,
+        pageSize: this.pageSize,
+      };
+      getGoodsSearchInput(params)
         .then((res) => {
-          if (res.data.code === 200) {
-            // console.log("res-----", res.data.result.records);
-            this.tableData = res.data.result.records;
-            // console.log(this.tableData);
-            this.total = res.data.result.total;
+          if (res.code == 200) {
+            console.log("res----", res);
+            this.tableData = res.result.records;
+            this.total = res.result.total;
           }
         })
-        .catch((e) => {});
+        .catch((e) => {
+          this.$message({
+            showClose: true,
+            message: e.message,
+            type: "error",
+          });
+          console.log("e---", e);
+        });
+
+      // console.log(value);
+      // axios
+      //   .get(
+      //     "http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list",
+      //     {
+      //       // .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
+      //       params: {
+      //         name: value,
+      //         pageNo: this.currentPage,
+      //         pageSize: this.pageSize,
+      //       },
+      //     }
+      //   )
+      //   .then((res) => {
+      //     if (res.data.code === 200) {
+      //       // console.log("res-----", res.data.result.records);
+      //       this.tableData = res.data.result.records;
+      //       // console.log(this.tableData);
+      //       this.total = res.data.result.total;
+      //     }
+      //   })
+      //   .catch((e) => {});
     },
 
     // getgoodsList() {
@@ -192,28 +215,6 @@ export default {
 
     // 获取商品列表
     getSearchPageGoodsListMethod() {
-      // axios
-      //   .get("http://linzhiying123.natapp1.cc/jeecg-boot/bio/app/bioItem/list", {
-
-      //   // .get("http://bkzx.bioclub.cn/api/jeecg-boot/bio/app/bioItem/list", {
-      //     params: {
-      //       // name: this.name,
-      //       pageNo: this.currentPage,
-      //       pageSize: this.pageSize,
-      //     },
-      //   })
-      //   .then((res) => {
-      //     if (res.data.code === 200) {
-      //       console.log("res-----", res.data.result.records);
-      //       this.tableData = res.data.result.records;
-      //       // console.log(this.tableData);
-      //       this.total = res.data.result.total;
-      //     }
-      //   })
-      //   .catch((e) => {
-      //     console.log(e);
-      //   });
-
       let params = {
         pageNo: this.currentPage,
         pageSize: this.pageSize,
@@ -221,9 +222,9 @@ export default {
       getSearchPageGoodsList(params)
         .then((res) => {
           // if (res.data.code == 200) {
-            console.log("res-----", res);
-            this.tableData = res.result.records;
-            this.total = res.result.total;
+          // console.log("res-----", res);
+          this.tableData = res.result.records;
+          this.total = res.result.total;
           // }
         })
         .catch((e) => {

@@ -118,6 +118,14 @@ export function getSearchPageGoodsList(data) {
     })
 }
 
+// 商品所有页面点击搜索按钮
+export function getGoodsSearchInput(data) {
+    return get({
+        url: "/bio/app/bioItem/list?",
+        data
+    })
+}
+
 // 服务详情返回id
 export function getServiceDetail(data) {
     return get({
