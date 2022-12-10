@@ -7,7 +7,8 @@ import qs from "qs"
 const service = axios.create({
   baseURL:
   // "http://bkzx.bioclub.cn/api/jeecg-boot",
-  "http://linzhiying123.natapp1.cc/jeecg-boot",
+  // "http://linzhiying123.natapp1.cc/jeecg-boot",
+  "http://bkjx.dev.bioclub.cn/api/jeecg-boot",
   timeout: 1000,
   headers: {
     // "Content-Type" : "application/json;charset=utf-8"

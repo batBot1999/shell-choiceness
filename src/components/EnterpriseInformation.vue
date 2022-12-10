@@ -419,7 +419,7 @@ export default {
   },
 
   mounted() {
-    // this.getInformationType();
+    this.getInformationType();
     // this.getUserImformationMethod();
     this.getEnterpriseInformationMethod();
     // this.active = this.$store.state.isAuditing;

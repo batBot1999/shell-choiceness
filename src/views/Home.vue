@@ -74,7 +74,7 @@ import IndexGoodsList from "../components/IndexGoodsList.vue";
 
 // import GoodsSearchBox from "../components/GoodsSearchBox.vue";
 import ServiceSearchBox from "../components/ServiceSearchBox.vue";
-import GoodsBannerBox from "../components/indexComponents/GoodsBannerBox.vue";
+// import GoodsBannerBox from "../components/indexComponents/GoodsBannerBox.vue";
 import ServiceBannerBox from "../components/indexComponents/ServiceBannerBox.vue";
 import GoodsRecommand from "../components/GoodsRecommand.vue";
 import SelectedService from "../components/SelectedService.vue";
@@ -99,7 +99,7 @@ export default {
 
     // GoodsSearchBox,
     ServiceSearchBox,
-    GoodsBannerBox,
+    // GoodsBannerBox,
     ServiceBannerBox,
     GoodsRecommand,
     SelectedService,

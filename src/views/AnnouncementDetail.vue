@@ -88,7 +88,6 @@ export default {
       );
     },
   },
-
   mounted() {
     showLoading();
     setTimeout(() => {
